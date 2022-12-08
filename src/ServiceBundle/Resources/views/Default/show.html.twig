@@ -1,0 +1,197 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/plugins/jqGrid/ui.jqgrid.css') }}">
+ {% endblock  %}
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('js/plugins/jqGrid/jquery.jqGrid.min.js') }}"></script>
+<script src="{{ asset('bundles/service/js/show.js') }}"></script>
+<script src="{{ asset('bundles/service/js/prix.js') }}"></script>
+{% endblock %}
+
+{% block contenu %}
+	<input type="hidden" id="id_service" value="{{ service.id }}">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+        	<div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5 >
+                            {{ service.nom }}
+                        </h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal">
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="tabs-container">
+                                        <ul class="nav nav-tabs">
+                                          <li class="active">
+                                            <a data-toggle="tab" href="#tab-1">DETAILS</a>
+                                          </li>
+                                          <li class="">
+                                            <a data-toggle="tab" href="#tab-2">TARIFS</a>
+                                          </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="tab-content">
+                                        <div id="tab-1" class="tab-pane active">
+                                            <div class="panel-body">
+                                            	<div class="row">
+                                            		<div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label nom">Nom</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" class="form-control" required="" id="nom" value="{{ service.nom }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            	</div>
+
+                                            	<div class="row">
+                                            		<div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label description">Description</label>
+                                                            <div class="col-sm-10">
+                                                                <textarea id="description" class="summernote">
+                                                                	{{ service.description | raw }}
+                                                                </textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            	</div>
+
+                                            	<input type="hidden" id="statut" value="1">
+
+                                                <div class="hr-line-dashed"></div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <!-- <div class=""> -->
+                                                            {# <button class="btn btn-white" type="reset">
+                                                                <i class="fa fa-times"></i>
+                                                                Annuler
+                                                            </button> #}
+                                                            <button class="btn btn-primary" id="btn-save">
+                                                                <i class="fa fa-save"></i>
+                                                                Enregistrer les modification
+                                                            </button>
+                                                        <!-- </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="tab-2" class="tab-pane">
+                                            <div class="panel-body">
+
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-2 control-label">Format</label>
+                                                                    <div class="col-sm-10">
+                                                                        <select class="form-control" id="type_tarif">
+                                                                            <option></option>
+                                                                            <option value="1">Durée</option>
+                                                                            <option value="2">Qte</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row row_duree">
+                                                            <div class="col-lg-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-2 control-label">Durée</label>
+                                                                    <div class="col-sm-10">
+                                                                        <select class="form-control" id="duree">
+                                                                            <option value="1">heure</option>
+                                                                            <option value="2">jour</option>
+                                                                            <option value="3">mois</option>
+                                                                            <option value="4">année</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {# <div class="row row_prestation hidden">
+                                                            <div class="col-lg-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-2 control-label">Prestation</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="text" class="form-control" id="prestation" required="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div> #}
+
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-2 control-label">Prix</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="number" class="form-control" id="prix" required="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                            
+
+
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <button class="btn btn-primary pull-right" id="save-prix">
+                                                                    <i class="fa fa-save"></i>
+                                                                    Enregistrer
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="t-content" style="width:100%;overflow:auto;">
+                                                            <table id="liste_prix"></table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                {# <div class="hr-line-dashed"></div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <!-- <div class=""> -->
+                                                            <button class="btn btn-white" type="reset">
+                                                                <i class="fa fa-times"></i>
+                                                                Annuler
+                                                            </button>
+                                                            <button class="btn btn-primary" id="btn-save">
+                                                                <i class="fa fa-save"></i>
+                                                                Enregistrer les modification
+                                                            </button>
+                                                        <!-- </div> -->
+                                                    </div>
+                                                </div> #}
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

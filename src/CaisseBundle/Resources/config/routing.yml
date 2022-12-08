@@ -1,0 +1,52 @@
+caisse_homepage:
+    path:     /caisse/index
+    defaults: { _controller: CaisseBundle:Default:index }
+
+caisse_vente_add:
+    path:     /caisse/vente/add
+    defaults: { _controller: CaisseBundle:Vente:add }
+
+caisse_vente_consultation:
+    path:     /caisse/vente/consultation
+    defaults: { _controller: CaisseBundle:Vente:consultation }
+
+caisse_vente_save:
+    path:     /caisse/vente/save
+    defaults: { _controller: CaisseBundle:Vente:save }
+    options:
+        expose: true 
+
+caisse_commande_list:
+    path:     /caisse/vente/list
+    defaults: { _controller: CaisseBundle:Vente:list }
+    options:
+        expose: true
+    methods: [POST]
+
+caisse_commande_show:
+    path:     /caisse/vente/show/{id}
+    defaults: { _controller: CaisseBundle:Vente:show }
+    options:
+        expose: true
+    methods: [GET]
+
+caisse_dashboard:
+    path:     /caisse/dashboard
+    defaults: { _controller: CaisseBundle:Dashboard:index }
+    options:
+        expose: true
+    methods: [GET]
+
+caisse_vente_delete:
+    path:     /caisse/vente/delete/{id}
+    defaults: { _controller: CaisseBundle:Vente:delete }
+    options:
+        expose: true 
+    methods: [GET]
+
+caisse_commande_print_ticket:
+    path:     /caisse/vente/print-ticket
+    defaults: { _controller: CaisseBundle:Vente:printTicket }
+    options:
+        expose: true
+    methods: [POST]

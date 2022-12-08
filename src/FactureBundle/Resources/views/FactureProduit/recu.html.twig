@@ -1,0 +1,66 @@
+{% set i = 0 %}
+{% set total = 0 %}
+{% set list_id = "" %}
+{% for pannier in panniers %}
+    {% if list_id == "" %}
+        {% set list_id = pannier.id %}
+    {% else %}
+        {% set list_id = list_id ~ "," ~ pannier.id %}
+    {% endif %}
+    {% set f_produit_class = '' %}
+    {% set f_designation_class = '' %}
+    <tr data-id="{{i}}">
+        <td>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <select class="form-control f_libre" name="f_libre[]">
+                        <option value="0" selected="">PRODUIT</option>
+                    </select>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <select class="form-control f_produit {{ f_produit_class }}" name="f_produit[]">
+                        <option></option>
+                        {% for variation in variations %}
+                          <option
+                            value="{{ variation.id }}"
+                            data-prixvente="{{ variation.prix_vente }}"
+                            data-stock="{{ variation.stock }}"
+                            {% if pannier.variation_produit_id == variation.id %}
+                              selected=""
+                            {% endif %}
+                          >{{ variation.nom }} - {{ variation.prix_vente }} KMF</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input type="number" class="form-control f_qte" name="f_qte[]" value="{{pannier.qte}}" >
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input type="number" class="form-control f_prix" name="f_prix[]" value="{{pannier.pu}}" required="">
+                </div>
+            </div>
+        </td>
+        <td class="td-montant">
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input type="number" class="form-control f_montant" name="f_montant[]" value="{{pannier.total}}" required="">
+                </div>
+            </div>
+        </td>
+        <td>
+        </td>
+    </tr>
+    {% set i = i + 1 %}
+{% endfor %}

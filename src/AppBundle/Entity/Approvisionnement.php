@@ -1,0 +1,445 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Approvisionnement
+ *
+ * @ORM\Table(name="approvisionnement")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ApprovisionnementRepository")
+ */
+class Approvisionnement
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime", nullable=true)
+     */
+    private $date;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="qte", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $qte;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="prix_achat", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $prixAchat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="charge", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $charge;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="prix_revient", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $prixRevient;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="total", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $total;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var \AppBundle\Entity\Ravitaillement
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ravitaillement")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ravitaillement", referencedColumnName="id")
+     * })
+     */
+    private $ravitaillement;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_expiration", type="date", nullable=true)
+     */
+    private $dateExpiration;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer", nullable=true)
+     */
+    private $status = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="stock", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $stock;
+
+    /**
+     * @var \AppBundle\Entity\VariationProduit
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\VariationProduit")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="variation_produit", referencedColumnName="id")
+     * })
+     */
+    private $variationProduit;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fournisseurs", type="text", nullable=true)
+     */
+    private $fournisseurs;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Approvisionnement
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set qte
+     *
+     * @param string $qte
+     *
+     * @return Approvisionnement
+     */
+    public function setQte($qte)
+    {
+        $this->qte = $qte;
+    
+        return $this;
+    }
+
+    /**
+     * Get qte
+     *
+     * @return string
+     */
+    public function getQte()
+    {
+        return $this->qte;
+    }
+
+    /**
+     * Set prixAchat
+     *
+     * @param string $prixAchat
+     *
+     * @return Approvisionnement
+     */
+    public function setPrixAchat($prixAchat)
+    {
+        $this->prixAchat = $prixAchat;
+    
+        return $this;
+    }
+
+    /**
+     * Get prixAchat
+     *
+     * @return string
+     */
+    public function getPrixAchat()
+    {
+        return $this->prixAchat;
+    }
+
+    /**
+     * Set total
+     *
+     * @param string $total
+     *
+     * @return Approvisionnement
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+    
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return string
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Approvisionnement
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set ravitaillement
+     *
+     * @param \AppBundle\Entity\Ravitaillement $ravitaillement
+     *
+     * @return Approvisionnement
+     */
+    public function setRavitaillement(\AppBundle\Entity\Ravitaillement $ravitaillement = null)
+    {
+        $this->ravitaillement = $ravitaillement;
+    
+        return $this;
+    }
+
+    /**
+     * Get ravitaillement
+     *
+     * @return \AppBundle\Entity\Ravitaillement
+     */
+    public function getRavitaillement()
+    {
+        return $this->ravitaillement;
+    }
+
+    
+
+    /**
+     * Set dateExpiration
+     *
+     * @param \DateTime $dateExpiration
+     *
+     * @return Approvisionnement
+     */
+    public function setDateExpiration($dateExpiration)
+    {
+        $this->dateExpiration = $dateExpiration;
+
+        return $this;
+    }
+
+    /**
+     * Get dateExpiration
+     *
+     * @return \DateTime
+     */
+    public function getDateExpiration()
+    {
+        return $this->dateExpiration;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return Approvisionnement
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+
+    /**
+     * Set stock
+     *
+     * @param string $stock
+     *
+     * @return Approvisionnement
+     */
+    public function setStock($stock)
+    {
+        $this->stock = $stock;
+
+        return $this;
+    }
+
+    /**
+     * Get stock
+     *
+     * @return string
+     */
+    public function getStock()
+    {
+        return $this->stock;
+    }
+
+    /**
+     * Set variationProduit
+     *
+     * @param \AppBundle\Entity\VariationProduit $variationProduit
+     *
+     * @return Approvisionnement
+     */
+    public function setVariationProduit(\AppBundle\Entity\VariationProduit $variationProduit = null)
+    {
+        $this->variationProduit = $variationProduit;
+
+        return $this;
+    }
+
+    /**
+     * Get variationProduit
+     *
+     * @return \AppBundle\Entity\VariationProduit
+     */
+    public function getVariationProduit()
+    {
+        return $this->variationProduit;
+    }
+
+    /**
+     * Set charge
+     *
+     * @param float $charge
+     *
+     * @return Approvisionnement
+     */
+    public function setCharge($charge)
+    {
+        $this->charge = $charge;
+
+        return $this;
+    }
+
+    /**
+     * Get charge
+     *
+     * @return float
+     */
+    public function getCharge()
+    {
+        return $this->charge;
+    }
+
+    /**
+     * Set prixRevient
+     *
+     * @param float $prixRevient
+     *
+     * @return Approvisionnement
+     */
+    public function setPrixRevient($prixRevient)
+    {
+        $this->prixRevient = $prixRevient;
+
+        return $this;
+    }
+
+    /**
+     * Get prixRevient
+     *
+     * @return float
+     */
+    public function getPrixRevient()
+    {
+        return $this->prixRevient;
+    }
+
+    /**
+     * Set fournisseurs
+     *
+     * @param string $fournisseurs
+     *
+     * @return Approvisionnement
+     */
+    public function setFournisseurs($fournisseurs)
+    {
+        $this->fournisseurs = $fournisseurs;
+
+        return $this;
+    }
+
+    /**
+     * Get fournisseurs
+     *
+     * @return string
+     */
+    public function getFournisseurs()
+    {
+        return $this->fournisseurs;
+    }
+}

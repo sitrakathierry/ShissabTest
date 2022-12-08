@@ -1,0 +1,39 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th class="text-center">Entrepôt</th>
+			<th class="text-center">Code</th>
+			<th class="text-center">Prix de vente ({{ devise.symbole }})</th>
+			<th class="text-center">Stock</th>
+			<!-- <th class="text-center">Status</th> -->
+            <th class="col-lg-2"></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for produitEntrepot in produitEntrepotList %}
+			{% for variation in produitEntrepot.variationProduitList %}
+				{% if variation.isDelete == 1 %}
+				{% else %}
+					<tr>
+						<td>{{ produitEntrepot.entrepot.nom }}</td>
+						<td>{{ produitEntrepot.produit.codeProduit}}/{{ produitEntrepot.indice }}</td>
+						<td>{{ variation.prixVente }}</td>
+						<td>{{ variation.stock }}</td>
+						<!-- <td></td> -->
+						<td>
+							<button 
+								class="btn btn-xs btn-success edit-variation"
+								data-id="{{ variation.id }}"
+							><i class="fa fa-edit"></i> Modifier</button>
+							<button 
+								class="btn btn-xs btn-danger delete-variation"
+								data-id="{{ variation.id }}"
+							><i class="fa fa-trash"></i> Supprimer</button>
+						</td>
+					</tr>
+				{% endif %}
+				
+			{% endfor %}
+		{% endfor %}
+	</tbody>
+</table>

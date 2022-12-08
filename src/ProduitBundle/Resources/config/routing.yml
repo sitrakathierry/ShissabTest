@@ -1,0 +1,348 @@
+produit_homepage:
+    path:     /produit/index
+    defaults: { _controller: ProduitBundle:Default:index }
+
+produit_add:
+    path:     /produit/add/{categorie}
+    defaults: { _controller: ProduitBundle:Default:add, categorie : 0 }
+
+produit_save:
+    path:     /produit/save
+    defaults: { _controller: ProduitBundle:Default:save }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_consultation:
+    path:     /produit/consultation/{categorie}
+    defaults: { _controller: ProduitBundle:Default:consultation, categorie: 0}
+    options:
+        expose: true
+    methods: [GET]
+
+produit_list:
+    path:     /produit/list
+    defaults: { _controller: ProduitBundle:Default:list }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_show:
+    path:     /produit/show/{id}
+    defaults: { _controller: ProduitBundle:Default:show }
+    options:
+        expose: true
+    methods: [GET]
+
+produit_delete:
+    path:     /produit/delete/{id}
+    defaults: { _controller: ProduitBundle:Default:delete }
+    options:
+        expose: true
+    methods: [GET]
+
+produit_approvisionnement_index:
+    path:     /produit/approvisionnement/index
+    defaults: { _controller: ProduitBundle:Approvisionnement:index }
+
+produit_approvisionnement_add:
+    path:     /produit/approvisionnement/add
+    defaults: { _controller: ProduitBundle:Approvisionnement:add }
+
+produit_approvisionnement_save:
+    path:     /produit/approvisionnement/save
+    defaults: { _controller: ProduitBundle:Approvisionnement:save }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_approvisionnement_consultation:
+    path:     /produit/approvisionnement/consultation
+    defaults: { _controller: ProduitBundle:Approvisionnement:consultation }
+
+produit_approvisionnement_list:
+    path:     /produit/approvisionnement/list
+    defaults: { _controller: ProduitBundle:Approvisionnement:list }
+    options:
+        expose: true
+    methods: [POST]
+    
+produit_pdf: 
+    path:     /produit/pdf/{id}
+    defaults: { _controller: ProduitBundle:Default:pdf }
+    options:
+        expose: true
+    methods: [GET]
+
+produit_approvisionnement_detail:
+    path:     /produit/approvisionnement/detail/{approId}
+    defaults: { _controller: ProduitBundle:Approvisionnement:Detail }
+    options:
+        expose: true
+    methods: [GET]
+    
+produit_entrees_sorties:
+    path:     /produit/approvisionnement/entrees_sorties
+    defaults: { _controller: ProduitBundle:Approvisionnement:entreesSorties }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_graph:
+    path:     /produit/approvisionnement/graph
+    defaults: { _controller: ProduitBundle:Approvisionnement:graph }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_notification_list:
+    path:     /produit/notification/list
+    defaults: { _controller: ProduitBundle:Notification:list }
+    options:
+        expose: true
+    methods: [POST]
+    
+produit_save_statut_prix_produit:
+    path:     /produit/save/statut
+    defaults: { _controller: ProduitBundle:Default:saveStatutProduit }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_entrepot_tpl:
+    path:     /produit/entrepot/tpl
+    defaults: { _controller: ProduitBundle:Default:entrepotTpl }
+    options:
+        expose: true
+    methods: [GET]
+
+
+# CATEGORIE DES PRODUITS
+produit_categorie_index:
+    path:     /produit/categorie/index
+    defaults: { _controller: ProduitBundle:CategorieProduit:index }
+
+produit_categorie_add:
+    path:     /produit/categorie/add
+    defaults: { _controller: ProduitBundle:CategorieProduit:add }
+
+produit_categorie_save:
+    path:     /produit/categorie/save
+    defaults: { _controller: ProduitBundle:CategorieProduit:save }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_categorie_consultation:
+    path:     /produit/categorie/consultation
+    defaults: { _controller: ProduitBundle:CategorieProduit:consultation }
+
+produit_categorie_list:
+    path:     /produit/categorie/list
+    defaults: { _controller: ProduitBundle:CategorieProduit:list }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_categorie_show:
+    path:     /produit/categorie/show/{id}
+    defaults: { _controller: ProduitBundle:CategorieProduit:show }
+    options:
+        expose: true
+    methods: [GET]
+
+# VARIATION PRODUIT
+produit_save_variation:
+    path:     /produit/variation/save
+    defaults: { _controller: ProduitBundle:VariationProduit:save }
+    options:
+        expose: true
+    methods: [POST] 
+
+produit_list_variation:
+    path:     /produit/variation/list
+    defaults: { _controller: ProduitBundle:VariationProduit:list }
+    options:
+        expose: true
+    methods: [POST] 
+
+produit_editor_variation:
+    path:     /produit/variation/editor
+    defaults: { _controller: ProduitBundle:VariationProduit:editor }
+    options:
+        expose: true
+    methods: [POST] 
+
+produit_update_variation:
+    path:     /produit/variation/update
+    defaults: { _controller: ProduitBundle:VariationProduit:update }
+    options:
+        expose: true
+    methods: [POST] 
+
+produit_delete_variation:
+    path:     /produit/variation/delete/{id}
+    defaults: { _controller: ProduitBundle:VariationProduit:delete }
+    options:
+        expose: true
+    methods: [GET] 
+
+produit_inventaire_index:
+    path:     /produit/inventaire/index
+    defaults: { _controller: ProduitBundle:Inventaire:index }
+
+produit_inventaire_list:
+    path:     /produit/inventaire/list
+    defaults: { _controller: ProduitBundle:Inventaire:list }
+    options:
+        expose: true
+    methods: [POST] 
+
+# PREFERENCE CATEGORIE
+produit_preference_index:
+    path:     /produit/preference/index
+    defaults: { _controller: ProduitBundle:PreferenceCategorie:index }
+
+produit_preference_save:
+    path:     /produit/preference/save
+    defaults: { _controller: ProduitBundle:PreferenceCategorie:save }
+    options:
+        expose: true
+    methods: [POST] 
+
+# entrepot
+entrepot_index:
+    path:     /entrepot/index
+    defaults: { _controller: ProduitBundle:Entrepot:index }
+
+entrepot_save:
+    path:     /entrepot/save
+    defaults: { _controller: ProduitBundle:Entrepot:save }
+    methods:  [POST]
+    options:
+        expose: true
+
+entrepot_list:
+    path:     /entrepot/list
+    defaults: { _controller: ProduitBundle:Entrepot:list }
+    methods:  [POST]
+    options:
+        expose: true
+
+entrepot_editor:
+    path:     /entrepot/editor
+    defaults: { _controller: ProduitBundle:Entrepot:editor }
+    methods:  [POST]
+    options:
+        expose: true
+
+entrepot_delete:
+    path:     /entrepot/delete/{id}
+    defaults: { _controller: ProduitBundle:Entrepot:delete }
+    methods:  [GET]
+    options:
+        expose: true
+
+# fournisseur
+fournisseur_index:
+    path:     /fournisseur/index
+    defaults: { _controller: ProduitBundle:Fournisseur:index }
+
+fournisseur_save:
+    path:     /fournisseur/save
+    defaults: { _controller: ProduitBundle:Fournisseur:save }
+    methods:  [POST]
+    options:
+        expose: true
+
+fournisseur_list:
+    path:     /fournisseur/list
+    defaults: { _controller: ProduitBundle:Fournisseur:list }
+    methods:  [POST]
+    options:
+        expose: true
+
+fournisseur_editor:
+    path:     /fournisseur/editor
+    defaults: { _controller: ProduitBundle:Fournisseur:editor }
+    methods:  [POST]
+    options:
+        expose: true
+
+fournisseur_delete:
+    path:     /fournisseur/delete/{id}
+    defaults: { _controller: ProduitBundle:Fournisseur:delete }
+    methods:  [GET]
+    options:
+        expose: true
+
+# stock entrepot
+produit_stock_entrepot_index:
+    path:     /produit/stock/entrepot/index
+    defaults: { _controller: ProduitBundle:StockEntrepot:index }
+    options:
+        expose: true
+
+produit_stock_entrepot_list:
+    path:     /produit/stock/entrepot/list
+    defaults: { _controller: ProduitBundle:StockEntrepot:list }
+    methods:  [POST]
+    options:
+        expose: true
+
+produit_stock_entrepot_show:
+    path:     /produit/stock/entrepot/show/{id}
+    defaults: { _controller: ProduitBundle:StockEntrepot:show }
+    methods:  [GET]
+    options:
+        expose: true
+
+produit_stock_entrepot_delete:
+    path:     /produit/stock/entrepot/delete/{id}
+    defaults: { _controller: ProduitBundle:StockEntrepot:delete }
+    methods:  [GET]
+    options:
+        expose: true
+
+produit_stock_entrepot_edit:
+    path:     /produit/stock/entrepot/edit
+    defaults: { _controller: ProduitBundle:StockEntrepot:edit }
+    methods:  [POST]
+    options:
+        expose: true
+
+# 
+affectation_entrepot:
+    path:     /affectation/entrepot
+    defaults: { _controller: ProduitBundle:Default:affectationEntrepot}
+    options:
+        expose: true
+    methods: [GET]
+
+produit_dashboard_index:
+    path:     /produit/dashboard/index
+    defaults: { _controller: ProduitBundle:Dashboard:index }
+    options:
+        expose: true
+
+
+produit_verify:
+    path:     /produit/verify
+    defaults: { _controller: ProduitBundle:Default:verify }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_list_deduit:
+    path:     /produit/deduit/list
+    defaults: { _controller: ProduitBundle:Default:listDeduit }
+    options:
+        expose: true
+    methods: [POST]
+
+produit_consultation_deduit:
+    path:     /produit/deduit/consultation
+    defaults: { _controller: ProduitBundle:Default:consultationDeduit}
+    options:
+        expose: true
+    methods: [GET]

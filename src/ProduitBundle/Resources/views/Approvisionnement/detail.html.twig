@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+  {{ parent() }}
+  <style type="text/css">
+  	.select2-container {
+          width: 100% !important;
+      }
+
+      .select2-container--bootstrap4 .select2-selection--single {
+          height: calc(3rem + 3.5px) !important;
+      }
+  </style>
+{% endblock  %}
+{% block scripts %}
+{{ parent() }}
+  <script src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script>
+  <script src="{{ asset('bundles/produit/js/approvisionnement-add.js') }}"></script>
+{% endblock %}
+{% block contenu %}
+<div class="wrapper wrapper-content">
+{# {% if permissions.facture.create %} #}
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>
+            APPROVISIONNEMENT DU PRODUIT {{ produit.nom }} - <span class="badge-warning">{{ produit.codeProduit }}</span>
+          </h5>
+        </div>
+        <div class="ibox-content">
+          <form class="form-horizontal" id="form-appro">
+
+            <div class="hr-line-dashed"></div>
+            <table class="table table-bordered" id="table-appro-add">
+              <thead class="thead-dark">
+                <tr>
+                  <th class="col-sm-2">PRODUIT</th>
+                  <th class="col-sm-2">QTE</th>
+                  <th class="col-sm-2">EXPIRER LE</th>
+                  <th class="col-sm-2">PRIX VENTE</th>
+                  <th class="col-sm-2">PRIX UNITAIRE</th>
+                  <th class="col-sm-2">MONTANT TOTAL</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-id="0">
+                  <td>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                      	<select class="form-control select2 produit" name="produit[]">
+                      		<option></option>
+                      		{% for prod in produits %}
+                      			<option value="{{ produit.id }}" {{ prod.id == produit.id ? 'selected' : '' }}> {{ produit.nom }} </option>
+                      		{% endfor %}
+                      	</select>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input type="number" class="form-control qte" name="qte[]" value="{{appro.qte}}" required="">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input type="text" class="form-control expirer" name="expirer[]" value="{{appro.dateExpiration|date("d/m/Y")}}" required="">
+                      </div>
+                    </div>
+                  </td>
+                  <td class="td-montant">
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input type="number" class="form-control prix_vente" name="prix_vente[]" value="{{appro.prixVente}}" required="">
+                      </div>
+                    </div>
+                  </td>
+                  <td class="td-montant">
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input type="number" class="form-control prix" name="prix[]" value="{{appro.prixAchat}}" required="">
+                      </div>
+                    </div>
+                  </td>
+                  <td class="td-montant">
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input type="number" class="form-control total" name="total[]" value="{{appro.total}}" readonly="">
+                      </div>
+                    </div>
+                  </td>
+                  
+                  <td>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="4">Total</th>
+                  <th>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input type="number" class="form-control" name="montant_total" id="montant_total" readonly="" value="{{appro.total}}">
+                      </div>
+                    </div>
+                    
+                  </th>
+                  {# <th>
+                    <span class="btn-remove-row" data-id="0"><i class="fa fa-trash"></i></span>&nbsp;
+                    <span class="btn-add-row" data-id="0"><i class="fa fa-plus"></i></span>
+                  </th> #}
+                </tr>
+              </tfoot>
+            </table>
+            {# <div class="hr-line-dashed"></div> #}
+            {# <p>Arrêté la présente facture à la somme de <b id="somme" style="text-transform: uppercase;"></b>  #}
+            <p>
+            <div class="row">
+              <div class="col-lg-6 col-lg-push-6">
+                <div class="form-group" id="data_1">
+                  <label class="font-noraml">Moroni le</label>
+                  <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control" name="date" value="{{ "now" | date('d/m/Y') }}" required="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+              <div class="col-sm-4">
+                <button class="btn btn-primary" id="btn-save">
+                <i class="fa fa-save"></i>
+                Enregistrer la modification
+                </button>
+              </div>
+            </div>
+            <input type="hidden" name="" id="id-appro" value="{{appro.id}}">
+            <input type="hidden" name="" id="id-row" value="0">
+            <input type="hidden" name="somme" id="id-somme" value="0">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
