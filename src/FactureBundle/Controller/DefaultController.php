@@ -94,6 +94,10 @@ class DefaultController extends BaseController
         $checkFactureHebergement = $this->checkFactureHebergement();
         $checkFactureRestaurant = $this->checkFactureRestaurant();
 
+
+        
+
+
         return $this->render('FactureBundle:Default:add.html.twig',array(
         	'deviseEntrepot' => $deviseEntrepot,
             'agence' => $agence,

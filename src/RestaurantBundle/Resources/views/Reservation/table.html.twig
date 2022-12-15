@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/restaurant/css/style.css') }}">
+
+{% endblock  %}
+
+{% block scripts %}
+   {{ parent() }}
+    <script src="{{ asset('bundles/restaurant/js/reservation/add.js') }}"></script>
+{% endblock %}
+
+{% block contenu %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins affiche_table table-bordered">
+               <div class="row">
+                <div class="col-md-4 text-center elem_table ">
+                    <div class="text-right float-right w-100">
+                        <i class="fa fa-times btn_fermer"></i>
+                    </div>
+                    <h1>Menu</h1>
+                    <button class="btn btn-sm  btn_green">PLAT</button>
+                    <button class="btn btn-sm  btn_green">PLAsdqfqsdfqsdfqsdfqT</button>
+                    <button class="btn btn-sm btn_green">PLqsdfqsdfAT</button>
+                    <button class="btn btn-sm btn_green">PLAT</button>
+                    <button class="btn btn-sm btn_green">PLsqdfqsdfAT</button>
+                    <button class="btn btn-sm btn_green">PLqsdfqsdfsdqAT</button>
+                    <button class="btn btn-sm btn_green">PLqsdfAT</button>
+                    <button class="btn btn-sm btn_green">PsqdfLAT</button>
+                    <button class="btn btn-sm btn_green">PLAT</button>
+                    <button class="btn btn-sm btn_green">PLqsdfAT</button>
+                    <button class="btn btn-sm btn_green">PLAT</button>
+                </div>
+                <div class="col-md-8 info_table border_left">
+                    <div class="text-left float-left hidden w-100">
+                        <i class="fa fa-eye btn_ouvrir"></i>
+                    </div>
+                    
+                    <h1 class="text-center">Table 1</h1>
+                    <div class="table-responsive">
+                        <table class="table table-sm list_commande">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Catégorie</th>
+                                    <th>Nom</th>
+                                    <th>Accomp.</th>
+                                    <th>Qte</th>
+                                    <th>Prix</th>
+                                    <th>Total</th>
+                                    <th colspan="2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>01</td>
+                                    <td>01QSDFQSDFQS</td>
+                                    <td class="no_wrap">qsdfqsdfqs dfqsdfqdsfqf</td>
+                                    <td>
+                                        <table class="table table_accomp">
+                                            <tr>
+                                                <th>Nom</th>
+                                                <th>Qte</th>
+                                                <th colspan="2">Prix</th>
+                                            </tr>
+                                            <tr>
+                                                <td>qsdfqsdf qsdfqsd fsqdf qsf sdfqsf</td>
+                                                <td><input type="number" value="12" class="form-control min_space accomp_qte"></td>
+                                                <td><input type="number" value="1200" class="form-control min_space accomp_prix"></td>
+                                                <td><button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" class="text-right"><button class="btn btn-sm btn-primary"><i class="fa fa-plus"></i></button></td>
+                                            </tr>
+
+                                        </table>
+                                    </td>
+                                    <td><input type="number" class="form-control min_space cmd_qte"></td>
+                                    <td><input type="number" value="1200" class="form-control min_space cmd_prix"></td>
+                                    <td class="text-right"><input type="number" value="20000" class="form-control max_space cmd_prix"></td>
+                                    <td><button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button></td>
+                                    <td><button class="btn btn-sm btn-success"><i class="fa fa-edit"></i></button></td>
+                                    <!-- <td><button class="btn btn-sm btn-success"><i class="fa fa-plus"></i></button></td> -->
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="6" class="text-right">TOTAL GENERAL&emsp;&emsp;</th>
+                                    <td colspan="2" class="text-right">100 000.00&emsp;&emsp;&emsp;&emsp;&emsp;</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="w-100 text-right bouton_action">
+                        <button class="btn btn-primary btn-save"><i class="fa fa-edit"></i>&nbsp;Modifier</button>    
+                        <button class="btn btn-primary btn-save"><i class="fa fa-save"></i>&nbsp;Enregistrer</button>    
+                        <button class="btn btn-success"><i class="fa fa-print"></i>&nbsp;Imprimer</button>    
+                    </div>
+                </div>
+               </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+

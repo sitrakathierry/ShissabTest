@@ -16,6 +16,7 @@
 	<tbody>
 	{% set j = 0 %}
 	{% set total_general = 0 %}
+	{% set ttc_restant = 0 %}
 		{% for credit in credits %}
 			{% if credit.details %}
 				{% set i = 1 %}
@@ -142,9 +143,10 @@
 				<tr>
 					<th colspan="10" bgcolor="#ddd"></th>
 				</tr>
+				{% set total_general = total_general + ttc_restant %}
 			{% endif %}
 			{% set j = j + 1 %}
-			{% set total_general = total_general + ttc_restant %}
+			
 		{% endfor %}
 				<tr>
 					<th colspan="7" class="text-right ">TOTAL GENERAL&emsp;&emsp;&emsp;</th>

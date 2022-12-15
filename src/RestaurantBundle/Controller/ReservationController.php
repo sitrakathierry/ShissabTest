@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Reservation;
 use AppBundle\Entity\ReservationDetails;
 use HebergementBundle\Controller\BaseController;
+use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class ReservationController extends BaseController
 {
@@ -18,46 +20,63 @@ class ReservationController extends BaseController
 
     public function addAction()
     {
-        $user = $this->getUser();
-        $userAgence = $this->getDoctrine()
-                    ->getRepository('AppBundle:UserAgence')
-                    ->findOneBy(array(
-                        'user' => $user
-                    ));
+    //     $user = $this->getUser();
+    //     $userAgence = $this->getDoctrine()
+    //                 ->getRepository('AppBundle:UserAgence')
+    //                 ->findOneBy(array(
+    //                     'user' => $user
+    //                 ));
                     
-        $agence = $userAgence->getAgence();
+    //     $agence = $userAgence->getAgence();
 
-        $plats = $this->getDoctrine()
-                ->getRepository('AppBundle:Plat')
-                ->findBy(array(
-                    'agence' => $agence,
-                    'statut' => 1,
+    //     $plats = $this->getDoctrine()
+    //             ->getRepository('AppBundle:Plat')
+    //             ->findBy(array(
+    //                 'agence' => $agence,
+    //                 'statut' => 1,
+    //             ));
+
+    //     $bookings = $this->getDoctrine()
+    //             ->getRepository('AppBundle:Booking')
+    //             ->getList(
+    //                 $agence->getId(),
+    //                 '',
+    //                 '',
+    //                 0,
+    //                 2
+    //             );
+
+    //     $hebergementRestaurantRelation = $this->hebergementRestaurantRelation();
+
+    //     $accompagnements = $this->getDoctrine()
+    //             ->getRepository('AppBundle:Accompagnement')
+    //             ->findBy(array(
+    //                 'agence' => $agence,
+    //             ));
+
+    $user = $this->getUser();
+    $userAgence = $this->getDoctrine()
+                ->getRepository('AppBundle:UserAgence')
+                ->findOneBy(array(
+                    'user' => $user
                 ));
+                
+    $agence = $userAgence->getAgence();
 
-        $bookings = $this->getDoctrine()
-                ->getRepository('AppBundle:Booking')
-                ->getList(
-                    $agence->getId(),
-                    '',
-                    '',
-                    0,
-                    2
-                );
+    $tables = $this->getDoctrine()
+            ->getRepository('AppBundle:TableRestaurant')
+            ->tablesDisponible($agence->getId());
 
-        $hebergementRestaurantRelation = $this->hebergementRestaurantRelation();
-
-        $accompagnements = $this->getDoctrine()
-                ->getRepository('AppBundle:Accompagnement')
-                ->findBy(array(
-                    'agence' => $agence,
-                ));
+    //     return $this->render('RestaurantBundle:Reservation:add.html.twig',array(
+    //         'agence' => $agence,
+    //         'plats' => $plats,
+    //         'bookings' => $bookings,
+    //         'hebergementRestaurantRelation' => $hebergementRestaurantRelation,
+    //         'accompagnements' => $accompagnements,
+    //     ));
 
         return $this->render('RestaurantBundle:Reservation:add.html.twig',array(
-            'agence' => $agence,
-            'plats' => $plats,
-            'bookings' => $bookings,
-            'hebergementRestaurantRelation' => $hebergementRestaurantRelation,
-            'accompagnements' => $accompagnements,
+            'tables' => $tables
         ));
     }
 
@@ -702,6 +721,17 @@ class ReservationController extends BaseController
         // return $tbody;
 
     }
+
+    // RESERVATION TABLE 
+
+    public function tableAction($idtable)
+    {
+        return $this->render('RestaurantBundle:Reservation:table.html.twig', array(
+
+        ));
+
+    }
+
 
     public function deleteAction($id)
     {

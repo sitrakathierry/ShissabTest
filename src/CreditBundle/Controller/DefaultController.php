@@ -359,7 +359,7 @@ class DefaultController extends Controller
         ));
     }
 
-    public function validationAction($id)
+    public function validationAction($id) 
     {
         $credit = $this->getDoctrine()
                         ->getRepository('AppBundle:Credit')

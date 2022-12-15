@@ -29,7 +29,7 @@ $(document).ready(function(){
 			type: 'POST',
 			data: data,
 			success: function(res) {
-				$('#list_commande').html( res )
+				$('#list_commande').html(res)
 			}
 		})
 	}

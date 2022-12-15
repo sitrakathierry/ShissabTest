@@ -1,0 +1,231 @@
+#list_table {
+    background: #c0c0c0;
+    margin: 0;
+    padding: 15px;
+}
+
+.table-title{
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+}
+
+.select2-container {
+  width: 150px !important;
+}
+
+.select2-container--bootstrap4 .select2-selection--single {
+  height: calc(3rem + 3.5px) !important;
+}
+
+.creation_commande
+{
+    height : 500px ;
+    width: 100% ;
+    background-color: white;
+    padding: 30px;
+}
+
+.affiche_table
+{
+  height : auto ;
+  width: 100% ;
+  background-color: white;
+}
+
+
+.block_table
+{
+  height: 90px;
+  transition: .2s;
+  cursor: pointer ;
+  border : 1px solid lightgray ;
+}
+.c_status
+{
+  width: 100% ;
+  height: 20px ;
+}
+
+.table_desactivee
+{
+  background: repeating-linear-gradient(
+    45deg,
+    #f05142,
+    #f05142 10px,
+    #eb2222 10px,
+    #eb2222 20px
+  );
+}
+
+.table_libre
+{
+  background: repeating-linear-gradient(
+    45deg,
+    #48f042,
+    #48f042 10px,
+    #48eb22 10px,
+    #48eb22 20px
+  );
+}
+
+.table_occupee
+{
+  background: repeating-linear-gradient(
+    45deg,
+    #f0c742,
+    #f0c742 10px,
+    #FFA500 10px,
+    #FFA500 20px
+  );
+}
+.block_elem h3
+{
+  font-weight: inherit;
+  margin-top: 10px;
+}
+
+.block_elem
+{
+  width: 100%;
+}
+.block_table:hover
+{
+  background-color: lightgoldenrodyellow;
+  font-weight: 600!important;
+  /* background-color: rgb(249, 252, 203); */
+  box-shadow: 0px 0px 5px gray;
+}
+
+.elem_table
+{
+  height: auto ;
+  padding-top : 10px ;
+  padding-left: 15px !important;
+}
+
+.row {
+  margin-right: 0!important;
+  margin-left: 0!important;
+}
+
+.border_right
+{
+  border-right: 3px dashed lightgray;
+}
+.border_left
+{
+  border-left: 3px dashed lightgray;
+}
+
+
+.btn_green {
+  color: #fff;
+  background-color: #4cae4c;
+  border-color: #4cae4c;
+  height: 30px;
+  font-size: 0.9em;
+  font-family: "Maiandra GD";
+  letter-spacing: 1.5px;
+  transition: .3s;
+  /* font-weight: 700; */
+  padding: 2px 10px 2px 10px;
+  margin-top: 8px !important;
+}
+
+.btn_green:hover {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #398439;
+}
+
+.btn_green:focus
+{
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #398439;
+}
+
+*
+{
+  box-sizing: border-box;
+}
+
+.info_table {
+  padding: 0px 20px 20px 5px;
+}
+
+.thead-dark
+{
+  background-color: rgb(49, 49, 49);
+  color: white;
+}
+
+.btn-save
+{
+  margin-right: 20px;
+}
+
+.min_space
+{
+  width: 120px !important;
+}
+
+.max_space
+{
+  width: 180px !important;
+}
+
+.bouton_action
+{
+  margin-top: 30px;
+}
+
+.list_commande tbody tr td, .list_commande thead tr th
+{
+  line-height: 30px;
+}
+.table_accomp
+{
+  min-width: 300px;
+}
+
+th,td {
+  white-space: nowrap;
+}
+
+.btn_fermer,.btn_ouvrir
+{
+  font-size: 1.5em;
+  cursor: pointer;
+  transition: .3s; 
+}
+
+.btn_fermer:hover
+{
+  color: #eb2222;
+  transform: scale(1.1);
+}
+
+.btn_ouvrir
+{
+  margin-top: 10px;
+  margin-left: 8px;
+}
+
+.float-left
+{
+  float: left;
+}
+
+.float-right
+{
+  float: right;
+}
+
+
+.btn_ouvrir:hover
+{
+  color: #48eb22;
+  transform: scale(1.1);
+}

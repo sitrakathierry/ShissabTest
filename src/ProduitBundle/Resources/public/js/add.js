@@ -104,75 +104,25 @@ function makeCode (data) {
 
 $(document).on('click', '#btn-save', function(event) {
 	event.preventDefault();
-	var indice = "Non" ;
-
-	var val_num = [
-		parseInt($('.prix_achat').val()),
-		parseInt($('.charge').val()),
-		parseInt($('.prix_revient').val()),
-		parseInt($('.marge_valeur').val()),
-		parseInt($('.prix_vente').val()),
-		parseInt($('.stock').val()),
-		parseInt($('.stock_alerte').val()),
-		]
-	
-	var val_descri = [
-		"Prix d'achat",
-		"Charge",
-		"Prix de revient",
-		"Marge",
-		"Prix de vente",
-		"Stock",
-		"Stock Alerte"
-	] ;
-
-	
-	positif = true
-		for(var i = 0; i < val_num.length ; i++)
-		{
-			if (val_num[i] < 0)
-			{
-				positif = false
-				val_vide = false
-				valeur_negatif = val_descri[i]
-				break ;
-			}
-			else if(!(Number.isInteger(val_num[i])))
-			{
-				positif = false
-				val_vide = true
-				valeur_negatif = val_descri[i]
-				break ;
-			}
-		}
-	if (positif)
-	{
-
 		var val_str = [
+			$('#categorie').val(),
 			$('#code').val(),
 			$('#qrcode img').attr('src'),
 			$('#nom').val(),
 			$('#unite').val(),
-			$('#categorie').val(),
 			$('#produit_image').attr('src'),
-			$('.indice').val(),
-			$('.entrepot').val(),
-			$('.fournisseur').val(),
-			$('.expirer').val()
 		] ;
 
 		var descri_str = [
+			"Categorie",
 			"Code",
 			"Qr Code Image",
 			"Nom",
 			"Unité",
-			"Categorie",
-			"Produit Image",
-			"Indice",
-			"Entrepot",
-			"Fournisseur",
-			"Expirer le"
+			"Produit Image"
 		] ;
+
+
 
 		enregistre = true
 		for (var i = 0; i < val_str.length ; i++) 
@@ -185,83 +135,114 @@ $(document).on('click', '#btn-save', function(event) {
 			}
 		}
 
-		if (enregistre)
-		{
-			var data = {
-			code : $('#code').val(),
-			qrcode : $('#qrcode img').attr('src'),
-			nom : $('#nom').val(),
-			description : $('#description').code(),
-			unite : $('#unite').val(),
-			categorie: $('#categorie').val(),
-			produit_image : $('#produit_image').attr('src'),
-			indice : toArray('.indice'),
-			entrepot : toArray('.entrepot'),
-			fournisseur : toArray('.fournisseur'),
-			prix_achat : toArray('.prix_achat'),
-			charge : toArray('.charge'),
-			prix_revient : toArray('.prix_revient'),
-			marge_type : toArray('.marge_type'),
-			marge_valeur : toArray('.marge_valeur'),
-			prix_vente : toArray('.prix_vente'),
-			stock : toArray('.stock'),
-			stock_alerte : toArray('.stock_alerte'),
-			expirer : toArray('.expirer'),	
-			};
-			var url = Routing.generate('produit_save');
-			disabled_confirm(false); 
+	
+	if (enregistre)
+	{
+		var val_strPro = [
+			$('.indice'),
+			$('.entrepot'),
+			$('.fournisseur'),
+			$('.expirer')
+		]
 
-			swal({
-				title: "Enregistrer",
-				text: "Voulez-vous vraiment enregistrer ? ",
-				type: "info",
-				showCancelButton: true,
-				confirmButtonText: "Oui",
-				cancelButtonText: "Non",
-				},
-				function () {
-				disabled_confirm(true);
-					$.ajax({
-						url: url,
-						type: 'POST',
-						data: data,
-						success: function(res) {
-							show_success('Succès', 'Produit enregistré');
-						}
-					})
-			
-			});
-		}	
+		var str_descriPro = [
+			"Indice",
+			"Entrepot",
+			"Fournisseur",
+			"Expirer le"
+		]
+		vide = false
+
+		var elem_descriPro = ""
+
+		for (let i = 0; i < val_strPro.length; i++) {
+			const element = val_strPro[i];
+			element.each(function(){
+				if($(this).val() == "")
+				{
+					vide = true
+					elem_descriPro = str_descriPro[i]
+					return 
+				}
+			})
+
+			if(vide)
+			{
+				break ;
+			}
+		}
+
+
+		if(!vide)
+		{
+
+		}
 		else
 		{
 			swal({
 				type: 'warning',
-				title: val_descri_str+' vide',
-				text: 'Remplissez '+val_descri_str+' !'
+				title: elem_descriPro+' vide ou invalide',
+				text: 'Remplissez ou corriger '+elem_descriPro+' !'
 				// footer: '<a href="">Misy olana be</a>'
-			  })
+			})
+
 		}
-	}
+
+		
+
+
+		var val_num = [
+			$('.prix_achat'),
+			$('.charge'),
+			$('.prix_revient'),
+			$('.marge_valeur'),
+			$('.prix_vente'),
+			$('.stock'),
+			$('.stock_alerte')
+			]
+		
+		var val_descri = [
+			"Prix d'achat",
+			"Charge",
+			"Prix de revient",
+			"Marge",
+			"Prix de vente",
+			"Stock",
+			"Stock Alerte"
+		] ;
+	
+		
+		positif = true
+			for(var i = 0; i < val_num.length ; i++)
+			{
+				const element = val_num[i]  ;
+				element.each(function(){
+					if (element.val() < 0)
+					{
+						positif = false
+						val_vide = false
+						valeur_negatif = val_descri[i]
+						return 
+					}
+					else if(!(Number.isInteger(element.val())))
+					{
+						positif = false
+						val_vide = true
+						valeur_negatif = val_descri[i]
+						return 
+					}
+				})
+			}
+
+	}	
 	else
 	{
-		if(val_vide)
-		{
-			swal({
-				type: 'warning',
-				title: valeur_negatif+' vide ou invalide',
-				text: 'Remplissez ou corriger '+valeur_negatif+' !'
-				// footer: '<a href="">Misy olana be</a>'
-			  })
-		}
-		else
-		{
-			swal({
-				type: 'error',
-				title: valeur_negatif+' négative',
-				text: 'Verifier le '+valeur_negatif+' !'
-				// footer: '<a href="">Misy olana be</a>'
-			  })
-		}
+		swal({
+			type: 'warning',
+			title: val_descri_str+' vide',
+			text: 'Remplissez '+val_descri_str+' !'
+			// footer: '<a href="">Misy olana be</a>'
+		  })
 	}
 
 

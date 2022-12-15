@@ -78,15 +78,12 @@ class TableRestaurantRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         
         $query = "  select t.*
-                    from table_restaurant t
-                    where t.statut = 1
-                    and t.disponibilite = 1";
-
+                    from table_restaurant t where ";
         if ($agence) {
-            $query .= " and t.agence = " . $agence ;
+            $query .= " t.agence = " . $agence ;
         }
 
-        $query .= " order by t.nom asc";
+        // $query .= " order by t.nom asc";
 
         $statement = $em->getConnection()->prepare($query);
 

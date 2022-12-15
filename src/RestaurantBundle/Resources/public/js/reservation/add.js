@@ -1,5 +1,74 @@
 $(document).ready(function(){
 
+	// CONFIG TABLE
+
+	$('.btn_fermer').click(function(){
+		$(this).parent().parent().addClass("hidden") ;
+		$('.btn_ouvrir').parent().removeClass('hidden') ;
+		$('.info_table').removeClass('col-md-8').addClass('col-md-12') ;
+	})
+
+	$(".btn_ouvrir").click(function(){
+		$(this).parent().addClass("hidden") ;
+		$('.btn_fermer').parent().parent().removeClass("hidden") ;
+		$('.btn_fermer').parent().removeClass('hidden') ;
+		$('.info_table').removeClass('col-md-12').addClass('col-md-8') ;
+	})
+
+
+	
+	$('.table_desactivee').parent().parent().click(function(event){
+		event.preventDefault()
+
+		var self = $(this)
+		var url = Routing.generate('restaurant_activation_table');
+		swal({
+			title: "Activation",
+			text: "Voulez-vous activer la table ? ",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonText: "Oui",
+			cancelButtonText: "Non"
+		},
+		function () {
+
+			self.find('.table_desactivee').addClass('table_libre') ;
+			self.find('.table_desactivee').removeClass('table_desactivee') ;
+
+			// $.ajax({
+			// 	url: url,
+			// 	type: 'POST',
+			// 	data: data,
+			// 	success: function(res) {
+			// 		show_success('Succès','Commande enregistré');
+			// 	}
+			// })
+		  
+	  });
+
+		
+	})
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	$('#data_1 .input-group.date').datepicker({
         todayBtn: "linked",
         keyboardNavigation: false,
@@ -248,6 +317,7 @@ $(document).ready(function(){
 			return;
 		}
 
+		
 		var url = Routing.generate('restaurant_table_disponible');
 
 		$.ajax({

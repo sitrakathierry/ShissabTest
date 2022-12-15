@@ -125,6 +125,11 @@ restaurant_reservation_add:
     path:     /restaurant/reservation/add
     defaults: { _controller: RestaurantBundle:Reservation:add }
 
+restaurant_resevation_table:
+    path:     /restaurant/reservation/table/{idtable}
+    defaults: { _controller: RestaurantBundle:Reservation:table }
+
+
 restaurant_reservation_save:
     path:     /restaurant/reservation/save
     defaults: { _controller: RestaurantBundle:Reservation:save }
