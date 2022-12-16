@@ -63,7 +63,7 @@ class InventaireController extends Controller
             'userAgence' => $userAgence,
             'categories' => $categories,
             'entrepots' => $entrepots,
-            'userEntrepot' => $userEntrepot,
+            'userEntrepot' => $userEntrepot
         ));
 	}
 
