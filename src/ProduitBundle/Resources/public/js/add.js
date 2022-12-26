@@ -175,7 +175,50 @@ $(document).on('click', '#btn-save', function(event) {
 
 		if(!vide)
 		{
-
+			var data = {
+				code : $('#code').val(),
+				qrcode : $('#qrcode img').attr('src'),
+				nom : $('#nom').val(),
+				description : $('#description').code(),
+				unite : $('#unite').val(),
+				categorie: $('#categorie').val(),
+				produit_image : $('#produit_image').attr('src'),
+				indice : toArray('.indice'),
+				entrepot : toArray('.entrepot'),
+				fournisseur : toArray('.fournisseur'),
+				prix_achat : toArray('.prix_achat'),
+				charge : toArray('.charge'),
+				prix_revient : toArray('.prix_revient'),
+				marge_type : toArray('.marge_type'),
+				marge_valeur : toArray('.marge_valeur'),
+				prix_vente : toArray('.prix_vente'),
+				stock : toArray('.stock'),
+				stock_alerte : toArray('.stock_alerte'),
+				expirer : toArray('.expirer'),	
+				};
+				var url = Routing.generate('produit_save');
+				disabled_confirm(false); 
+	
+				swal({
+					title: "Enregistrer",
+					text: "Voulez-vous vraiment enregistrer ? ",
+					type: "info",
+					showCancelButton: true,
+					confirmButtonText: "Oui",
+					cancelButtonText: "Non",
+					},
+					function () {
+					disabled_confirm(true);
+						$.ajax({
+							url: url,
+							type: 'POST',
+							data: data,
+							success: function(res) {
+								show_success('Succès', 'Produit enregistré');
+							}
+						})
+				
+				});
 		}
 		else
 		{

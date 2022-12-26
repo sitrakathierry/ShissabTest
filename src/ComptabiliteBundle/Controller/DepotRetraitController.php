@@ -253,7 +253,6 @@ class DepotRetraitController extends Controller
             ->setFillType('solid')
             ->getStartColor()->setRGB('b8e4bb');
 
-
         $phpExcelObject->getActiveSheet()->setTitle('SOLDE GENERALE');
         $phpExcelObject->setActiveSheetIndex(0);
 
@@ -272,12 +271,13 @@ class DepotRetraitController extends Controller
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $name
         );
+
         $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
         $response->headers->set('Pragma', 'public');
         $response->headers->set('Cache-Control', 'maxage=1');
         $response->headers->set('Content-Disposition', $dispositionHeader);
 
-        return $response;
+        return $response; 
     }
 
     public function deleteMouvementAction($id)

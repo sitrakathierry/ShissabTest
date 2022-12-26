@@ -28,7 +28,7 @@
 						<td>
 
 							{% if pannier.type == 1 %}
-								{{ pannier.produit }} - {{ pannier.prix }} KMF
+								{{ pannier.produit }} - {{ pannier.prix|round }} KMF
 							{% endif %}
 
 							{% if pannier.type == 2 %}
@@ -42,11 +42,11 @@
 						</td>
 						<td>
 							{% if pannier.type == 1 %}
-								{{ pannier.qte }} {{ pannier.unite }}
+								{{ pannier.qte|round }} {{ pannier.unite }}
 							{% endif %}
 
 							{% if pannier.type == 2 %}
-								{{ pannier.periode }} 
+								{{ pannier.periode|round }} 
 								{% if pannier.duree == 1 %}
 									heures
 								{% endif %}
@@ -62,24 +62,24 @@
 							{% endif %}
 
 							{% if pannier.type == 3 %}
-								{{ pannier.qte }}
+								{{ pannier.qte|round }}
 							{% endif %}
 
 
 						</td>
-						<td>{{ pannier.prix }}</td>
+						<td>{{ pannier.prix|round }}</td>
 						<td>
-							{{ pannier.montant_remise }}
+							{{ pannier.montant_remise|round }}
 							{% if pannier.type_remise == 0 and pannier.montant_remise %} % {% endif %}
 						</td>
-						<td>{{ pannier.montant }}</td>
+						<td>{{ pannier.montant|round }}</td>
 						{% if i == 1 %}
 							<td rowspan="{{ (commande.panniers | length) + 4 }}">
 								{% if commande.statut == 1 %}
 									EN COURS
 								{% else %}
 									VALIDÉ
-								{% endif %}
+								{% endif %} 
 							</td>
 							<td rowspan="{{ (commande.panniers | length) + 4 }}">
 								<a href="{{ path('bon_commande_show', { id : commande.id }) }}" class="btn btn-primary">
@@ -92,21 +92,21 @@
 				{% endfor %}
 				<tr>
 					<th colspan="4">TOTAL</th>
-					<th>{{ commande.ht }}</th>
+					<th>{{ commande.ht|round }}</th>
 				</tr>
 				<tr>
 					<th colspan="4">REMISE</th>
 					{# <th>{{ commande.remise }}%</th> #}
-					<th>{{ commande.montant_remise }}</th>
+					<th>{{ commande.montant_remise|round }}</th>
 				</tr>
 				<tr>
 					<th colspan="4">TVA</th>
 					{# <th>{{ commande.tva }}%</th> #}
-					<th>{{ commande.montant_tva }}</th>
+					<th>{{ commande.montant_tva|round }}</th>
 				</tr>
 				<tr>
 					<th colspan="4">TTC</th>
-					<th>{{ commande.montant_total }}</th>
+					<th>{{ commande.montant_total|round }}</th>
 					{% set total = total + commande.montant_total %}
 				</tr>
 				<tr>
@@ -116,9 +116,16 @@
 		{% endfor %}
 	</tbody>
 	<tfoot>
+	{# {% set decimal = total - (total|round) %}
+	{%  if decimal > 0  %}
+	{% set total = total|number_format(2,',', '') %}
+	{% else %}
+	{% set total = total|round %}
+	{% endif %} #}
+
 		<tr bgcolor="#fd9597">
 			<th colspan="7">TOTAL</th>
-			<th >{{ total }}</th>
+			<th >{{ total|round }}</th>
 			<th></th>
 			<th></th>
 		</tr>

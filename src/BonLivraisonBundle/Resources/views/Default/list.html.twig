@@ -38,11 +38,11 @@
 						</td>
 						<td>
 							{% if detail.type == 1 %}
-								{{ detail.qte }} {{ detail.unite }}
+								{{ detail.qte|round }} {{ detail.unite }}
 							{% endif %}
 
 							{% if detail.type == 2 %}
-								{{ detail.periode }} 
+								{{ detail.periode|round }} 
 								{% if detail.duree == 1 %}
 									heures
 								{% endif %}
@@ -58,7 +58,7 @@
 							{% endif %}
 
 							{% if detail.type == 3 %}
-								{{ detail.qte }}
+								{{ detail.qte|round }}
 							{% endif %}
 
 

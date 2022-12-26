@@ -1,7 +1,7 @@
 var cl_row_edited = 'r-cl-edited';
 
 $(document).ready(function(){
-
+    var datas = [] ;
 	load_list();
 
 	function instance_grid() {
@@ -22,15 +22,36 @@ $(document).ready(function(){
         },{ 
             name:'prix_vente',
             index:'prix_vente',
-            align: 'center'
+            align: 'center',
+            formatter: function(v,i,r) {
+                if (r.modele == 4) {
+                    return Math.round(r.prix_vente * 100) / 100;
+                } else {
+                    return (v) ? Math.round(v * 100) / 100: Math.round(r.prix_vente * 100) / 100;
+                }
+            }
         },{ 
             name:'stock',
             index:'stock',
-            align: 'center'
+            align: 'center',
+            formatter: function(v,i,r) {
+                if (r.modele == 4) {
+                    return Math.round(r.stock * 100) / 100;
+                } else {
+                    return (v) ? Math.round(v * 100) / 100: Math.round(r.stock * 100) / 100;
+                }
+            }
         },{ 
             name:'total',
             index:'total',
             align: 'center',
+            formatter: function(v,i,r) {
+                if (r.modele == 4) {
+                    return Math.round(r.total * 100) / 100;
+                } else {
+                    return (v) ? Math.round(v * 100) / 100: Math.round(r.total * 100) / 100;
+                }
+            }
         }];
 
         var options = {
@@ -72,15 +93,21 @@ $(document).ready(function(){
         return tableau_grid;
     }
 
-    function load_list() {
-    	
+    function load_list() 
+    {	
         var url = Routing.generate('produit_inventaire_list');
+        var agence  =  $('#agence').val() ; 
+        var entrepot  =  $('#entrepot').val() ;
+        var recherche_par =  $('#recherche_par').val() ;
+        var a_rechercher =  $('#a_rechercher').val() ;
+        var categorie =  $('#categorie').val() ;
+
         var data = {
-        	agence : $('#agence').val(),
-        	entrepot : $('#entrepot').val(),
-            recherche_par: $('#recherche_par').val(),
-            a_rechercher: $('#a_rechercher').val(),
-            categorie: $('#categorie').val(),
+        	agence : agence,
+        	entrepot : entrepot,
+            recherche_par : recherche_par,
+            a_rechercher: a_rechercher,
+            categorie: categorie,
         };
 
         $.ajax({
@@ -89,14 +116,15 @@ $(document).ready(function(){
             data: data,
             dataType: 'html',
             success: function(res) {
+                datas = res ;
                 var grid = instance_grid();
                 grid.jqGrid('setGridParam', {
-                    data        : $.parseJSON(res),
+                    data  : $.parseJSON(res),
                     loadComplete: function() {
                         $(this).jqGrid("footerData", "set", {
                             categorie: "Total",
-                            stock : $(this).jqGrid('getCol', 'stock', false, 'sum'),
-                            total : $(this).jqGrid('getCol', 'total', false, 'sum'),
+                            stock : Math.round($(this).jqGrid('getCol', 'stock', false, 'sum') * 100) / 100,
+                            total : Math.round($(this).jqGrid('getCol', 'total', false, 'sum') * 100) / 100,
                         });
                     }
                 }).trigger('reloadGrid', [{
@@ -121,4 +149,17 @@ $(document).ready(function(){
       }
     });
 
+ 
+    $(".cl_export").click(function(){
+        
+        var url = Routing.generate('produit_inventaire_export');
+
+        var params = ''
+                + '<input type="hidden" name="datas" value="'+encodeURI(datas)+'">'
+
+        $('#form_export').attr('action',url).html(params);
+        $('#form_export')[0].submit();
+    })
+
 });
+

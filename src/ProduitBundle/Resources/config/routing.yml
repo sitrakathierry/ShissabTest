@@ -34,6 +34,14 @@ produit_show:
         expose: true
     methods: [GET]
 
+produit_mise_ajour :
+    path : /produit/maj
+    defaults: { _controller: ProduitBundle:Default:miseAjour }
+    options:
+        expose: true
+    methods: [GET]
+
+
 produit_delete:
     path:     /produit/delete/{id}
     defaults: { _controller: ProduitBundle:Default:delete }
@@ -186,7 +194,7 @@ produit_delete_variation:
     options:
         expose: true
     methods: [GET] 
-
+ 
 produit_inventaire_index:
     path:     /produit/inventaire/index
     defaults: { _controller: ProduitBundle:Inventaire:index }
@@ -198,6 +206,13 @@ produit_inventaire_list:
         expose: true
     methods: [POST] 
 
+produit_inventaire_export :
+    path:     /produit/inventaire/export
+    defaults: { _controller: ProduitBundle:Inventaire:export }
+    methods:  [POST]
+    options:
+        expose: true
+        
 # PREFERENCE CATEGORIE
 produit_preference_index:
     path:     /produit/preference/index

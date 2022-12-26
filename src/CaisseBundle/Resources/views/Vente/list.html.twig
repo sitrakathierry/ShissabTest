@@ -21,10 +21,10 @@
 							<td rowspan="{{ (commande.panniers | length) + 1 }}">{{ commande.date }}</td>
 							<td rowspan="{{ (commande.panniers | length) + 1 }}">{{ commande.recu }}</td>
 						{% endif %}
-						<td>{{ pannier.produit }}  {{ pannier.pu }} {{ agence.deviseSymbole }}</td>
-						<td>{{ pannier.qte }}</td>
-						<td>{{ pannier.pu }}</td>
-						<td>{{ pannier.total|number_format(2) }}</td>
+						<td>{{ pannier.produit }}  {{ pannier.pu|round }} {{ agence.deviseSymbole }}</td>
+						<td>{{ pannier.qte|round }}</td>
+						<td>{{ pannier.pu|round }}</td>
+						<td>{{ pannier.total|round }}</td>
 						{% if i == 1 %}
 							<td rowspan="{{ (commande.panniers | length) + 1 }}">
 								<a href="{{ path('caisse_commande_show', { id : commande.id }) }}" class="btn btn-primary">
@@ -43,7 +43,7 @@
 				{% endfor %}
 				<tr>
 					<td colspan="3">TOTAL</td>
-					<td>{{ commande.montant_total|number_format(2) }}</td>
+					<td>{{ commande.montant_total|round }}</td>
 					{% set total = total + commande.montant_total %}
 				</tr>
 				<tr>
@@ -55,7 +55,7 @@
 	<tfoot>
 		<tr bgcolor="#fd9597">
 			<th colspan="5">TOTAL</th>
-			<th >{{ total }}</th>
+			<th >{{ total|round }}</th>
 			<th></th>
 		</tr>
 	</tfoot>

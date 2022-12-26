@@ -35,9 +35,25 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
             $query .= " and e.id = " . $entrepot ;
         }
 
+        if ($categorie) {
+            $query .= " and cp.id = " . $categorie ;
+        }
+
+        if ($a_rechercher) {
+            if ($recherche_par == 0) {
+                $query .= " and p.code_produit like '".$a_rechercher."%'";
+            }
+            else
+            {
+                $query .= " and p.nom like '%".$a_rechercher."%'" ;
+            }
+        }
+
+
+
         $query .= " and p.is_delete IS NULL";
 
-        $query .= " order by p.nom ASC";
+        // $query .= " order by p.nom ASC";
 
         $statement = $em->getConnection()->prepare($query);
 
@@ -57,5 +73,33 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
         $statement->execute([$id]);
         $result = $statement->fetch();
         return $result ; 
+    }
+
+
+    public function mettreAjourTable()
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "ALTER TABLE `variation_produit` ADD `produitId` INT NULL AFTER `produit_entrepot`" ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array());
+        // return $this ;
+    }
+
+    public function getProduitEntrepotNotNull()
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT * FROM `variation_produit` WHERE `produit_entrepot` IS NOT NULL" ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array());
+        $result = $statement->fetchAll();
+        return $result ; 
+    }
+
+    public function updateProduitId($produitId,$produitEnt)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "UPDATE `variation_produit` SET `produitId` = ? WHERE `produit_entrepot` = ?" ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql); // PREPARER LA REQUETE
+        $statement->execute(array($produitId,$produitEnt)); // APPLIQUER LAS PARAMETRES DE LA REQUETE
     }
 }

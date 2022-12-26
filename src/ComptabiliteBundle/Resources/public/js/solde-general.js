@@ -385,7 +385,7 @@ $(document).ready(function(){
 		}	
 
 	})
-
+  
     $(document).on('click','.cl_export',function() {
         // var extension = $(this).attr('data-format');
 

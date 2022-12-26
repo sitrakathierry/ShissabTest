@@ -43,8 +43,19 @@ class VariationProduit
      *   @ORM\JoinColumn(name="produit_entrepot", referencedColumnName="id")
      * })
      */
+        
     private $produitEntrepot;
 
+    /**
+     * @var \AppBundle\Entity\Produit
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Produit")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="produitId", referencedColumnName="id")
+     * })
+     */
+    
+    private $produitId ;
     /**
      * @var integer
      *
@@ -143,11 +154,35 @@ class VariationProduit
      *
      * @return \AppBundle\Entity\ProduitEntrepot
      */
+
     public function getProduitEntrepot()
     {
         return $this->produitEntrepot;
     }
+    
+    /**
+     * Set produit
+     *
+     * @param \AppBundle\Entity\Produit $produitId
+     *
+     * @return VariationProduit
+     */
+    public function setproduitId($produitId)
+    {
+        $this->produitId = $produitId ; 
 
+        return $this ;
+    }
+
+    /**
+     * Get produit
+     *
+     * @return \AppBundle\Entity\Produit
+     */
+    public function getproduitId()
+    {
+        return $this->produitId ;
+    }
     /**
      * Set margeType
      *

@@ -1,3 +1,7 @@
+tache:
+    resource: "@TacheBundle/Resources/config/routing.yml"
+    prefix:   /
+
 stock_interne_general:
     resource: "@StockInterneGeneralBundle/Resources/config/routing.yml"
     prefix:   /

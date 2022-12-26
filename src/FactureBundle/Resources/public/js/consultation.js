@@ -81,9 +81,9 @@ $(document).ready(function(){
                 classes : 'js-total',
                 formatter: function(v,i,r) {
                     if (r.modele == 4) {
-                        return r.montant;
+                        return Math.round(r.montant * 100) / 100;
                     } else {
-                        return (v) ? v : r.montant;
+                        return (v) ? Math.round(v * 100) / 100: Math.round(r.montant * 100) / 100;
                     }
                 }
             },{
@@ -180,7 +180,7 @@ $(document).ready(function(){
                     loadComplete: function() {
                         $(this).jqGrid("footerData", "set", {
                             agence: "Total",
-                            total : $(this).jqGrid('getCol', 'total', false, 'sum'),
+                            total : Math.round($(this).jqGrid('getCol', 'total', false, 'sum') * 100) / 100,
                         });
                     
                     }

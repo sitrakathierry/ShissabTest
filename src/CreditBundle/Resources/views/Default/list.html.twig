@@ -45,11 +45,11 @@
 						</td>
 						<td>
 							{% if detail.type == 1 %}
-								{{ detail.qte }} {{ detail.unite }}
+								{{ detail.qte|round }} {{ detail.unite }}
 							{% endif %}
 
 							{% if detail.type == 2 %}
-								{{ detail.periode }} 
+								{{ detail.periode|round }} 
 								{% if detail.duree == 1 %}
 									heures
 								{% endif %}
@@ -65,17 +65,17 @@
 							{% endif %}
 
 							{% if detail.type == 3 %}
-								{{ detail.qte }}
+								{{ detail.qte|round }}
 							{% endif %}
 
 
 						</td>
-						<td>{{ detail.prix }}</td>
+						<td>{{ detail.prix|round }}</td>
 						<td>
-							{{ detail.montant_remise }}
+							{{ detail.montant_remise|round }}
 							{% if detail.type_remise == 0 and detail.montant_remise %} % {% endif %}
 						</td>
-						<td>{{ detail.montant }}</td>
+						<td>{{ detail.montant|round }}</td>
 						{% if i == 1 %}
 							<td rowspan="{{ (credit.details | length) + 6 }}">
 								{% if credit.statut == 1 and credit.statut_paiement == 0 %}
@@ -115,30 +115,30 @@
 				{% endfor %}
 				<tr>
 					<th colspan="4">TOTAL</th>
-					<th>{{ credit.ht }}</th>
+					<th>{{ credit.ht|round }}</th>
 				</tr>
 				<tr>
 					<th colspan="4">REMISE</th>
 					{# <th>{{ credit.remise }}%</th> #}
-					<th>{{ credit.montant_remise }}</th>
+					<th>{{ credit.montant_remise|round }}</th>
 				</tr>
 				<tr>
 					<th colspan="4">TVA</th>
 					{# <th>{{ credit.tva }}%</th> #}
-					<th>{{ credit.montant_tva }}</th>
+					<th>{{ credit.montant_tva|round }}</th>
 				</tr>
 				<tr>
 					<th colspan="4">TTC</th>
-					<th>{{ credit.montant_total }}</th>
+					<th>{{ credit.montant_total|round }}</th>
 				</tr>
 				<tr>
 					<th colspan="4">PAYEE</th>
-					<th>{{ credit_payee[j] }}</th>
+					<th>{{ credit_payee[j]|round }}</th>
 				</tr>
 				<tr>
 					<th colspan="4">TTC RESTANT</th>
 					{% set ttc_restant = credit.montant_total - credit_payee[j] %}
-					<th>{{ ttc_restant|number_format(2, '.', '') }}</th>
+					<th>{{ ttc_restant|round }}</th>
 				</tr>
 				<tr>
 					<th colspan="10" bgcolor="#ddd"></th>
@@ -150,7 +150,7 @@
 		{% endfor %}
 				<tr>
 					<th colspan="7" class="text-right ">TOTAL GENERAL&emsp;&emsp;&emsp;</th>
-					<th colspan="3" bgcolor="#eff">{{ total_general|number_format(2, '.', ' ') }}</th>
+					<th colspan="3" bgcolor="#eff">{{ total_general|round }}</th>
 				</tr>
 	</tbody>
 </table>

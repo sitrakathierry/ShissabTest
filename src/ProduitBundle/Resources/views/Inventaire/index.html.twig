@@ -3,6 +3,16 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/plugins/jqGrid/ui.jqgrid.css') }}">
+    <style>
+        #a_rechercher
+        {
+            margin-top : 23px ;
+        }
+        .tableau_donnee
+        {
+            margin-top : 20px ;
+        }
+    </style>
 {% endblock  %}
 
 {% block scripts %}
@@ -47,8 +57,8 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">ENTREPÔT</label>
-                                        <div class="col-sm-9">
+                                        <label class="col-sm-6 control-label">ENTREPÔT</label>
+                                        <div class="col-sm-12">
                                             <select class="form-control m-b entrepot" id="entrepot">
                                                 {% if is_granted('ROLE_RESPONSABLE') %}
                                                     <option value="0">TOUS</option>
@@ -64,8 +74,8 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">CATEGORIE</label>
-                                        <div class="col-sm-8">
+                                        <label class="col-sm-6 control-label">CATEGORIE</label>
+                                        <div class="col-sm-12">
                                             <select class="form-control m-b categorie" id="categorie">
                                                 <option value="0">Tous</option>
                                                 {% for categorie in categories %}
@@ -79,8 +89,8 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">RECHERCHE PAR</label>
-                                        <div class="col-sm-8">
+                                        <label class="col-sm-12 control-label">RECHERCHE PAR</label>
+                                        <div class="col-sm-12">
                                             <select class="form-control m-b statut" id="recherche_par">
                                                 <option value="0">CODE PRODUIT</option>
                                                 <option value="1">NOM PRODUIT</option>
@@ -90,18 +100,29 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12 ">
                                             <input type="text" class="form-control" id="a_rechercher" placeholder="Texte à rechercher ..." style="margin-bottom:10px;">
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-1">
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            <button class="btn btn-primary" id="btn_search" style="width:100%">
-                                                <i class="fa fa-search"></i>
-                                            </button>
+                                            <div class="btn-group" style="width:100%">
+                                                <button class="btn btn-primary" id="btn_search" style="width:50%">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                                <span data-toggle="dropdown" class="btn btn-white dropdown-toggle"><i class="fa fa-download" aria-hidden="true"></i></span>
+                                                <ul class="dropdown-menu">
+                                                    <li class="cl_export" data-type="xls">
+                                                        <a href="#">
+                                                            <i class="fa fa-file-excel-o"></i>
+                                                            Exporter en Excel
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -109,8 +130,10 @@
 
                         </div>
                     </div>
-
-                    <div class="row">
+                    <div class="hidden">
+                        <form action="" method="POST" id="form_export"></form>
+                    </div>
+                    <div class="row tableau_donnee">
                         <div class="col-lg-12">
                             <div class="t-content" style="width:100%;overflow:auto;">
                                 <table id="liste_produit"></table>

@@ -11,6 +11,7 @@ use AppBundle\Entity\Ravitaillement;
 use AppBundle\Entity\PrixProduit;
 use AppBundle\Entity\ProduitEntrepot;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -187,7 +188,7 @@ class DefaultController extends Controller
 
                     $produitEntrepot->setEntrepot($entrepot);
 
-                    $em->persist($produitEntrepot);
+                    $em->persist($produitEntrepot); 
                     $em->flush();
 
                     /**
@@ -204,7 +205,7 @@ class DefaultController extends Controller
                     $variation->setMargeValeur($marge_valeur);
                     $variation->setStock($stock);
                     $variation->setProduitEntrepot($produitEntrepot);
-
+                    $variation->setproduitId($produit) ;
                     $em->persist($variation);
                     $em->flush();
                     
@@ -639,5 +640,29 @@ class DefaultController extends Controller
             'exist' => $exist
         ));
         
+    }
+
+    public function miseAjourAction(){
+        // $this->getDoctrine()
+        //             ->getRepository('AppBundle:VariationProduit')
+        //             ->mettreAjourTable() ;
+
+        // $variations = $this->getDoctrine()
+        //             ->getRepository('AppBundle:VariationProduit')
+        //             ->getProduitEntrepotNotNull() ;
+        
+        // foreach ($variations as $variation) {
+        //     $idPEntrepot = $this->getDoctrine()
+        //                     ->getRepository('AppBundle:ProduitEntrepot')
+        //                     ->getProduitEntrepot($variation["produit_entrepot"]) ;
+            
+        //     $this->getDoctrine()
+        //                 ->getRepository('AppBundle:VariationProduit')
+        //                 ->updateProduitId($idPEntrepot["produit"],$variation["produit_entrepot"]) ;
+        // }
+
+        return new Response("Mise à jour terminé") ;
+
+
     }
 }

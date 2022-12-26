@@ -29,11 +29,11 @@
 							<td>{{ approvisionnement.produit }}</td>
 							<td>{{ approvisionnement.qte }} {{ approvisionnement.unite }}</td>
 							<td>{{ (approvisionnement.date_expiration) ? approvisionnement.date_expiration|date("d/m/Y") : '' }}</td>
-							<td>{{ approvisionnement.prix_achat }}</td>
-							<td>{{ approvisionnement.charge }}</td>
-							<td>{{ approvisionnement.prix_revient }}</td>
-							<td>{{ approvisionnement.prix_vente }}</td>
-							<td>{{ approvisionnement.total }}</td>
+							<td>{{ approvisionnement.prix_achat|round }}</td>
+							<td>{{ approvisionnement.charge|round }}</td>
+							<td>{{ approvisionnement.prix_revient|round }}</td>
+							<td>{{ approvisionnement.prix_vente|round }}</td>
+							<td>{{ approvisionnement.total|round }}</td>
 							{% if i == 1 %}
 								<td rowspan="{{ (ravitaillement.approvisionnements | length) + 1 }}">
 									<!-- <button class="btn btn-primary cl_show_appro">
@@ -47,7 +47,7 @@
 				{% endfor %}
 				<tr>
 					<td colspan="7">TOTAL</td>
-					<td><b>{{ ravitaillement.montant_total }}</b></td>
+					<td><b>{{ ravitaillement.montant_total|round }}</b></td>
 					{% set total = total + ravitaillement.montant_total %}
 				</tr>
 				<tr>
@@ -59,7 +59,7 @@
 	<tfoot>
 		<tr bgcolor="#fd9597">
 			<th colspan="9">TOTAL</th>
-			<th >{{ total }}</th>
+			<th >{{ total|round }}</th>
 			<th></th>
 		</tr>
 	</tfoot>

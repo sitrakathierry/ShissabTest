@@ -48,6 +48,7 @@ class AppKernel extends Kernel
             new StockInterneBundle\StockInterneBundle(),
             new StockInterneGeneralBundle\StockInterneGeneralBundle(),
             new SGK\BarcodeBundle\SGKBarcodeBundle(),
+            new TacheBundle\TacheBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

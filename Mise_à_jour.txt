@@ -1,3 +1,7 @@
+INSERT INTO `menu` (`id`, `menu_id`, `route`, `name`, `icon`, `rang`, `disabled`, `admin`) VALUES (NULL, NULL, 'tache_homepage', 'Gestion Tache', 'fa-wrench', '14', NULL, NULL);
+INSERT INTO `menu` (`id`, `menu_id`, `route`, `name`, `icon`, `rang`, `disabled`, `admin`) VALUES (NULL, '151', 'tache_affectation', 'Affectation', 'fa-plus', '14', NULL, NULL);
+INSERT INTO `menu` (`id`, `menu_id`, `route`, `name`, `icon`, `rang`, `disabled`, `admin`) VALUES (NULL, '151', 'tache_consultation', 'Consultation', 'fa-list', '14', NULL, NULL);
 
 Ibrahim : Mettre le projet Arc Concept sur le git  
+
 

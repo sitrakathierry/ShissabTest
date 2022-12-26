@@ -1,0 +1,13 @@
+tache_homepage:
+    path:     /tache/index
+    defaults: { _controller: TacheBundle:Default:index }
+
+tache_affectation:
+    path:     /tache/affectation
+    defaults: { _controller: TacheBundle:Default:add }
+
+
+tache_consultation:
+    path:     /tache/consultation
+    defaults: { _controller: TacheBundle:Default:consultation }
+
