@@ -3,6 +3,8 @@
 namespace MenuBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -26,6 +28,16 @@ class DefaultController extends Controller
         	'user' => $user,
         	'menus' => $menus
         ));
+    }
+
+    public function ajoutAction()
+    {
+
+        $this->getDoctrine()
+            ->getRepository('AppBundle:Menu')
+            ->creerMenu();
+            return new Response("Action effectué") ;
+        
     }
 
     public function maxRole()

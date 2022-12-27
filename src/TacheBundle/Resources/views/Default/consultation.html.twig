@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+{{ parent() }}
+<style type="text/css">
+    .t-block
+    {
+        width: 100%;
+        height: auto;
+        background-color: white!important;
+        /* border: 2px solid black ;  */
+        overflow: hidden;
+    }
+
+    .t-title
+    {
+        width: 100%;
+        border-bottom: 1px solid lightgray;
+        border-top : 3px solid gray ;
+        padding-left: 20px;
+    }
+
+    .t-title h2
+    {
+        font-size: 1.5em !important;
+        margin: 10px 0 10px 10px !important;
+    }
+    .t-content{
+        padding: 30px ;
+    }
+    .mt-3
+    {
+        margin-top: 25px;
+    }
+    .mb-3
+    {
+        margin-bottom: 25px;
+    }
+</style>
+{% endblock  %}
+{% block scripts %}
+{{ parent() }}
+{# <script src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script> #}
+{# <script src="{{ asset('bundles/credit/js/add.js') }}"></script> #}
+{% endblock %}
+{% block contenu %}
+    <div class="t-block">
+        <div class="t-title">
+            <h2>LISTE DES TACHES</h2>
+        </div>
+        <div class="t-content table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Date d'éxecution</th>
+                        <th>Durée</th>
+                        <!-- <th>Type durée</th> -->
+                        <th>Personne assigné</th>
+                        <th>Type tâche</th>
+                        <th>Action</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

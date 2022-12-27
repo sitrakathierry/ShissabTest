@@ -59,6 +59,14 @@ class MenuRepository extends \Doctrine\ORM\EntityRepository
 
 	}
 
+	public function creerMenu()
+	{
+		$em = $this->getEntityManager();
+		$sql = "INSERT INTO `menu` (`id`, `menu_id`, `route`, `name`, `icon`, `rang`, `disabled`, `admin`) VALUES (NULL, '151', 'tache_consultation', 'Consultation', 'fa-list', '14', NULL, NULL)" ;
+		$statement = $em->getConnection()->prepare($sql);
+		$statement->execute();
+	}
+
 	public function byRole($role, User $user = null)
 	{
 

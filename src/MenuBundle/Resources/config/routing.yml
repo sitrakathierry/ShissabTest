@@ -31,7 +31,6 @@ menu_utilisateur_index:
     path:     /menu/utilisateur/index
     defaults: { _controller: MenuBundle:MenuUtilisateur:index }
 
-
 menu_utilisateur_list:
     path: /menu/utilisateur/list/{user}
     defaults: { _controller: MenuBundle:MenuUtilisateur:userMenu }
