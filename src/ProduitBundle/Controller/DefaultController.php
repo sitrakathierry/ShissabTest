@@ -12,7 +12,7 @@ use AppBundle\Entity\PrixProduit;
 use AppBundle\Entity\ProduitEntrepot;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-
+ 
 class DefaultController extends Controller
 {
     public function indexAction()
@@ -298,13 +298,14 @@ class DefaultController extends Controller
         $produits = $this->getDoctrine()
                 ->getRepository('AppBundle:Produit')
                 ->findBy(array(
-                    'agence' => $agence
+                    'agence' => $agence,
+                    'is_delete' => NULL
                 ));
-
+                
         $preference = $this->getDoctrine()
                 ->getRepository('AppBundle:PreferenceCategorie')
                 ->findOneBy(array(
-                    'agence' => $agence
+                    'agence' => $agence,
                 ));
 
         if ($preference) {
@@ -343,6 +344,36 @@ class DefaultController extends Controller
                             $categorie,
                             $produit_id
                         );
+        $totalStock = 0 ;
+        $lstProduit = [] ;
+        for ($i=0; $i < count($produits) ; $i++) { 
+                $totalStock = $this->getDoctrine() 
+                ->getRepository('AppBundle:VariationProduit') 
+                ->getTotalVariationProduit($agence,$produits[$i]["id"]) ;
+                $produits[$i]["stock"] = number_format($totalStock["stockG"],0,"."," ") ;
+
+                if(empty($produits[$i]["stock"]))
+                {
+                    $produits[$i]["stock"] = 0 ;
+                }
+
+                // if($i > 0)
+                // {
+                //     if($produits[$i]["nom"] == $produits[$i-1]["nom"])
+                //     {
+                //         // $lstProduit[$i-1]["stock"] +=  $produits[$i]["stock"] ;
+                //         $produits[$i]["nom"] = "MEME"; 
+                //     }
+                //     else
+                //     {
+                //         array_push($lstProduit,$produits[$i]) ;
+                //     }
+                // }
+                // else
+                // {
+                //     array_push($lstProduit,$produits[$i]) ;
+                // }
+        }
 
         return new JsonResponse($produits);
     }
@@ -382,20 +413,18 @@ class DefaultController extends Controller
                 ->find($id);
 
         $user = $this->getUser();
-
         $userAgence = $this->getDoctrine()
                     ->getRepository('AppBundle:UserAgence')
                     ->findOneBy(array(
                         'user' => $user
                     ));
-
+        $agence = $userAgence->getAgence();
+        
         $userEntrepot = $this->getDoctrine()
                     ->getRepository('AppBundle:UserEntrepot')
                     ->findOneBy(array(
                         'user' => $user
                     ));
-
-        $agence = $userAgence->getAgence();
 
         $print = false;
 
@@ -421,18 +450,24 @@ class DefaultController extends Controller
         
         $produitEntrepotList = $this->getDoctrine()
                     ->getRepository('AppBundle:ProduitEntrepot') 
-                    ->findOneBy(array(
+                    ->findBy(array(
                         'produit' => $id
                     ));
- 
+        
+        $agenceId = $agence->getId() ;
+        $totalStock = $this->getDoctrine()
+                ->getRepository('AppBundle:VariationProduit') 
+                ->getTotalVariationProduit($agenceId,$id) ;
+
         return $this->render('ProduitBundle:Default:show.html.twig',array( 
             'userEntrepot' => $userEntrepot,
             'entrepots' => $entrepots,
             'agence' => $agence,
             'produit' => $produit,
             'categories' => $categories,
-            'print' => $print,
-            'produitEntrepot' => $produitEntrepotList
+            'print' => $print, 
+            'produitEntrepot' => $produitEntrepotList,
+            'totalStock' => number_format($totalStock["stockG"],0,"."," "),
         ));
     }
 

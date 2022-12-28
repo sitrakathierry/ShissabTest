@@ -45,14 +45,21 @@ class ApprovisionnementController extends Controller
                 ->getRepository('AppBundle:Fournisseur')
                 ->findBy(array(
                     'agence' => $agence
-                ));
+                )); 
 
-        return $this->render('ProduitBundle:Approvisionnement:add.html.twig', array(
-        	'agence' => $agence,
-            'produits' => $produits,
-            'entrepots' => $entrepots,
-            'fournisseurs' => $fournisseurs,
-        ));
+        // $agenceId = $agence->getId() ;
+            return $this->render('ProduitBundle:Approvisionnement:add.html.twig', array(
+                'agence' => $agence,
+                'produits' => $produits,
+                'entrepots' => $entrepots,
+                'fournisseurs' => $fournisseurs,
+            ));
+        // return $this->render('ProduitBundle:Approvisionnement:add.html.twig', array(
+        // 	'agence' => $agence,
+        //     'produits' => $produits,
+        //     'entrepots' => $entrepots,
+        //     'fournisseurs' => $fournisseurs,
+        // ));
     }
 
     public function saveAction(Request $request)

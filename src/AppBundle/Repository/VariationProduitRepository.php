@@ -102,4 +102,24 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
         $statement = $em->getConnection()->prepare($sql); // PREPARER LA REQUETE
         $statement->execute(array($produitId,$produitEnt)); // APPLIQUER LAS PARAMETRES DE LA REQUETE
     }
+
+    public function getTotalVariationProduit($idAgence, $idProduit)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT SUM(variation_produit.stock) stockG FROM `variation_produit` JOIN produit_entrepot ON produit_entrepot.id = variation_produit.produit_entrepot JOIN entrepot ON entrepot.id = produit_entrepot.entrepot WHERE entrepot.agence = ? AND produit_entrepot.produit = ? AND variation_produit.is_delete IS NULL" ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idAgence,$idProduit));
+        $result = $statement->fetch();
+        return $result ; 
+    }
+
+    public function getVariationProduit($idAgence, $idProduit)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT SUM(variation_produit.stock) stockG FROM `variation_produit` JOIN produit_entrepot ON produit_entrepot.id = variation_produit.produit_entrepot JOIN entrepot ON entrepot.id = produit_entrepot.entrepot WHERE entrepot.agence = ? AND produit_entrepot.produit = ? AND variation_produit.is_delete IS NULL" ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idAgence,$idProduit));
+        $result = $statement->fetchAll();
+        return $result ; 
+    }
 }

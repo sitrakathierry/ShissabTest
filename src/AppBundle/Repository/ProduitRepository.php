@@ -56,7 +56,9 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
 					from produit p
 					left join categorie_produit cp on (p.categorie_produit = cp.id)
 					left join produit_entrepot pe on (pe.produit = p.id)
-					where p.nom is not null ";
+					where p.nom is not null";
+		
+		// $query = "	SELECT DISTINCT p.*,cp.*, cp.nom as categorie FROM `produit` p JOIN produit_entrepot pe ON pe.produit = p.id JOIN variation_produit ON variation_produit.produit_entrepot = pe.id JOIN categorie_produit cp ON cp.id = p.categorie_produit WHERE variation_produit.is_delete IS NULL AND p.nom IS NOT NULL";
 
 		if ($agence) {
 			$query .= "	and p.agence = " . $agence ;
@@ -116,5 +118,15 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
         $result = $statement->fetchAll();
 
         return $result;
+	}
+
+	public function getProduitInEntrepot($idAgence)
+	{
+		$em = $this->getEntityManager();
+		$sql = "SELECT produit.* FROM `produit` JOIN produit_entrepot ON produit_entrepot.produit = produit.id WHERE produit.agence = ? " ;
+		$statement = $em->getConnection()->prepare($sql);
+		$statement->execute(array($idAgence));
+		$result = $statement->fetchAll();
+		return $result;
 	}
 }

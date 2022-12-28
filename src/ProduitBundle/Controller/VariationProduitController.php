@@ -122,7 +122,7 @@ class VariationProduitController extends Controller
         $produitEntrepotList = $this->getDoctrine()
                             ->getRepository('AppBundle:ProduitEntrepot')
                             ->findBy($options);
-
+ 
         foreach ($produitEntrepotList as $produitEntrepot) {
             $variations = $this->getDoctrine()
                             ->getRepository('AppBundle:VariationProduit')
@@ -155,7 +155,7 @@ class VariationProduitController extends Controller
             'produitEntrepotList' => $produitEntrepotList,
         ));
     }
-
+ 
     public function editorAction(Request $request)
     {
         $id = $request->request->get('id');
@@ -164,7 +164,7 @@ class VariationProduitController extends Controller
 
         $produitEntrepot = $variation->getProduitEntrepot();
 
-        $devise = $this->getDevise();
+        $devise = $this->getDevise(); 
 
         return $this->render('@Produit/VariationProduit/editor.html.twig',[
             'devise' => $devise,

@@ -189,6 +189,7 @@ $(document).on('click','#id_save_variation', function(event) {
             show_info('Succès', 'Variation Produit enregistré');
             close_modal();
             load_list_prix_produit();
+            location.reload() ;
         }
     });
 

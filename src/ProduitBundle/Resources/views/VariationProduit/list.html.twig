@@ -1,7 +1,7 @@
 <table class="table table-bordered">
 	<thead>
 		<tr>
-			<th class="text-center">Entrepôt</th>
+			<th class="text-center">Entgsdgrepôt</th>
 			<th class="text-center">Code</th>
 			<th class="text-center">Prix de vente ({{ devise.symbole }})</th>
 			<th class="text-center">Stock</th>
@@ -9,7 +9,7 @@
             <th class="col-lg-2"></th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody> 
 		{% for produitEntrepot in produitEntrepotList %}
 			{% for variation in produitEntrepot.variationProduitList %}
 				{% if variation.isDelete == 1 %}
@@ -21,7 +21,7 @@
 						<td>{{ variation.stock }}</td>
 						<!-- <td></td> -->
 						<td>
-							<button 
+							<button  
 								class="btn btn-xs btn-success edit-variation"
 								data-id="{{ variation.id }}"
 							><i class="fa fa-edit"></i> Modifier</button>

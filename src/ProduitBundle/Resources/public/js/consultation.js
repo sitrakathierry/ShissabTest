@@ -110,7 +110,9 @@ $(document).ready(function(){
             url: url,
             data: data,
             dataType: 'html',
+            async: true,
             success: function(res) {
+                console.log(res) ;
                 var grid = instance_grid();
                 grid.jqGrid('setGridParam', {
                     data        : $.parseJSON(res),

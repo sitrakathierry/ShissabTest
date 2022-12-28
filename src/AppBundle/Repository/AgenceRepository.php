@@ -26,4 +26,5 @@ class AgenceRepository extends \Doctrine\ORM\EntityRepository
 
         return $result;
 	}
+
 }
