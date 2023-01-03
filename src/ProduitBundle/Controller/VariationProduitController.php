@@ -261,6 +261,17 @@ class VariationProduitController extends Controller
         
     }
 
+    public function afficheAction(Request $request)
+    {
+        $idProduitEntrepot = $request->request->get('idProduitEntrepot');
+
+        $variationPrix  = $this->getDoctrine() 
+                        ->getRepository('AppBundle:VariationProduit')
+                        ->getVariationPrix($idProduitEntrepot);
+
+        return new JsonResponse($variationPrix) ;
+    }
+
     public function getDevise()
     {
         $user = $this->getUser();

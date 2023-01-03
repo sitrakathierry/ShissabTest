@@ -9,9 +9,13 @@
       .select2-container--bootstrap4 .select2-selection--single {
           height: calc(3rem + 3.5px) !important;
       }
-      .type_appro
+      .type_appro,.var_prix_produit
       {
         min-width: 120px;
+      }
+      .ref_produit,.ref_produit_new
+      {
+        min-width : 100px ;
       }
   </style>
 {% endblock  %}
@@ -44,8 +48,8 @@
                     <th class="col-sm-2">ENTREPÔT</th>
                     <th class ="col-sm">TYPE</th>
                     <th class="col-sm-2">PRODUIT</th>
-                    <th>REF</th>
-                    <th scope="col">FOURNISSEURS</th>
+                    <th scope="col">REF</th>
+                    <th scope="col" class="ajt_var_prix">FOURNISSEURS</th>
                     <th scope="col">QTE</th>
                     <th scope="col">EXPIRER LE</th>
                     <th scope="col">PRIX ACHAT</th>
@@ -57,7 +61,7 @@
                     <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody> 
                   <tr data-id="0">
                     <td>
                       <div class="form-group">
@@ -75,9 +79,9 @@
                       <div class="form-group">
                         <div class="col-sm-12">
                           <select name="type_appro" class="type_appro form-control" id="type_appro" required>
-                            <option value="" disabled selected>Type</option>
-                            <option value="1">Nouveau</option>
-                            <option value="2">Existant</option>
+                            <option value="" ></option>
+                            <option value="1" >Nouveau</option>
+                            <option value="2" >Existant</option>
                           </select>
                         </div>
                       </div>
@@ -97,13 +101,11 @@
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td class="ch_ref">
                       <div class="form-group">
                         <div class="col-sm-12">
-                          <select name="type_appro" class="type_appro form-control" id="type_appro" required>
-                            <option value="" disabled selected>REF</option>
-                            <option value="1">452464633</option>
-                            <option value="2">45654598</option>
+                          <select name="ref_produit" class="ref_produit form-control" id="ref_produit" required>
+                            <option value=""></option>
                           </select>
                         </div>
                       </div>

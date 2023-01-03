@@ -64,6 +64,27 @@ produit_approvisionnement_save:
         expose: true
     methods: [POST]
 
+produit_entrepot_affiche : 
+    path:     /produit/entrepot/affiche
+    defaults: { _controller: ProduitBundle:Entrepot:affiche }
+    options:
+        expose: true
+    methods: [POST]
+    
+reference_produit_affiche :
+    path:     /produit/reference/affiche
+    defaults: { _controller: ProduitBundle:Default:affiche }
+    options:
+        expose: true
+    methods: [POST]
+
+variation_prix_affiche:
+    path:     /variation/prix/affiche
+    defaults: { _controller: ProduitBundle:VariationProduit:affiche }
+    options:
+        expose: true
+    methods: [POST]
+
 produit_approvisionnement_consultation:
     path:     /produit/approvisionnement/consultation
     defaults: { _controller: ProduitBundle:Approvisionnement:consultation }

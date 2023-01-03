@@ -8,6 +8,8 @@ use AppBundle\Entity\Facture;
 use AppBundle\Entity\FactureDetails;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use FactureBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 
 class DefaultController extends BaseController
 {
@@ -20,7 +22,9 @@ class DefaultController extends BaseController
     {
 
     	$permission_user = $this->get('app.permission_user');
+
         $user = $this->getUser();
+
         $permissions = $permission_user->getPermissions($user);
 
         $userAgence = $this->getDoctrine()
@@ -30,7 +34,6 @@ class DefaultController extends BaseController
                     ));
 
         $agence = $userAgence->getAgence();
-
 
     	$clients = $this->getDoctrine()
             ->getRepository('AppBundle:Client')
@@ -94,10 +97,6 @@ class DefaultController extends BaseController
         $checkFactureHebergement = $this->checkFactureHebergement();
         $checkFactureRestaurant = $this->checkFactureRestaurant();
 
-
-        
-
-
         return $this->render('FactureBundle:Default:add.html.twig',array(
         	'deviseEntrepot' => $deviseEntrepot,
             'agence' => $agence,
@@ -142,12 +141,15 @@ class DefaultController extends BaseController
 
         $agence = $client->getAgence();
 
-        if ($f_id) {
+        if ($f_id) 
+        {
             $facture = $this->getDoctrine()
                 ->getRepository('AppBundle:Facture')
                 ->find($f_id);
              $newNum = str_pad($facture->getNum(), 3, '0', STR_PAD_LEFT);
-        } else{
+        }
+        else
+        {
             $facture = new Facture();
             $newNum = $this->prepareNewNumFacture($agence->getId());
             $facture->setNum(intval($newNum));
@@ -161,8 +163,6 @@ class DefaultController extends BaseController
         $facture->setSomme($somme);
         $facture->setDescr($descr);
 
-
-        
         $facture->setClient($client);
 
         $dateCreation = new \DateTime('now');
@@ -223,6 +223,132 @@ class DefaultController extends BaseController
 
     }
 
+    public function exportAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        $userAgence = $this->getDoctrine()
+                    ->getRepository('AppBundle:UserAgence')
+                    ->findOneBy(array(
+                        'user' => $user
+                    ));
+                    
+        $agence = $userAgence->getAgence();
+
+        $datas = json_decode(urldecode($request->request->get('datas')));
+        // $type_date = $request->request->get('type_date');
+        // $date_specifique = $request->request->get('date_specifique');
+
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+        // $backgroundTitle = '808080';
+        $phpExcelObject->getProperties()->setCreator("SHISSAB")
+            ->setLastModifiedBy("SHISSAB")
+            ->setTitle("Export excel Factures")
+            ->setSubject("Export excel Factures")
+            ->setDescription("Export excel Factures")
+            ->setKeywords("factures")
+            ->setCategory("export excel");
+        $sheet = $phpExcelObject->setActiveSheetIndex(0);
+
+
+        $sheet->setCellValue('A1', $agence->getNom());
+        $sheet->setCellValue('A2', 'Liste des Factures');
+
+        /*Titre*/
+        $sheet->setCellValue('A4', 'N°Facture');
+        $sheet->setCellValue('B4', 'Modèle');
+        $sheet->setCellValue('C4', 'Type');
+        $sheet->setCellValue('D4', 'Date de création');
+        $sheet->setCellValue('E4', 'Date Facture');
+        $sheet->setCellValue('F4', 'Client');
+        $sheet->setCellValue('G4', 'Total');
+        // $sheet->setCellValue('H4', 'Montant');
+
+        $sheet->getStyle('A4:G4')
+            ->getFill()
+            ->setFillType('solid')
+            ->getStartColor()->setRGB('c0c0c0');
+
+
+        foreach(range('A','G') as $columnID) {
+            $sheet->getColumnDimension($columnID)
+                ->setAutoSize(true);
+        }
+
+        
+
+        $index = 5;
+
+        $totalGeneral = 0; 
+        // $totalStock = 0 ;
+
+        foreach ($datas as $data) {
+
+            $v = $data->modele ;
+            $dataModele = "AUCUNE" ;
+            if ($v == 1) {
+                $dataModele = 'PRODUIT';
+            }
+            else if ($v == 2) {
+                $dataModele = 'PRESTATION';
+            }
+            else if ($v == 3) {
+                $dataModele = 'PRODUIT & PRESTATION';
+            }
+            else if ($v == 4) {
+                $dataModele = 'HÉBERGEMENT';
+            }
+
+           $sheet->setCellValue('A'.$index,$data->num_fact); 
+           $sheet->setCellValue('B'.$index,$dataModele); 
+           $sheet->setCellValue('C'.$index,$data->type); 
+           $sheet->setCellValue('D'.$index,$data->date_creation); 
+           $sheet->setCellValue('E'.$index,$data->date); 
+           $sheet->setCellValue('F'.$index,$data->client); 
+           $sheet->setCellValue('G'.$index,round($data->total * 100)/100); 
+            $totalGeneral += $data->total;
+            $index++;
+        }
+
+        $tindex = $index + 1;
+
+        $sheet->setCellValue('A'.$tindex,'Total'); 
+        // $sheet->setCellValue('E'.$tindex, $totalStock); 
+        $sheet->setCellValue('G'.$tindex,$totalGeneral); 
+
+        // $sheet->getStyle('H'.$tindex)
+        //     ->getFill()
+        //     ->setFillType('solid')
+        //     ->getStartColor()->setRGB('b8e4bb');
+
+        $phpExcelObject->getActiveSheet()->setTitle('FACTURES');
+        $phpExcelObject->setActiveSheetIndex(0);
+
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+
+        $ext = '.xls';
+
+        $name = 'factures';
+
+        $name = str_replace('/','-',$name);
+
+        $name .= $ext;
+
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $name
+        );
+
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
+        return $response;
+    }
+
     public function prepareNewNumFacture($id_agence)
     {
         $em = $this->getDoctrine()
@@ -240,7 +366,6 @@ class DefaultController extends BaseController
         $facture  = $this->getDoctrine()
                         ->getRepository('AppBundle:Facture')
                         ->find($id);
-
         $definitif = $this->getDoctrine()
                         ->getRepository('AppBundle:Facture')
                         ->findOneBy(array(
@@ -389,7 +514,7 @@ class DefaultController extends BaseController
     }
 
     public function listAction(Request $request)
-    {
+    { 
         $filtre_modele = $request->request->get('filtre_modele');
         $filtre_type = $request->request->get('filtre_type');
         $recherche_par = $request->request->get('recherche_par');
@@ -406,7 +531,7 @@ class DefaultController extends BaseController
         $factures = $this->getDoctrine() 
             ->getRepository('AppBundle:Facture')
             ->consultation( 
-                $recherche_par,
+                $recherche_par, 
                 $a_rechercher,
                 $type_date,
                 $mois,

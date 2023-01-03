@@ -30,10 +30,11 @@ class FactureRepository extends \Doctrine\ORM\EntityRepository
 		$query = "	select f.id as id, IF(f.type = 1,'DEVIS','DEFINITIVE') as type, date_format(f.date_creation,'%d/%m/%Y') as date_creation, date_format(f.date,'%d/%m/%Y') as date, IF(c.statut = 1,cm.nom_societe,cp.nom) as client, CONCAT( IF(f.type = 1, 'PR-','DF-') ,LPAD(f.num, 3, '0'),'/',date_format(f.date_creation,'%y')) as num_fact, ag.nom as agence, f.modele, f.total, f.montant, f.date_creation as dc, f.num
 					from facture f
 					left join client c on (f.client = c.num_police)
-					left join client_morale cm on (c.id_client_morale=cm.id)
-					left join client_physique cp on (c.id_client_physique=cp.id)
-					inner join agence ag on (f.agence = ag.id)";
-
+					left join client_morale cm on (c.id_client_morale = cm.id)
+					left join client_physique cp on (c.id_client_physique = cp.id)
+					inner join agence ag on (f.agence = ag.id) 
+				";
+ 
 		$where = " where f.id is not null";
 
 		if($recherche_par == 1){
@@ -94,15 +95,10 @@ class FactureRepository extends \Doctrine\ORM\EntityRepository
 		}
 
 		$query .= $where;
-
 		$query .= " and f.is_delete IS NULL ";
-
         $statement = $em->getConnection()->prepare($query);
-
         $statement->execute();
-
         $result = $statement->fetchAll();
-
         return $result;
 	}
 
@@ -239,5 +235,16 @@ class FactureRepository extends \Doctrine\ORM\EntityRepository
 
         return $result;
 
+	}
+
+	public function findNumFact($numFact)
+	{
+		
+		$em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+		$sql = "SELECT CONCAT( IF(f.type = 1, 'PR-','DF-') ,LPAD(f.num, 3, '0'),'/',date_format(f.date_creation,'%y')) as formattedNum,f.*,c.*,cm.*,cp.* FROM `facture` f JOIN client c ON c.num_police = f.client LEFT JOIN client_physique cp ON cp.id = c.id_client_physique LEFT JOIN client_morale cm ON cm.id = c.id_client_morale WHERE f.num = ? " ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($numFact));
+        $result = $statement->fetch();
+        return $result ; 
 	}
 }

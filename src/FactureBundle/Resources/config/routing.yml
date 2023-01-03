@@ -75,6 +75,13 @@ facture_produit_show:
         expose: true
     methods: [GET]
 
+facture_consultation_export :
+    path:     /facture/consultation/export
+    defaults: { _controller: FactureBundle:Default:export }
+    methods:  [POST]
+    options:
+        expose: true
+
 facture_produit_recu:
     path:     /facture/produit/recu/{recu}
     defaults: { _controller: FactureBundle:FactureProduit:recu }

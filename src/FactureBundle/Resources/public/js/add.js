@@ -35,6 +35,26 @@ function accompagnements() {
 
 $(document).on("click", "#btn-save", function (event) {
   event.preventDefault();
+  // toastr.options = {
+  //   "closeButton": false,
+  //   "debug": false,
+  //   "newestOnTop": false,
+  //   "progressBar": true,
+  //   "positionClass": "toast-top-right",
+  //   "preventDuplicates": false,
+  //   "onclick": null,
+  //   "showDuration": "300",
+  //   "hideDuration": "1000",
+  //   "timeOut": "5000",
+  //   "extendedTimeOut": "1000",
+  //   "showEasing": "swing",
+  //   "hideEasing": "linear",
+  //   "showMethod": "fadeIn",
+  //   "hideMethod": "fadeOut"
+  // }
+  // toastr["error"]("Have fun storming the castle!") ;
+
+  
 
   var enregistre = true;
 

@@ -52,11 +52,11 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
 	{
 		$em = $this->getEntityManager();
 		
-		$query = "	select p.id, p.code_produit, p.nom, pe.stock, cp.nom as categorie
+		$query = "	select p.code_produit, p.id, p.nom, pe.stock, cp.nom as categorie
 					from produit p
 					left join categorie_produit cp on (p.categorie_produit = cp.id)
 					left join produit_entrepot pe on (pe.produit = p.id)
-					where p.nom is not null";
+					where p.nom is not null ";
 		
 		// $query = "	SELECT DISTINCT p.*,cp.*, cp.nom as categorie FROM `produit` p JOIN produit_entrepot pe ON pe.produit = p.id JOIN variation_produit ON variation_produit.produit_entrepot = pe.id JOIN categorie_produit cp ON cp.id = p.categorie_produit WHERE variation_produit.is_delete IS NULL AND p.nom IS NOT NULL";
 
@@ -81,6 +81,8 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
 		}
 
 		$query .= "	and p.is_delete IS NULL";
+
+		$query .= "	group by p.code_produit ";
 
 		$query .= "	order by p.nom asc";
 
@@ -124,6 +126,16 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
 	{
 		$em = $this->getEntityManager();
 		$sql = "SELECT produit.* FROM `produit` JOIN produit_entrepot ON produit_entrepot.produit = produit.id WHERE produit.agence = ? " ;
+		$statement = $em->getConnection()->prepare($sql);
+		$statement->execute(array($idAgence));
+		$result = $statement->fetchAll();
+		return $result;
+	}
+
+	public function getAllProduit($idAgence)
+	{
+		$em = $this->getEntityManager();
+		$sql = "SELECT * FROM `produit` WHERE `agence` = ? AND `is_delete` IS NULL GROUP BY code_produit  ORDER BY code_produit ASC " ;
 		$statement = $em->getConnection()->prepare($sql);
 		$statement->execute(array($idAgence));
 		$result = $statement->fetchAll();

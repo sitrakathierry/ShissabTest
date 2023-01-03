@@ -22,6 +22,221 @@ $(document).ready(function(){
 
 	$('.select2').select2();
 
+        
+    // FORMULAIRE D'APPROVISIONNEMENT
+function toutSurAppro()
+{
+    function clickReference()
+    {
+        $(".ref_produit").change(function(){
+        var selfParent = $(this).parent().parent().parent().parent() ;
+        var self = $(this)
+        var url = Routing.generate("variation_prix_affiche") ;
+        var data = {
+            idProduitEntrepot:$(this).val()
+            }
+            if(selfParent.find('.produit').val() != "")
+            {
+                $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(res) {
+
+                    $('tbody tr').each(function(){
+                        if($(this).find('.type_appro').val() != 2)
+                        {
+                            $(this).find('.fournisseur').parent().parent().parent().attr("colspan","2") ;
+                        }
+                    })
+
+                    $(".elem_title_varp").remove()
+                    selfParent.find(".elem_content_varp").remove()
+
+                    var element = '<th class="elem_title_varp" scope="col">VARIATION PRIX</th>' ;
+                    $(element).insertBefore(".ajt_var_prix") ;
+                    options = '' ;
+
+                    for (let i = 0; i < res.length; i++) {
+                        const element = res[i];
+                        options += '<option value="'+element.id+'">'+ (Math.round(element.prix_vente*100) / 100) +'</option>' ;
+                    }
+                    element = `
+                    <td class="elem_content_varp">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <select name="var_prix_produit" class="var_prix_produit form-control" id="var_prix_produit" required>
+                                    <option value=""></option>
+                                    `+options+`
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                    ` ;
+                    $(element).insertAfter(selfParent.find(".ch_ref"))
+
+                    }
+                }) ;
+            }
+            else
+            {
+                $(this).val("")
+                swal({
+                    type: 'warning',
+                    title: "Produit vide",
+                    text: "Veullez sélectionner un Produit"
+                })
+            }
+        })
+    }
+
+
+    $(".type_appro").change(function(){
+        var selfParent = $(this).parent().parent().parent().parent() ;
+        var entrepot = selfParent.find(".entrepot").val() ;
+        var self = $(this)
+        if(entrepot != "")
+        {
+            var url = Routing.generate("produit_entrepot_affiche") ;
+            var data = {
+                entrepot:entrepot,
+                typeid:$(this).val()
+            }
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(res) {
+                    $(".elem_title_varp").remove()
+                    selfParent.find(".elem_content_varp").remove()
+                    var options = '<option value=""></option>' ;
+                    for (let i = 0; i < res.length; i++) {
+                        const element = res[i];
+                        options += '<option value="'+element.id+'" >'+element.code_produit+' | '+element.nom+'</option>' ;
+                        // console.log(options)
+                    }
+                    selfParent.find(".produit").empty().append(options) ;
+                    if(self.val() == 1)
+                    {
+                        selfParent.find(".ch_ref").empty().append(`
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                            <input  type="text" 
+                                    class="form-control ref_produit_new" 
+                                    value="" 
+                                    placeholder="Ajoutez REF">
+                            </div>
+                        </div>
+                        `) ;
+                    }
+                    else
+                    {
+                        selfParent.find('.fournisseur').parent().parent().parent().attr("colspan","0") ;
+                        selfParent.find(".ch_ref").empty().append(`
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <select name="ref_produit" class="ref_produit form-control" id="ref_produit" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        `) ;
+                        clickReference() ;
+                    }
+                    // console.log(options)
+                }
+            })
+
+            // alert("Bonjour SItraka") ;
+        }
+        else
+        {
+            $(this).val("")
+            swal({
+                type: 'warning',
+                title: "Entrepot vide",
+                text: "Veullez sélectionner un entrepot"
+            })
+        }
+    })
+
+    clickReference() ;
+
+    $(".produit").change(function()
+    {
+        var selfParent = $(this).parent().parent().parent().parent() ;
+        var type_appro = selfParent.find("#type_appro").val() ;
+
+        if(type_appro == 2)
+        {
+            if(type_appro != "")
+            {
+                var entrepot = selfParent.find(".entrepot").val() ;
+                var url = Routing.generate('reference_produit_affiche')
+                var data = {
+                    entrepot:entrepot,
+                    idProduit:$(this).val() 
+                }
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    success: function(res) {
+                        $(".elem_title_varp").remove()
+                        selfParent.find(".elem_content_varp").remove()
+                        var options = '<option value=""></option>' ;
+                        for (let i = 0; i < res.length; i++) {
+                            const element = res[i];
+                            options += '<option value="'+element.id+'" >'+element.indice+'</option>' ;
+                        }
+                        selfParent.find(".ref_produit").empty().append(options) ;
+                    }
+                })
+            }
+            else
+            {
+                $(this).val("")
+                swal({
+                    type: 'warning',
+                    title: "Type vide",
+                    text: "Veullez sélectionner un Type"
+                })
+            }
+        }
+    })
+
+    $(".entrepot").change(function(){
+        var selfParent = $(this).parent().parent().parent().parent() ;
+        var type_appro = selfParent.find("#type_appro").val() ;
+        if(type_appro != '')
+        {
+            var url = Routing.generate("produit_entrepot_affiche") ;
+            var data = {
+                entrepot:$(this).val(),
+                typeid:type_appro
+            }
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(res) {
+                    $(".elem_title_varp").remove()
+                    selfParent.find(".elem_content_varp").remove()
+                    
+                    var options = '<option value=""></option>' ;
+                    for (let i = 0; i < res.length; i++) {
+                        const element = res[i];
+                        options += '<option value="'+element.id+'" >'+element.code_produit+' | '+element.nom+'</option>' ;
+                        // console.log(options)
+                    }
+                    selfParent.find(".produit").empty().append(options) ;
+                    // console.log(options)
+                }
+            })
+        }
+    })
+}
+
 	$(document).on('click', '.btn-add-row', function(event) {
         event.preventDefault();
         var id = $('#id-row').val();
@@ -32,7 +247,31 @@ $(document).ready(function(){
         var fournisseur_options = $('.fournisseur').html();
 
         var a = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control select2 entrepot entrepot_produit" name="entrepot[]">'+ entrepot_options +'</select></div></div></td>';
+        var a1 = `
+            <td>
+            <div class="form-group">
+            <div class="col-sm-12">
+                <select name="type_appro" class="type_appro form-control" id="type_appro" required>
+                <option value="" ></option>
+                <option value="1" >Nouveau</option>
+                <option value="2" >Existant</option>
+                </select>
+            </div>
+            </div>
+            </td>
+        `
         var b = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control select2 produit" name="produit[]">'+ produit_options +'</select></div></div></td>';
+        var b1 = `
+        <td class="ch_ref">
+        <div class="form-group">
+          <div class="col-sm-12">
+            <select name="ref_produit" class="ref_produit form-control" id="ref_produit" required>
+              <option value=""></option>
+            </select>
+          </div>
+        </div>
+      </td>
+        `
         var c = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control select2 fournisseur" name="fournisseur[]" multiple="">'+ fournisseur_options +'</select></div></div></td>';
         var d = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control qte" name="qte[]" required=""></div></div></td>';
         var e = '<td><div class="form-group"><div class="col-sm-12"><input type="text" class="form-control expirer" name="expirer[]" required=""></div></div></td>';
@@ -43,8 +282,9 @@ $(document).ready(function(){
         var j = '<td class="td-montant"><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control prix_vente" name="prix_vente[]" required=""></div></div></td>';
         var k = '<td class="td-montant"><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control total" name="total[]" readonly=""></div></div></td><td></td>';
 
-        var markup = '<tr data-id="'+ new_id +'">' + a + b + c + d + e + f + g + h + i + j + k + '</tr>';
+        var markup = '<tr data-id="'+ new_id +'">' + a + a1 + b + b1 + c + d + e + f + g + h + i + j + k + '</tr>';
         $("#table-appro-add tbody").append(markup);
+        toutSurAppro() ;
         $('#id-row').val(new_id);
 
         $('.select2').select2();
@@ -272,4 +512,6 @@ for (let i = 0; i < tab_input.length; i++) {
 
     })
 
+toutSurAppro() ;
+ 
 })

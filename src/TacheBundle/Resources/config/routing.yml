@@ -11,3 +11,23 @@ tache_consultation:
     path:     /tache/consultation
     defaults: { _controller: TacheBundle:Default:consultation }
 
+personne_add:
+    path:     /personne/add 
+    defaults: { _controller: TacheBundle:Personne:add }
+    options:
+        expose: true
+    methods: [POST]
+
+type_tache_add:
+    path:     /type_tache/add 
+    defaults: { _controller: TacheBundle:TypeTache:add }
+    options:
+        expose: true
+    methods: [POST]
+
+tache_save:
+    path:     /tache/save 
+    defaults: { _controller: TacheBundle:Default:save }
+    options:
+        expose: true
+    methods: [POST]

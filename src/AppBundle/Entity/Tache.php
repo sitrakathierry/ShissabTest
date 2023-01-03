@@ -29,7 +29,7 @@ class Tache
     private $tache;
 
     /**
-     * @var int
+     * @var integer
      *
      * @ORM\Column(name="idAgence", type="integer")
      */
@@ -71,7 +71,7 @@ class Tache
     private $description;
 
     /**
-     * @var int
+     * @var integer
      *
      * @ORM\Column(name="statut", type="integer")
      */
@@ -84,6 +84,12 @@ class Tache
      */
     private $dateCreatedAt;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="is_delete", type="integer")
+     */
+    private $isDelete;
 
     /**
      * Get id
@@ -136,7 +142,7 @@ class Tache
     /**
      * Get idAgence
      *
-     * @return int
+     * @return integer
      */
     public function getIdAgence()
     {
@@ -280,7 +286,7 @@ class Tache
     /**
      * Get statut
      *
-     * @return int
+     * @return integer
      */
     public function getStatut()
     {
@@ -309,6 +315,30 @@ class Tache
     public function getDateCreatedAt()
     {
         return $this->dateCreatedAt;
+    }
+
+    /**
+     * Set isDelete
+     *
+     * @param integer $isDelete
+     *
+     * @return Tache
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
+
+        return $this;
+    }
+
+    /**
+     * Get isDelete
+     *
+     * @return integer
+     */
+    public function getIsDelete()
+    {
+        return $this->isDelete;
     }
 }
 

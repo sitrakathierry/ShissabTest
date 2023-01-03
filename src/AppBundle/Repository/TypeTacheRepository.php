@@ -10,4 +10,13 @@ namespace AppBundle\Repository;
  */
 class TypeTacheRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getAllTypeTache($agenceId)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT * FROM `type_tache` WHERE `id_agence` = ? ORDER BY `nom_type_tache` ASC" ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($agenceId));
+        $result = $statement->fetchAll();
+        return $result ; 
+    }
 }

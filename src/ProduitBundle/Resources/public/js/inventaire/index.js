@@ -153,7 +153,7 @@ $(document).ready(function(){
     $(".cl_export").click(function(){
         
         var url = Routing.generate('produit_inventaire_export');
-
+ 
         var params = ''
                 + '<input type="hidden" name="datas" value="'+encodeURI(datas)+'">'
 

@@ -12,6 +12,7 @@ use AppBundle\Entity\CreditDetails;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FactureBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\Response;
 
 class FactureProduitController extends BaseController
 {
@@ -288,7 +289,7 @@ class FactureProduitController extends BaseController
         $factureProduit  = $this->getDoctrine()
                         ->getRepository('AppBundle:FactureProduit')
                         ->findOneBy(array(
-                        	'facture' => $facture
+                            'facture' => $facture
                         ));
 
         $definitif = $this->getDoctrine()
@@ -358,7 +359,7 @@ class FactureProduitController extends BaseController
         return $this->render('FactureBundle:FactureProduit:show.html.twig', array(
             'deviseEntrepot' => $deviseEntrepot,
             'devises' => $devises,
-            'agence' => $agence,
+            'agence' => $agence, 
             'facture' => $facture,
             'factureProduit' => $factureProduit,
             'details' => $details,
@@ -371,7 +372,10 @@ class FactureProduitController extends BaseController
             'checkFactureBonCommande' => $checkFactureBonCommande,
         ));
 
-    }
+        // return new JsonResponse($facture) ;
+
+
+    } 
 
     public function pdfAction($id)
     {

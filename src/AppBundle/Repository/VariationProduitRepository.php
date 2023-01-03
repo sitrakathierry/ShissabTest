@@ -122,4 +122,14 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
         $result = $statement->fetchAll();
         return $result ; 
     }
+
+    public function getVariationPrix($idPEntrepot)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT * FROM `variation_produit` WHERE `produit_entrepot` = ? " ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idPEntrepot));
+        $result = $statement->fetchAll();
+        return $result ; 
+    }
 }

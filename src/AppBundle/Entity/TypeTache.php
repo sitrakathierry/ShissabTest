@@ -29,6 +29,13 @@ class TypeTache
     private $nomTypeTache;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_agence", type="integer")
+     */
+    private $idAgence ;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_created_at", type="datetime")
@@ -68,6 +75,31 @@ class TypeTache
     public function getNomTypeTache()
     {
         return $this->nomTypeTache;
+    }
+
+
+    /**
+     * Set idAgence
+     *
+     * @param integer $idAgence
+     *
+     * @return TypeTache
+     */
+    public function setIdAgence($idAgence)
+    {
+        $this->idAgence = $idAgence;
+
+        return $this;
+    }
+
+    /**
+     * Get idAgence
+     *
+     * @return integer
+     */
+    public function getIdAgence()
+    {
+        return $this->idAgence;
     }
 
     /**

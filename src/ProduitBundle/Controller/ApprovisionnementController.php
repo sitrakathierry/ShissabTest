@@ -68,6 +68,7 @@ class ApprovisionnementController extends Controller
         $montant_total = $request->request->get('montant_total');
         $date = $request->request->get('date');
         $date = \DateTime::createFromFormat('j/m/Y', $date);
+        
         $user = $this->getUser();
         $userAgence = $this->getDoctrine()
                     ->getRepository('AppBundle:UserAgence')
@@ -171,7 +172,7 @@ class ApprovisionnementController extends Controller
                         $variation->setMargeType($margeType);
                         $variation->setMargeValeur($margeValeur);
                         $variation->setPrixVente($vente);
-                        $variation->setStock($qte);
+                        $variation->setStock($qte); 
                         $variation->setProduitEntrepot($produitEntrepot);
                     }
 
@@ -185,11 +186,13 @@ class ApprovisionnementController extends Controller
                         $approvisionnement = $this->getDoctrine()
                             ->getRepository('AppBundle:Approvisionnement')
                             ->find($approId);
-                    }else{
+                    }
+                    else
+                    {
                         $approvisionnement = new Approvisionnement();
                     }
 
-                    $approvisionnement->setFournisseurs( json_encode($fournisseur) );
+                    $approvisionnement->setFournisseurs(json_encode($fournisseur) );
                     $approvisionnement->setDate($date);
                     $approvisionnement->setQte($qte);
                     $approvisionnement->setPrixAchat($prix);

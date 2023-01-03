@@ -151,7 +151,7 @@ $(document).ready(function(){
 
         return tableau_grid;
     }
-
+    var datas = [] ;
 	function load_list(){
 		var url = Routing.generate('facture_list')
 		var data = {
@@ -174,13 +174,14 @@ $(document).ready(function(){
         	data: data,
         	dataType: 'html',
         	success: function(res) {
+                datas = res ;
         		var grid = instance_list_grid();
                 grid.jqGrid('setGridParam', {
                     data        : $.parseJSON(res),
                     loadComplete: function() {
                         $(this).jqGrid("footerData", "set", {
                             agence: "Total",
-                            total : Math.round($(this).jqGrid('getCol', 'total', false, 'sum') * 100) / 100,
+                            total : Math.round($(this).jqGrid('getCol', 'total', true, 'sum') * 100) / 100,
                         });
                     
                     }
@@ -192,6 +193,19 @@ $(document).ready(function(){
 
 		})
 	}
+
+    $(".cl_export").click(function(){
+        
+        var url = Routing.generate('facture_consultation_export');
+ 
+        var params = ''
+                + '<input type="hidden" name="datas" value="'+encodeURI(datas)+'">'
+
+        $('#form_export').attr('action',url).html(params);
+        $('#form_export')[0].submit();
+    })
+
+
 
     $(document).on('click','#btn_search',function(event) {
         event.preventDefault();

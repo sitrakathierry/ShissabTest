@@ -10,4 +10,46 @@ namespace AppBundle\Repository;
  */
 class TacheRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getAllTachePersonne($idTache)
+    {
+        // ALTER TABLE `tache` ADD `duree` INT NOT NULL AFTER `date_fin`;
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT * FROM `assignation` a JOIN personne p ON p.id = a.idpersonne WHERE a.idtache = ? " ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idTache));
+        $result = $statement->fetchAll();
+        return $result ; 
+    }
+
+    public function getAllTacheTypeTache($idTache)
+    {
+        // ALTER TABLE `tache` ADD `duree` INT NOT NULL AFTER `date_fin`;
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT * FROM `histo_type_tache` ht JOIN type_tache typ ON typ.id = ht.idtypetache WHERE ht.idtache = ? " ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idTache));
+        $result = $statement->fetchAll();
+        return $result ; 
+    }
+
+    public function getAllTache($agenceId)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT DATE_FORMAT(date_debut,'%d %b %Y') as dateDebut, DATE_FORMAT(date_fin,'%d %b %Y') as dateFin, tache.* FROM `tache` WHERE `idAgence` = ? " ;
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($agenceId));
+        $result = $statement->fetchAll();
+        return $result ; 
+    }
+
+    public function getAllCommentTache($agenceId)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT * FROM `commentaire` com JOIN tache t ON t.id = com.idtache WHERE com.idtache = ? " ;
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($agenceId));
+        $result = $statement->fetchAll();
+        return $result ; 
+    }
+
 }

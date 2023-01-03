@@ -29,6 +29,13 @@ class Personne
     private $nomPersonne;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id_agence", type="integer")
+     */
+    private $idAgence ;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_created_at", type="datetime")
@@ -68,6 +75,30 @@ class Personne
     public function getNomPersonne()
     {
         return $this->nomPersonne;
+    }
+
+    /**
+     * Set idAgence
+     *
+     * @param int $idAgence
+     *
+     * @return Personne
+     */
+    public function setIdAgence($idAgence)
+    {
+        $this->idAgence = $idAgence;
+
+        return $this;
+    }
+
+    /**
+     * Get idAgence
+     *
+     * @return int
+     */
+    public function getIdAgence()
+    {
+        return $this->idAgence;
     }
 
     /**

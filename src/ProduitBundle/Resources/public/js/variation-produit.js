@@ -79,40 +79,101 @@ function load_list_prix_produit() {
 
 $(document).on('click','#btn-save-variation', function(event) {
     event.preventDefault();
+    var inputForm = [
+        $('#variation_entrepot'),
+        $('#variation_indice'),
+        $('#variation_prix_vente'),
+        $('#variation_stock')
+    ]
+    enregistre = true ;
+    var textForm = [
+        'Entrepot',
+        'Indice',
+        'Prix de Vente',
+        'Stock'
+    ]
+    // console.log($('#variation_entrepot').val()) ;
+    message = '' ;
+    negatif = false ;
+    for (let i = 0; i < inputForm.length; i++) {
+        const element = inputForm[i];
+        if(element.val() == "" || element.val() == 0)
+        {
+            enregistre = false ;
+            message = textForm[i] ;
+            break ;
+        }
 
-    var data = {
-        id_produit : $('#id_produit').val(),
-        variation_entrepot : $('#variation_entrepot').val(),
-        variation_indice : $('#variation_indice').val(),
-        variation_prix_vente : $('#variation_prix_vente').val(),
-        variation_stock : $('#variation_stock').val(),
-        variation_operation : $('#variation_operation').val(),
-    };
+        if(i > 1)
+        {
+            if(element.val() < 0)
+        {
+            enregistre = false ;
+            message = textForm[i] ;
+            negatif = true ;
+            break ;
+        }
+        }
+    }
 
-    var url = Routing.generate('produit_save_variation');
+    if(enregistre)
+    {
+        var data = {
+            id_produit : $('#id_produit').val(),
+            variation_entrepot : $('#variation_entrepot').val(),
+            variation_indice : $('#variation_indice').val(),
+            variation_prix_vente : $('#variation_prix_vente').val(),
+            variation_stock : $('#variation_stock').val(),
+            variation_operation : $('#variation_operation').val(),
+        };
 
-    disabled_confirm(false); 
+        var url = Routing.generate('produit_save_variation');
 
-    swal({
-            title: "Enregistrer",
-            text: "Voulez-vous vraiment enregistrer ? ",
-            type: "info",
-            showCancelButton: true,
-            confirmButtonText: "Oui",
-            cancelButtonText: "Non",
-        },
-        function () {
-            disabled_confirm(true);
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: data,
-                success: function(res) {
-                    show_success('Succès', 'Variation Produit enregistré');
-                }
+        disabled_confirm(false); 
+
+        swal({
+                title: "Enregistrer",
+                text: "Voulez-vous vraiment enregistrer ? ",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonText: "Oui",
+                cancelButtonText: "Non",
+            },
+            function () {
+                disabled_confirm(true);
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    success: function(res) {
+                        show_success('Succès', 'Variation Produit enregistré');
+                    }
+                })
+            
+        });
+    }
+    else
+    {
+        if(negatif)
+        {
+            swal({
+                type: 'error',
+                title: message+' Négatif',
+                text: 'Veuillez corriger '+message
             })
-          
-    });
+        
+        }
+        else
+        {
+            swal({
+                type: 'warning',
+                title: message+' Vide',
+                text: 'Veuillez remplir '+message
+            })
+        
+        }
+        
+    }
 
 });
 

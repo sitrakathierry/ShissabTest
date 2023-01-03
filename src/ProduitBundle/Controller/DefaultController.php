@@ -205,7 +205,7 @@ class DefaultController extends Controller
                     $variation->setMargeValeur($marge_valeur);
                     $variation->setStock($stock);
                     $variation->setProduitEntrepot($produitEntrepot);
-                    $variation->setproduitId($produit) ;
+                    // $variation->setproduitId($produit) ;
                     $em->persist($variation);
                     $em->flush();
                     
@@ -214,7 +214,14 @@ class DefaultController extends Controller
                      */
                     $prix_achat = $prix_achats[$key];
                     $charge = $charges[$key];
-
+                    if(is_numeric($charge))
+                    {
+                        $charge = $charges[$key];
+                    }
+                    else
+                    {
+                        $charge = 0 ;
+                    }
                     $ravitaillement = new Ravitaillement();
 
                     $ravitaillement->setDate($dateCreation);
@@ -356,23 +363,6 @@ class DefaultController extends Controller
                 {
                     $produits[$i]["stock"] = 0 ;
                 }
-
-                // if($i > 0)
-                // {
-                //     if($produits[$i]["nom"] == $produits[$i-1]["nom"])
-                //     {
-                //         // $lstProduit[$i-1]["stock"] +=  $produits[$i]["stock"] ;
-                //         $produits[$i]["nom"] = "MEME"; 
-                //     }
-                //     else
-                //     {
-                //         array_push($lstProduit,$produits[$i]) ;
-                //     }
-                // }
-                // else
-                // {
-                //     array_push($lstProduit,$produits[$i]) ;
-                // }
         }
 
         return new JsonResponse($produits);
@@ -677,27 +667,18 @@ class DefaultController extends Controller
         
     }
 
+    public function afficheAction(Request $request)
+    {
+        $idProduit = $request->request->get('idProduit');
+        $entrepot = $request->request->get('entrepot');
+
+        $produitEntrepot = $this->getDoctrine()
+                                ->getRepository('AppBundle:ProduitEntrepot')
+                                ->getRefProduitEntrepot($idProduit,$entrepot);
+        return new JsonResponse($produitEntrepot) ;
+    }
+
     public function miseAjourAction(){
-        // $this->getDoctrine()
-        //             ->getRepository('AppBundle:VariationProduit')
-        //             ->mettreAjourTable() ;
-
-        // $variations = $this->getDoctrine()
-        //             ->getRepository('AppBundle:VariationProduit')
-        //             ->getProduitEntrepotNotNull() ;
-        
-        // foreach ($variations as $variation) {
-        //     $idPEntrepot = $this->getDoctrine()
-        //                     ->getRepository('AppBundle:ProduitEntrepot')
-        //                     ->getProduitEntrepot($variation["produit_entrepot"]) ;
-            
-        //     $this->getDoctrine()
-        //                 ->getRepository('AppBundle:VariationProduit')
-        //                 ->updateProduitId($idPEntrepot["produit"],$variation["produit_entrepot"]) ;
-        // }
-
         return new Response("Mise à jour terminé") ;
-
-
     }
 }

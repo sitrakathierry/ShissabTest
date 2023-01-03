@@ -142,14 +142,12 @@ $(document).on('click', '#btn-save', function(event) {
 			$('.indice'),
 			$('.entrepot'),
 			$('.fournisseur'),
-			$('.expirer')
 		]
 
 		var str_descriPro = [
 			"Indice",
 			"Entrepot",
 			"Fournisseur",
-			"Expirer le"
 		]
 		vide = false
 
@@ -172,6 +170,48 @@ $(document).on('click', '#btn-save', function(event) {
 			}
 		}
 
+		// var val_num = [
+		// 	$('.prix_achat'),
+		// 	$('.charge'),
+		// 	$('.prix_revient'),
+		// 	$('.marge_valeur'),
+		// 	$('.prix_vente'),
+		// 	$('.stock'),
+		// 	$('.stock_alerte')
+		// 	]
+		
+		// var val_descri = [
+		// 	"Prix d'achat",
+		// 	"Charge",
+		// 	"Prix de revient",
+		// 	"Marge",
+		// 	"Prix de vente",
+		// 	"Stock",
+		// 	"Stock Alerte"
+		// ] ;
+	
+		
+		// positif = true
+		// 	for(var i = 0; i < val_num.length ; i++)
+		// 	{
+		// 		const element = val_num[i]  ;
+		// 		element.each(function(){
+		// 			if (element.val() < 0)
+		// 			{
+		// 				positif = false
+		// 				vide = false
+		// 				valeur_negatif = val_descri[i]
+		// 				return 
+		// 			}
+		// 			else if(!(Number.isInteger(element.val())))
+		// 			{
+		// 				positif = false
+		// 				vide = true
+		// 				valeur_negatif = val_descri[i]
+		// 				return 
+		// 			}
+		// 		})
+		// 	}
 
 		if(!vide)
 		{
@@ -230,52 +270,6 @@ $(document).on('click', '#btn-save', function(event) {
 			})
 
 		}
-
-		
-
-
-		var val_num = [
-			$('.prix_achat'),
-			$('.charge'),
-			$('.prix_revient'),
-			$('.marge_valeur'),
-			$('.prix_vente'),
-			$('.stock'),
-			$('.stock_alerte')
-			]
-		
-		var val_descri = [
-			"Prix d'achat",
-			"Charge",
-			"Prix de revient",
-			"Marge",
-			"Prix de vente",
-			"Stock",
-			"Stock Alerte"
-		] ;
-	
-		
-		positif = true
-			for(var i = 0; i < val_num.length ; i++)
-			{
-				const element = val_num[i]  ;
-				element.each(function(){
-					if (element.val() < 0)
-					{
-						positif = false
-						val_vide = false
-						valeur_negatif = val_descri[i]
-						return 
-					}
-					else if(!(Number.isInteger(element.val())))
-					{
-						positif = false
-						val_vide = true
-						valeur_negatif = val_descri[i]
-						return 
-					}
-				})
-			}
 
 	}	
 	else

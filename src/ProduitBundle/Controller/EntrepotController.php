@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Entrepot;
+use AppBundle\Entity\ProduitEntrepot;
+use AppBundle\Entity\Produit;
+
 
 class EntrepotController extends Controller
 {
@@ -105,5 +108,38 @@ class EntrepotController extends Controller
         return $this->render('@Produit/Entrepot/editor.html.twig',[
             'entrepot' => $entrepot,
         ]);
+    }
+
+    public function afficheAction(Request $request)
+    {
+        $entrepot = $request->request->get('entrepot');
+        $typeid = $request->request->get('typeid');
+
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+                    ->getRepository('AppBundle:UserAgence')
+                    ->findOneBy(array(
+                        'user' => $user
+                    ));
+        $agence = $userAgence->getAgence();
+        $agenceId = $agence->getId() ;
+
+        $listeProduit = array() ;
+
+        if($typeid == 1)
+        {
+            $listeProduit = $this->getDoctrine()
+                            ->getRepository('AppBundle:Produit')
+                            ->getAllProduit($agenceId);
+            
+        }
+        else if($typeid == 2)
+        {
+            $listeProduit = $this->getDoctrine()
+                                        ->getRepository('AppBundle:ProduitEntrepot')
+                                        ->getProduitParEntrepot($entrepot);
+        }
+        
+        return new JsonResponse($listeProduit) ;
     }
 }
