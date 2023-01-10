@@ -34,7 +34,7 @@ $(document).on('click', '#btn-modal-print', function(event) {
   };
 
   var url = Routing.generate('bon_livraison_pdf_editor');
-
+ 
   $.ajax({
       data: data,
       type: 'POST',
@@ -49,7 +49,7 @@ $(document).on('click', '#btn-modal-print', function(event) {
 
 $(document).on('click','#id_save_modele_pdf',function(event) {
   event.preventDefault();
-
+  // console.log($('#id').val()) ;
   var data = {
     id : $('#id').val(),
     f_modele_pdf : $('#f_modele_pdf').val(),

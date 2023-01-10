@@ -19,7 +19,7 @@ class ModelePdfController extends Controller
 	    $bonLivraison = $this->getDoctrine()
                 ->getRepository('AppBundle:BonLivraison')
                 ->find($id);
-
+ 
 	    $user = $this->getUser();
 	    $userAgence = $this->getDoctrine()
 	                ->getRepository('AppBundle:UserAgence')
@@ -47,6 +47,7 @@ class ModelePdfController extends Controller
 	{
 
 	    $id = $request->request->get('id');
+		
 	    $f_modele_pdf = $request->request->get('f_modele_pdf');
 
 		$bonLivraison = $this->getDoctrine()

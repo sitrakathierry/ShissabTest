@@ -76,7 +76,7 @@ $(document).on("click", "#btn-save", function (event) {
       var f_recu = $("#f_recu").val();
       if (f_type == 2) {
         if (f_recu == "") {
-          recu = false;
+          recu = true;
         }
       }
 

@@ -80,12 +80,20 @@
                         <input type="text" name="t_nom" class="form-control mt-2 t_nom" id="t_nom" autocomplete="off" > 
                     </div>
                     <div class="col-md-6"> 
-                        <button type="button" class="btn btn-sm float-right btn-success pers_add"><i class="fa fa-plus"></i></button>
+                        {# <button type="button" class="btn btn-sm float-right btn-success pers_add"><i class="fa fa-plus"></i></button> #}
                         <label for="t-pers-assigne">Personne assigné</label>
                         <select name="t_pers_assigne[]" class="pers-ass-form t_pers_assigne" id="t-pers-assigne" multiple >
-                            {% for unePers in basePers %}
-                                <option value="{{ unePers.id }}"> {{ unePers.nom_personne }} </option>
-                            {% endfor %}
+                            {% if accessTache is empty %}
+                                {% for unePers in basePers %}
+                                    {% if unePers.user.id == user %}
+                                        <option value="{{ unePers.user.id }}" class="capitalize"> {{ unePers.user.username }} </option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for unePers in basePers %}
+                                    <option value="{{ unePers.user.id }}" class="capitalize"> {{ unePers.user.username }} </option>
+                                {% endfor %}
+                            {% endif %}
                         </select> 
                     </div>
                 </div>

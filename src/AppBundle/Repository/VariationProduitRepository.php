@@ -10,7 +10,7 @@ namespace AppBundle\Repository;
  */
 class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function list(
+    public function list( 
         $agence,
         $recherche_par = '',
         $a_rechercher = '',
@@ -27,7 +27,7 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
                     left join entrepot e on (pe.entrepot = e.id)
                     inner join agence ag on (p.agence = ag.id)
                     inner join categorie_produit cp on (p.categorie_produit = cp.id)
-                    where vp.stock > 0";
+                    where vp.stock > 0 ";
 
         $query .= " and ag.id = " . $agence;
 
@@ -63,6 +63,24 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
 
         return $result;
     }
+
+    public function getOneVariation($variation)
+    {
+        $sql = "select vp.id, p.nom, vp.prix_vente, p.id as produit_id, vp.stock, cp.nom as categorie, (vp.prix_vente * vp.stock) as total, p.code_produit, e.nom as entrepot, pe.indice
+        from variation_produit vp
+        inner join produit_entrepot pe on (vp.produit_entrepot = pe.id)
+        inner join produit p on (pe.produit = p.id)
+        left join entrepot e on (pe.entrepot = e.id)
+        inner join agence ag on (p.agence = ag.id)
+        inner join categorie_produit cp on (p.categorie_produit = cp.id)
+        where vp.stock > 0 and vp.id = ? and p.is_delete IS NULL" ;
+        $em = $this->getEntityManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($variation));
+        $result = $statement->fetch();
+        return $result ; 
+    }
+
 
     public function getInfoVariation($id)
     {

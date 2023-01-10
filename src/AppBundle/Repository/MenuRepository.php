@@ -519,4 +519,14 @@ class MenuRepository extends \Doctrine\ORM\EntityRepository
 
         return $query->getResult();
     }
+
+	public function getParamUser($userId)
+	{
+		$em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT * FROM `menu` m JOIN menu_utilisateur mu ON m.id = mu.menu WHERE mu.user = ? AND m.id = ? " ; // PREPARATION DE LA REQUETE
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($userId,8));
+        $result = $statement->fetchAll();
+        return $result ; 
+	}
 }

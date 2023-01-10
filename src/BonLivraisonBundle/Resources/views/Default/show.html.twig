@@ -53,8 +53,8 @@
 	            </div>
           	{% endif %}
 
-
           	<input type="hidden" name="id" id="id" value="{{ livraison.id }}">
+ 
           	<div class="row">
           		<div class="col-lg-6">
 		          	<div class="form-group client_mac">
@@ -70,17 +70,16 @@
 		                          	data-police="{{client.formattedNum}}"
 		                          	{% if livraison.client.numPolice == client.numPolice %}
 		                          		selected=""
-		                          	{% endif %} 
-		                          >
+		                          	{% endif %} >
 		                            {{client.idClientMorale.nomSociete}}
 		                          </option>
 		                        {% else %}
 		                          <option 
-		                          	value="{{client.numPolice}}" 
+		                          	value="{{ client.numPolice }}" 
 		                          	data-police="{{client.formattedNum}}"
 		                          	{% if livraison.client.numPolice == client.numPolice %}
 		                          		selected=""
-		                          	{% endif %} 
+		                          	{% endif %}  
 		                          >
 		                            {{client.idClientPhysique.nom}}
 		                          </option>
@@ -123,7 +122,7 @@
 	                      </div>
 	                    </div>
 	                  </td>
-	                  <td>
+	                  <td> 
 	                    <div class="form-group">
 	                      <div class="col-sm-12">
 	                        <select class="form-control designation {{ detail.type == 3 ? 'hidden' : '' }}" name="designation[]">

@@ -7,7 +7,7 @@ tache_affectation:
     defaults: { _controller: TacheBundle:Default:add }
 
 
-tache_consultation:
+tache_consultation:  
     path:     /tache/consultation
     defaults: { _controller: TacheBundle:Default:consultation }
 
@@ -28,6 +28,17 @@ type_tache_add:
 tache_save:
     path:     /tache/save 
     defaults: { _controller: TacheBundle:Default:save }
+    options:
+        expose: true
+    methods: [POST]
+
+tache_afficher_details:
+    path:     /tache/afficher/detail/{idTache}
+    defaults: { _controller: TacheBundle:Default:detail }
+
+tache_comment_add:
+    path:     /tache/comment/add 
+    defaults: { _controller: TacheBundle:Commentaire:add }
     options:
         expose: true
     methods: [POST]

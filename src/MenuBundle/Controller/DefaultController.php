@@ -14,7 +14,8 @@ class DefaultController extends Controller
 
         $role = $this->maxRole();
 
-
+        // var_dump($role) ;
+        // die() ;
 
         $menus  = $this->getDoctrine()
                         ->getRepository('AppBundle:Menu')

@@ -65,7 +65,7 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
 		}
 
 		if ($recherche_par == 0) { 
-			$query .= "	and p.code_produit like '%" . $a_rechercher . "%'";
+			$query .= "	and p.code_produit like '%".$a_rechercher."%'";
 		}
 
 		if ($recherche_par == 1) {

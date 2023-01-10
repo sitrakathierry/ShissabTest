@@ -9,7 +9,7 @@
 {% block scripts %}
 {{ parent() }}
 {# <script src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script> #}
-{# <script src="{{ asset('bundles/credit/js/add.js') }}"></script> #}
+<script src="{{ asset('bundles/tache/js/consultation.js') }}"></script>
 {% endblock %}
 {% block contenu %}
     {% set statut = "" %}
@@ -52,7 +52,7 @@
                     <td>
                     {% for unePersonne in tabTachePers[i] %}
                         {% if unePersonne.idtache == uneTache.id %}
-                            {{ unePersonne.nom_personne }}, 
+                            {{ unePersonne.username }}, 
                         {% endif %}
                     {% endfor %}
                     </td>
@@ -64,7 +64,7 @@
                     {% endfor %}
                     </td>
                     <td>{{ tabCommentTache[i]|length }} commentaire(s)</td>
-                    <td class="text-center"><button value="{{ uneTache.id }}" class="btn bouton_afficher btn-success btn-sm"><i class="fa fa-info-circle"></i>&emsp;Afficher</button></td>
+                    <td class="text-center"><a href="{{ path('tache_afficher_details',{idTache:uneTache.id}) }}" class="btn bouton_afficher btn-success btn-sm"><i class="fa fa-info-circle"></i>&emsp;Afficher</a></td>
                 </td>
             {% set i = i + 1 %}
             {% endfor %}

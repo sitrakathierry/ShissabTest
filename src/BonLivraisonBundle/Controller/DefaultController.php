@@ -349,7 +349,7 @@ class DefaultController extends Controller
         ));
     }
 
-    public function pdfAction($id)
+    public function pdfAction($id) 
     {
         $bonLivraison  = $this->getDoctrine()
                         ->getRepository('AppBundle:BonLivraison')
@@ -379,6 +379,7 @@ class DefaultController extends Controller
 
         $modelePdf = $bonLivraison->getModelePdf();      
 
+        
 
         $template = $this->renderView('BonLivraisonBundle:Default:pdf.html.twig', array(
             'bonLivraison' => $bonLivraison,
@@ -387,7 +388,7 @@ class DefaultController extends Controller
         ));
 
         $html2pdf = $this->get('app.html2pdf');
-
+        
         $html2pdf->create();
 
         return $html2pdf->generatePdf($template, "bonLivraison" . $bonLivraison->getId());

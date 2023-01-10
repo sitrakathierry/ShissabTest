@@ -27,6 +27,7 @@ class DefaultController extends Controller
     {
     	$listeUsers = [];
         $user = $this->getUser();
+        
         $role = '';
         if ($user) {
             $role = $user->getRoles()[0];
@@ -78,7 +79,7 @@ class DefaultController extends Controller
         	return $this->render('PermissionBundle:Default:acces-menu-user.html.twig', array(
 	            'listeUsers' => $listeUsers
 	        ));
-        }
+        } 
     }
 
     public function operateurMenuAction(Request $request, User $user)
