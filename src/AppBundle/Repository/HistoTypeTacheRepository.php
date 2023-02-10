@@ -10,4 +10,23 @@ namespace AppBundle\Repository;
  */
 class HistoTypeTacheRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function verifieHistoTypeTache($idTypeTache,$idTache)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT * FROM `histo_type_tache` WHERE `idtypetache` = ? AND `idtache` = ?";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idTypeTache,$idTache));
+        $result = $statement->fetch();
+        return $result ; 
+    }
+
+    public function affaceHistoTypeTahce($idTypeTache,$idTache)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "DELETE FROM `histo_type_tache` WHERE `idtypetache` = ? AND `idtache` = ?";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idTypeTache,$idTache));
+        // $result = $statement->fetch();
+        // return $result ; 
+    }
 }

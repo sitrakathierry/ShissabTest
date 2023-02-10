@@ -68,10 +68,10 @@ $('#user-form').on('submit', function (e) {
     	success: function(res) {
             if(res == -1)
     		    show_info('Erreur','Capacité compte atteint','error');
-            else{
-                show_info('Succès', 'Utilisateur enregistré');
-                location.reload();
-            }    		
+            else if(res == -2)
+    		    show_info('Attention','Votre email existe déjà, veuiller créer un autre','warning');
+            else
+                show_success('Succès', 'Utilisateur enregistré'); 		
     	}
     })
 }); 

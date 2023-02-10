@@ -10,6 +10,7 @@ $(document).ready(function(){
     isReady = true;
 });
 
+
 function show_loading(actif)
 {
     actif = typeof actif !== 'undefined' ? actif : true;

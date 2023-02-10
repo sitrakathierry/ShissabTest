@@ -114,92 +114,93 @@ $(document).on("click", "#btn-save", function (event) {
   var vide = false;
   if (enregistre) {
     if (f_model == 1) {
-      var passe = false;
-      // MISE A JOUR DE CHAQUE LIGNE
+      // var passe = false;
+      // // MISE A JOUR DE CHAQUE LIGNE
 
-      $(".f_libre").each(function () {
-        // MISE A JOUR DE LA DESINGATION
+      // $(".f_libre").each(function () {
+      //   // MISE A JOUR DE LA DESINGATION
 
-        if ($(this).val() == 0) {
-          $(".f_produit ").each(function () {
-            if ($(this).val() == "") {
-              enregistre = false;
-              vide = true;
-              return;
-            }
-          });
+      //   if ($(this).val() == 0) {
+      //     $(".f_produit ").each(function () {
+      //         if ($(this).val() == "") {
+      //           enregistre = false;
+      //           vide = true;
+      //           return;
+      //        }
+      //     });
 
-          if (vide) {
-            passe = true;
-          }
-        }
+      //     if (vide) {
+      //       passe = true;
+      //     }
+      //   }
 
-        if (!passe) {
-          // alert("PAssage ")
-          var val_num = [".f_qte", ".f_prix", ".f_remise_ligne"];
+      //   if (!passe) {
+      //     // alert("PAssage ")
+      //     var val_num = [".f_qte", ".f_prix", ".f_remise_ligne"];
 
-          var val_descri = ["Quantité", "Prix", "Remise"];
+      //     var val_descri = ["Quantité", "Prix", "Remise"];
 
-          var negatif = false;
-          for (let i = 0; i < val_num.length; i++) {
-            const element = val_num[i];
-            $(element).each(function () {
-              if (i != 2) {
-                if ($(this).val() == "") {
-                  val_elem = val_descri[i];
-                  vide = true;
-                  return;
-                } else if ($(this).val() < 0) {
-                  val_elem = val_descri[i];
-                  vide = false;
-                  negatif = true;
-                  return;
-                }
-              } else {
-                if ($(this).val() < 0) {
-                  val_elem = val_descri[i];
-                  vide = false;
-                  negatif = true;
-                  return;
-                }
-              }
-            });
+      //     var negatif = false;
+      //     for (let i = 0; i < val_num.length; i++) {
+      //       const element = val_num[i];
+      //       $(element).each(function () {
+      //         if (i != 2) {
+      //           if ($(this).val() == "") {
+      //             val_elem = val_descri[i];
+      //             vide = true;
+      //             return;
+      //           } else if ($(this).val() < 0) {
+      //             val_elem = val_descri[i];
+      //             vide = false;
+      //             negatif = true;
+      //             return;
+      //           }
+      //         } else {
+      //           if ($(this).val() < 0) {
+      //             val_elem = val_descri[i];
+      //             vide = false;
+      //             negatif = true;
+      //             return;
+      //           }
+      //         }
+      //       });
 
-            if (negatif || vide) {
-              break;
-            }
-          }
-          if (vide) {
-            enregistre = false;
-            swal({
-              type: "warning",
-              title: val_elem + " vide",
-              text: "Sélectionnez un " + val_elem + " !",
-            });
-            return;
-          } else if (negatif) {
-            enregistre = false;
-            swal({
-              type: "error",
-              title: val_elem + " Négatif",
-              text: "Corriger le champ " + val_elem + " !",
-            });
-            return;
-          }
-        } else {
-          enregistre = false;
-          swal({
-            type: "warning",
-            title: "Désignation vide",
-            text: "Sélectionnez un Désignation !",
-          });
-          return;
-        }
+      //       if (negatif || vide) {
+      //         break;
+      //       }
+      //     }
+      //     if (vide) {
+      //       enregistre = false;
+      //       swal({
+      //         type: "warning",
+      //         title: val_elem + " vide",
+      //         text: "Sélectionnez un " + val_elem + " !",
+      //       });
+      //       return;
+      //     } else if (negatif) {
+      //       enregistre = false;
+      //       swal({
+      //         type: "error",
+      //         title: val_elem + " Négatif",
+      //         text: "Corriger le champ " + val_elem + " !",
+      //       });
+      //       return;
+      //     }
+      //   } else {
+      //     enregistre = false;
+      //     swal({
+      //       type: "warning",
+      //       title: "Désignation vide",
+      //       text: "Sélectionnez un Désignation !",
+      //     });
+      //     return;
+      //   }
 
-        if (!enregistre) {
-          return;
-        }
-      });
+      //   if (!enregistre) {
+      //     return;
+      //   }
+      // });
+      enregistre = true ;
     } else if (f_model == 2) {
       $(".f_service_libre").each(function () {
         if ($(this).val() == 0) {
@@ -500,6 +501,8 @@ $(document).on("click", "#btn-save", function (event) {
     );
   }
 });
+
+
 
 $(document).on("change", "#f_model", function (event) {
   event.preventDefault();

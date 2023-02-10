@@ -15,7 +15,12 @@
 				{% if variation.isDelete == 1 %}
 				{% else %}
 					<tr>
+					{% if produitEntrepot.entrepot is not empty %}
 						<td>{{ produitEntrepot.entrepot.nom }}</td>
+					{% else %}
+						<td class="text-center">-</td>
+					{% endif %}
+						
 						<td>{{ produitEntrepot.produit.codeProduit}}/{{ produitEntrepot.indice }}</td>
 						<td>{{ variation.prixVente }}</td>
 						<td>{{ variation.stock }}</td>

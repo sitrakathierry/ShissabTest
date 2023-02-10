@@ -159,6 +159,10 @@ class FactureProduitController extends BaseController
                         ->getRepository('AppBundle:VariationProduit')
                         ->find( $f_produit[$key] );
 
+                    if ($f_type == 2) {
+                        $variationProduit->setStock($variationProduit->getStock() - $qte);
+                    }
+                    
                     $detail->setVariationProduit($variationProduit);
                 }
 
@@ -297,13 +301,20 @@ class FactureProduitController extends BaseController
                         ->findOneBy(array(
                             'proforma' => $facture
                         ));
-
+ 
         $details = $this->getDoctrine()
                     ->getRepository('AppBundle:FactureProduitDetails')
                     ->findBy(array(
                         'factureProduit' => $factureProduit
                     ));
-
+        $produitsDetails = [];
+        foreach ($details as $detail) {
+            $detailsProduit = $this->getDoctrine()
+                ->getRepository('AppBundle:FactureProduitDetails')
+                ->getFactureProduitDetails($detail->getId());
+            array_push($produitsDetails, $detailsProduit);
+        }
+        
         $permission_user = $this->get('app.permission_user');
         $user = $this->getUser();
         $permissions = $permission_user->getPermissions($user);
@@ -322,11 +333,11 @@ class FactureProduitController extends BaseController
                 'agence' => $agence
             ));
 
-        $produits = $this->getDoctrine()
-            ->getRepository('AppBundle:Produit')
-            ->findBy(array(
-                'agence' => $agence
-            ));
+        // $produits = $this->getDoctrine()
+        //     ->getRepository('AppBundle:Produit')
+        //     ->findBy(array(
+        //         'agence' => $agence
+        //     ));
 
         $print = false;
 
@@ -340,9 +351,9 @@ class FactureProduitController extends BaseController
             $print = true;
         }
                     
-        $variations = $this->getDoctrine()
-                ->getRepository('AppBundle:VariationProduit')
-                ->list($agence->getId());
+        // $variations = $this->getDoctrine()
+        //         ->getRepository('AppBundle:VariationProduit')
+        //         ->list($agence->getId());
 
         $devises = $this->getDoctrine()
                     ->getRepository('AppBundle:Devise')
@@ -363,12 +374,13 @@ class FactureProduitController extends BaseController
             'facture' => $facture,
             'factureProduit' => $factureProduit,
             'details' => $details,
-            'produits' => $produits,
-            'variations' => $variations,
+            // 'produits' => $produits,
+            // 'variations' => $variations, 
             'clients' => $clients,
             'permissions' => $permissions,
             'print' => $print,
             'definitif' => $definitif,
+            'produitsDetails' => $produitsDetails,
             'checkFactureBonCommande' => $checkFactureBonCommande,
         ));
 
@@ -395,6 +407,14 @@ class FactureProduitController extends BaseController
                         'factureProduit' => $factureProduit
                     ));
 
+        $produitsDetails = [];
+        foreach ($details as $detail) {
+            $detailsProduit = $this->getDoctrine()
+                ->getRepository('AppBundle:FactureProduitDetails')
+                ->getFactureProduitDetails($detail->getId());
+            array_push($produitsDetails, $detailsProduit);
+        }
+                    
 
         $user = $this->getUser();
         $userAgence = $this->getDoctrine()
@@ -428,6 +448,7 @@ class FactureProduitController extends BaseController
             'details' => $details,
             'produits' => $produits,
             'modelePdf' => $modelePdf,
+            'produitsDetails' => $produitsDetails
         ));
 
         $html2pdf = $this->get('app.html2pdf');
@@ -450,31 +471,33 @@ class FactureProduitController extends BaseController
 
         $agence = $userAgence->getAgence();
 
-        $variations = $this->getDoctrine()
-                ->getRepository('AppBundle:VariationProduit')
-                ->list($agence->getId());
+        // $variations = $this->getDoctrine()
+        //         ->getRepository('AppBundle:VariationProduit')
+        //         ->list($agence->getId());
 
-        $results = $this->getDoctrine()
-                        ->getRepository('AppBundle:Commande')
-                        ->consultation($agence->getId(), intval($recu));
+        // $results = $this->getDoctrine()
+        //                 ->getRepository('AppBundle:Commande')
+        //                 ->consultation($agence->getId(), intval($recu));
 
-        if (!empty($results)) {
-            $commande = $results[0];
+        // if (!empty($results)) { 
+            // $commande = $results[0];
 
             $panniers = $this->getDoctrine()
-                    ->getRepository('AppBundle:Pannier')
-                    ->consultation($commande['id']);
+            ->getRepository('AppBundle:Pannier')
+        ->findBy(array(
+            'commande' => intval($recu)
+        ));
 
             $tpl = $this->renderView('FactureBundle:FactureProduit:recu.html.twig',array(
-                'variations' => $variations,
-                'commande' => $commande,
-                'panniers' => $panniers,
+            // 'variations' => $variations,
+            // 'commande' => $commande,
+            'panniers' => $panniers
             ));
 
             return new JsonResponse(array(
                 'tpl' => $tpl,
             ));
-        }
+        // }
 
     }
 

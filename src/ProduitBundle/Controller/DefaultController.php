@@ -38,27 +38,27 @@ class DefaultController extends Controller
 
         $agence = $userAgence->getAgence();
 
-        // $preference = $this->getDoctrine()
-        //         ->getRepository('AppBundle:PreferenceCategorie')
-        //         ->findOneBy(array(
-        //             'agence' => $agence
-        //         ));
+        $preference = $this->getDoctrine()
+            ->getRepository('AppBundle:PreferenceCategorie')
+            ->findOneBy(array(
+                'agence' => $agence
+            ));
+        $categories = [];
+        if ($preference) {
+            $categoriesList = $preference->getCategoriesList();
 
-        // if ($preference) {
-        //     $categoriesList = $preference->getCategoriesList();
-
-        //     foreach ($categoriesList as $id) {
-        //         $item = $this->getDoctrine()
-        //             ->getRepository('AppBundle:CategorieProduit')
-        //             ->find($id);
-        //         array_push($categories, $item);
-        //     }
-        // }
+            foreach ($categoriesList as $id) {
+                $item = $this->getDoctrine()
+                    ->getRepository('AppBundle:CategorieProduit')
+                    ->find($id);
+                array_push($categories, $item);
+            }
+        }
 
    
-        $categories = $this->getDoctrine()
-            ->getRepository('AppBundle:CategorieProduit')
-            ->findAll();
+        // $categories = $this->getDoctrine()
+        //     ->getRepository('AppBundle:CategorieProduit')
+        //     ->findAll();
 
         $categorieProduit = $this->getDoctrine()
                     ->getRepository('AppBundle:CategorieProduit')
@@ -397,7 +397,6 @@ class DefaultController extends Controller
 
     public function showAction($id)
     {
-
         $produit = $this->getDoctrine()
                 ->getRepository('AppBundle:Produit')
                 ->find($id);
@@ -650,8 +649,9 @@ class DefaultController extends Controller
 
         $produits = $this->getDoctrine()
                 ->getRepository('AppBundle:Produit')
-                ->findBy(array(
-                    'codeProduit' => $code
+            ->findOneBy(array(
+                'codeProduit' => $code,
+                'is_delete' => NULL
                 ));
 
         if (!empty($produits)) {
@@ -675,10 +675,33 @@ class DefaultController extends Controller
         $produitEntrepot = $this->getDoctrine()
                                 ->getRepository('AppBundle:ProduitEntrepot')
                                 ->getRefProduitEntrepot($idProduit,$entrepot);
+
         return new JsonResponse($produitEntrepot) ;
     }
 
     public function miseAjourAction(){
         return new Response("Mise à jour terminé") ;
+    }
+
+    public function affichePrixAction(Request $request)
+    {
+        $idProduit = $request->request->get('idProduit');
+
+        $variationPrixProduit = $this->getDoctrine()
+            ->getRepository('AppBundle:VariationProduit')
+            ->affichePrixProduit($idProduit);
+
+        return new JsonResponse($variationPrixProduit);
+    }
+
+    public function afficheInfoSuppAction(Request $request)
+    {
+        $idVariation = $request->request->get('idVariation');
+
+        $variationPrixProduit = $this->getDoctrine()
+            ->getRepository('AppBundle:VariationProduit')
+            ->getOneVariationPrixProduit($idVariation);
+
+        return new JsonResponse($variationPrixProduit);
     }
 }

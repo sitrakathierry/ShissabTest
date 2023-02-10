@@ -35,7 +35,7 @@ class TacheRepository extends \Doctrine\ORM\EntityRepository
     public function getAllTache($agenceId)
     {
         $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
-        $sql = "SELECT DATE_FORMAT(date_debut,'%d %b %Y') as dateDebut, DATE_FORMAT(date_fin,'%d %b %Y') as dateFin, tache.* FROM `tache` WHERE `idAgence` = ? " ;
+        $sql = "SELECT DATE_FORMAT(date_debut,'%d %b %Y') as dateDebut, DATE_FORMAT(date_fin,'%d %b %Y') as dateFin, tache.* FROM `tache` WHERE `idAgence` = ? AND is_delete IS NULL";
         $statement = $em->getConnection()->prepare($sql);
         $statement->execute(array($agenceId));
         $result = $statement->fetchAll();
@@ -98,5 +98,74 @@ class TacheRepository extends \Doctrine\ORM\EntityRepository
             $statement = $em->getConnection()->prepare($sql) ;
             $statement->execute($data) ;
         } 
+    }
+
+    public function findeTache($idTache)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "UPDATE `tache` SET `statut`= ? WHERE `id` = ? ";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array(2, $idTache));
+        // $result = $statement->fetchAll();
+        // return $result ; 
+    }
+
+    public function supprimeTache($idTache)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "UPDATE `tache` SET `is_delete` = ? WHERE `id` = ? ";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array(1, $idTache));
+    }
+
+    public function modifieUnetache($param)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "UPDATE `tache` SET `tache`= ? ,`date_debut`= ? ,`date_fin`= ? ,`duree`= ? ,`type_duree`= ? ,`description`= ?  WHERE `id` = ? ";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute($param);
+    }
+
+    public function rechercheTache(
+        $agence,
+        $statut = 3,
+        $dateDebut = "",
+        $dateFin = "",
+        $duree = "",
+        $typeDuree = "",
+        $personne = "",
+        $typetache = ""
+    ) {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT DATE_FORMAT(date_debut,'%d %b %Y') as dateDebut, DATE_FORMAT(date_fin,'%d %b %Y') as dateFin, t.* FROM `tache` t 
+        LEFT JOIN assignation a ON a.idtache = t.id 
+        RIGHT JOIN histo_type_tache ht ON ht.idtache = t.id 
+        WHERE t.`idAgence` = $agence ";
+
+        if ($statut != 3)
+            $sql .= " AND t.`statut` = $statut ";
+
+        if ($dateDebut != "")
+            $sql .= " AND t.`date_debut` >= '$dateDebut' ";
+
+        if ($dateFin != "")
+            $sql .= " AND t.`date_fin` <= '$dateFin' ";
+
+        if ($duree != "" && $typeDuree != "")
+            $sql .= " AND t.`duree` = $duree AND t.`type_duree` LIKE '%$typeDuree%'";
+
+        if ($personne != "")
+            $sql .= " AND a.idpersonne = $personne ";
+
+        if ($typetache != "")
+            $sql .= " AND ht.idtypetache = $typetache ";
+
+        $sql .= " AND t.`is_delete` IS NULL 
+                    GROUP BY t.id 
+                    ORDER BY t.date_debut DESC";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetchAll();
+        return $result;
     }
 }

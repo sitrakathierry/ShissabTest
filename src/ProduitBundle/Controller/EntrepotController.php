@@ -125,13 +125,16 @@ class EntrepotController extends Controller
         $agenceId = $agence->getId() ;
 
         $listeProduit = array() ;
-
+ 
         if($typeid == 1)
         {
+            // $listeProduit = $this->getDoctrine()
+            //                 ->getRepository('AppBundle:Produit')
+            //                 ->getAllProduit($agenceId);
+
             $listeProduit = $this->getDoctrine()
-                            ->getRepository('AppBundle:Produit')
-                            ->getAllProduit($agenceId);
-            
+                ->getRepository('AppBundle:Produit')
+                ->getAllProduit($agenceId);
         }
         else if($typeid == 2)
         {

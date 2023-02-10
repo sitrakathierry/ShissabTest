@@ -9,6 +9,18 @@
       .select2-container--bootstrap4 .select2-selection--single {
           height: calc(3rem + 3.5px) !important;
       }
+      .ibox-title
+      {
+        overflow: hidden;
+      }
+      .float-right
+      {
+        float: right ;
+      }
+      .history_back
+      {
+        padding: 5px 30px ;
+      }
   </style>
 {% endblock  %}
 {% block scripts %}
@@ -25,6 +37,7 @@
     <div class="col-lg-12">
       <div class="ibox float-e-margins">
         <div class="ibox-title">
+        <button type="button" class="float-right history_back btn btn-success" onclick="history.back()"><b><i class="fa fa-arrow-left" aria-hidden="true"></i></b></button>
           <h5>
             Paiement Vente à crédit N° <span class="badge-warning">{{ credit.recu }}</span>
           </h5>
@@ -75,13 +88,21 @@
 	                          {% if detail.type == 2 %} SERVICE {% endif %}
 	                      </div>
 	                    </div>
-	                  </td>
+	                  </td> 
 	                  <td>
 	                    <div class="form-group">
 	                      <div class="col-sm-12">
 	                          {% if detail.type == 1 %}
-	                          		{{ detail.variationProduit.produitEntrepot.produit.nom }} - {{ detail.variationProduit.prixVente }} KMF
+                            {% if detail.variationProduit is empty %}
+                            {% if myVariationProduit is empty  %}
+                               - {{ detail.prix }} KMF
+                            {% else %}
+                                {{ myVariationProduit[i].designation }} - {{ detail.prix }} KMF
+                            {% endif %}
+                            {% else %}
+	                          	{{ detail.variationProduit.produitEntrepot.produit.nom }} - {{ detail.variationProduit.prixVente }} KMF
 	                          {% endif %}
+                            {% endif %}
 	                          {% if detail.type == 2 %}
 	                          		{{ detail.service.nom }}
 	                          {% endif %}
@@ -113,7 +134,7 @@
 	                    {{ detail.montant }}
 	                  </td>
 	                </tr>
-              		{% set i = i + 1 %}
+              		 {% set i = i + 1 %}
               	{% endfor %}
               </tbody>
               <tfoot>

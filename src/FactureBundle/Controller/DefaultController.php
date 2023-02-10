@@ -98,7 +98,7 @@ class DefaultController extends BaseController
         $checkFactureRestaurant = $this->checkFactureRestaurant();
 
         return $this->render('FactureBundle:Default:add.html.twig',array(
-        	'deviseEntrepot' => $deviseEntrepot,
+            'deviseEntrepot' => $deviseEntrepot, 
             'agence' => $agence,
             'devises' => $devises,
             'clients' => $clients,
@@ -112,15 +112,20 @@ class DefaultController extends BaseController
             'accompagnements' => $accompagnements,
             'bookings' => $bookings,
             'checkFactureProduit' => $checkFactureProduit,
-            'checkFactureService' => $checkFactureService,
+            'checkFactureService' => $checkFactureService,  
             'checkFactureCaisse' => $checkFactureCaisse,
             'checkFactureHebergement' => $checkFactureHebergement,
-            'checkFactureRestaurant' => $checkFactureRestaurant,
+            'checkFactureRestaurant' => $checkFactureRestaurant
         ));
     }
 
     public function saveAction(Request $request)
     {
+        $f_libre = $request->request->get('f_libre');
+
+        var_dump($f_libre);
+        die();
+
         $f_type = $request->request->get('f_type');
         $f_client = $request->request->get('f_client');
         $f_date = $request->request->get('f_date');
@@ -366,6 +371,7 @@ class DefaultController extends BaseController
         $facture  = $this->getDoctrine()
                         ->getRepository('AppBundle:Facture')
                         ->find($id);
+                        
         $definitif = $this->getDoctrine()
                         ->getRepository('AppBundle:Facture')
                         ->findOneBy(array(

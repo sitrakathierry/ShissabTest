@@ -15,9 +15,70 @@
     {% set statut = "" %}
     <div class="t-block">
         <div class="t-title">
+        {{ pass  }}
             <h2>LISTE DES TACHES</h2>
         </div>
-        <div class="liste-tache container mt-3">
+        <div class="liste-tache container ">
+        <div class="row mb-2">
+            <div class="col-sm-2 mt-3">
+                <label for="pers-assigne">Personne assigné</label>
+                <select name="pers_assigne" class="form-control pers_assigne"  >
+                    <option value=""></option>
+                            {% if accessTache is empty %}
+                                {% for unePers in basePers %}
+                                    {% if unePers.user.id == user %}
+                                        <option value="{{ unePers.user.id }}" class="capitalize"> {{ unePers.user.username }} </option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for unePers in basePers %}
+                                    <option value="{{ unePers.user.id }}" class="capitalize"> {{ unePers.user.username }} </option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+            </div>
+            <div class="col-sm-2 mt-3"> 
+                <label for="type_tache">Type de tâche</label>
+                <select name="type_tache"  class="form-control type_tache">
+                    <option value=""></option>
+                    {% for uneTypeTache in baseTypeTache %}
+                        <option value="{{ uneTypeTache.id }}"> {{ uneTypeTache.nom_type_tache }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-2 mt-3">
+            <label for="date_debut">Date début</label>
+                <input type="date" class="form-control date_debut">
+            </div>
+            <div class="col-sm-2 mt-3">
+            <label for="date_fin">Date fin</label>
+                <input type="date" class="form-control date_fin">
+            </div>
+            <div class="col-sm-2 mt-3">
+            <label for="duree">Durée</label>
+                <input type="number" class="form-control duree">
+            </div>
+            <div class="col-sm-2 mt-3">
+            <label for="type_duree">Type durée</label>
+                <select name="type_duree" class="form-control type_duree" >
+                    <option value=""></option>
+                    <option value="mn">Minute</option>
+                    <option value="h">Heure</option>
+                    <option value="j">Jour</option>
+                </select>
+                <input type="hidden" class="statutTache" value="3">
+            </div>
+            <div class="col-sm-8 text-left mt-3">
+                <button statut="3" class="btn btn-sm btn_statut  mr-3 btn-success"><i class="fa fa-hand-grab-o text-white"></i></button>
+                <button statut="0" class="btn btn-sm btn_statut  mr-3 btn-default"><i class="fa fa-hand-stop-o text-white"></i></button>
+                <button statut="1" class="btn btn-sm btn_statut  mr-3 btn-warning"><i class="fa fa-hand-pointer-o text-white"></i></button>
+                <button statut="2" class="btn btn-sm btn_statut  mr-3 tachecst btn-success"><i class="fa fa-thumbs-o-up text-white"></i></button>
+                <button statut="-1" class="btn btn-sm btn_statut  btn-danger"><i class="fa fa-thumbs-o-down text-white"></i></button>
+            </div>
+            <div class="col-sm-4 mt-3 text-right">
+            <button class="btn btn-md btn-primary recherche_tache">&emsp;<i class="fa fa-search text-white"></i>&nbsp;Rechercher&emsp;</button>
+            </div>
+        </div>
         <div class="table-responsive">
         <table class="table table-sm table-bordered">
             <thead >
@@ -32,7 +93,7 @@
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="t_consult_tache">
             {% set i = 0 %}
             {% for uneTache in baseTache %}
                 {% if uneTache.statut == 0 %}

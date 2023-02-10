@@ -139,15 +139,15 @@ $(document).ready(function(){
 
     	// var data = $('#form-commande').serializeArray();
         var val_str = [
-            $('#bon_commande').val(),
+            // $('#bon_commande').val(),
             $('#client').val(),
-            $('id-facture').val(),
+            // $('id-facture').val(),
         ]
 
         var val_descri = [
-            "Bon de commande",
+            // "Bon de commande",
             "Client",
-            "Facture"
+            // "Facture"
         ]
         var elem_str = ""
         var enregistre = true

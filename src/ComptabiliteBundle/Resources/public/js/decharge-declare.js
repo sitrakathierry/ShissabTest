@@ -6,7 +6,7 @@ $(document).ready(function(){
     load_list();
 
     function instance_list_grid() {
-        var colNames = ['Bénéficiaire','N° chèque/virement','Montant', 'Mode de paiement','Date déclaration','Mois','Motif', ''];
+        var colNames = ['Bénéficiaire','Mode de paiement','N° / Ref','Montant','Num Fact.','Date déclaration','Mois','Service','Motif', ''];
         var colModel = [{
                 name    : 'beneficiaire',
                 index   : 'beneficiaire',
@@ -22,6 +22,24 @@ $(document).ready(function(){
                     return v;
                 }
             },{
+                name    : 'mode_paiement',
+                index   : 'mode_paiement',
+                align   : 'left',
+                editable: false,
+                sortable: false,
+                classes : 'js-mode_paiement',
+                formatter: function(v) {
+                    if (v == 1) {
+                        return 'Chèque';
+                    }else if (v == 2) {
+                        return 'Espèce';
+                    }else if (v == 3) {
+                        return 'Virement';
+                    }else if (v == 4) {
+                        return 'Carte Bancaire';
+                    }
+                }
+            },{
                 name    : 'num',
                 index   : 'num',
                 align   : 'left',
@@ -31,9 +49,10 @@ $(document).ready(function(){
                 formatter: function(v,i,r) {
                     if (r.mode_paiement == 1) {
                         return r.cheque
-                    }
-                    if (r.mode_paiement == 3) {
+                    }else if (r.mode_paiement == 3) {
                         return r.virement
+                    }else if (r.mode_paiement == 4) {
+                        return r.cheque
                     }
 
                     return '';
@@ -48,23 +67,17 @@ $(document).ready(function(){
                 formatter: jq_number_format,
                 unformat: jq_number_unformat
             },{
-                name    : 'mode_paiement',
-                index   : 'mode_paiement',
+                name    : 'num_fact',
+                index   : 'num_fact',
                 align   : 'left',
                 editable: false,
                 sortable: false,
-                classes : 'js-mode_paiement',
-                formatter: function(v) {
-                    if (v == 1) {
-                        return 'Chèque';
-                    }
-
-                    if (v == 2) {
-                        return 'Espèce';
-                    }
-
-                    if (v == 3) {
-                        return 'Virement';
+                classes : 'js-num_fact',
+                formatter: function(v,i,r) {
+                    if (r.mode_paiement == 2 || r.mode_paiement == 4) {
+                        return r.virement
+                    }else{ 
+                        return ""
                     }
                 }
             },{
@@ -82,19 +95,26 @@ $(document).ready(function(){
                 sortable: false,
                 classes : 'js-mois'
             },{
+                name    : 'service',
+                index   : 'service',
+                align   : 'left',
+                editable: false,
+                sortable: false,
+                classes : 'js-service',
+                formatter: function(v, i, r) {
+                    if (r.depense_type == 2) {
+                        return 'SANTE';
+                    }
+                    return v;
+                }
+            },{
                 name    : 'motif',
                 index   : 'motif',
                 align   : 'left',
                 editable: false,
                 sortable: false,
-                classes : 'js-motif',
-                formatter: function(v, i, r) {
-                    if (r.depense_type == 2) {
-                        return 'SANTE';
-                    }
+                classes : 'js-motif'
 
-                    return v;
-                }
             },{
                 name:'x',
                 index:'x',

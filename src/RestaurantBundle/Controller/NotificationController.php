@@ -23,14 +23,14 @@ class NotificationController extends Controller
                     ->notificationsEmporters();
 
         $user = $this->getUser();
-        $check_menu = $this->get('app.check_menu');
-        $checkResto = $check_menu->check(['restaurant_homepage'],$user,$this->getDoctrine());
+        // $check_menu = $this->get('app.check_menu');
+        // $checkResto = $check_menu->check(['restaurant_homepage'],$user,$this->getDoctrine());
 
         if ($type_reponse == 'html') {
 	        return $this->render('RestaurantBundle:Notification:index.html.twig',array(
 	        	'notif_reserv' => $notif_reserv,
 	        	'notif_emp'	   => $notif_emp,
-	        	'menu'		   => $checkResto,
+                                'menu'         => "",
 	        ));
         } else {
         	return new JsonResponse($notif_reserv);

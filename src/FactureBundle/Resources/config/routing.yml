@@ -1,4 +1,4 @@
-facture_homepage:
+facture_homepage: 
     path:     /facture/index
     defaults: { _controller: FactureBundle:Default:index }
 

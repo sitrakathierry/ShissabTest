@@ -51,12 +51,14 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
 	)
 	{
 		$em = $this->getEntityManager();
-		
-		$query = "	select p.code_produit, p.id, p.nom, pe.stock, cp.nom as categorie
+
+		$query =
+		"	select p.code_produit, p.id, p.nom, pe.stock, cp.nom as categorie, pe.indice
 					from produit p
 					left join categorie_produit cp on (p.categorie_produit = cp.id)
 					left join produit_entrepot pe on (pe.produit = p.id)
-					where p.nom is not null ";
+					left join variation_produit vp on vp.produit_entrepot = pe.id
+					where p.nom is not null and vp.is_delete is null";
 		
 		// $query = "	SELECT DISTINCT p.*,cp.*, cp.nom as categorie FROM `produit` p JOIN produit_entrepot pe ON pe.produit = p.id JOIN variation_produit ON variation_produit.produit_entrepot = pe.id JOIN categorie_produit cp ON cp.id = p.categorie_produit WHERE variation_produit.is_delete IS NULL AND p.nom IS NOT NULL";
 

@@ -22,11 +22,13 @@ class ApprovisionnementController extends Controller
     {
 
     	$user = $this->getUser();
+
         $userAgence = $this->getDoctrine()
                     ->getRepository('AppBundle:UserAgence')
                     ->findOneBy(array(
                         'user' => $user
                     ));
+        
         $agence = $userAgence->getAgence();
 
         $produits = $this->getDoctrine()
@@ -34,7 +36,7 @@ class ApprovisionnementController extends Controller
 	            ->findBy(array(
 	            	'agence' => $agence,
                     'is_delete' => NULL));
-
+        
         $entrepots = $this->getDoctrine()
                 ->getRepository('AppBundle:Entrepot')
                 ->findBy(array(
@@ -45,30 +47,26 @@ class ApprovisionnementController extends Controller
                 ->getRepository('AppBundle:Fournisseur')
                 ->findBy(array(
                     'agence' => $agence
-                )); 
+        ));
 
-        // $agenceId = $agence->getId() ;
-            return $this->render('ProduitBundle:Approvisionnement:add.html.twig', array(
+        // Dans le serveur c'est add_new.html.twig !!!!!
+        return $this->render('ProduitBundle:Approvisionnement:add.html.twig', array(
                 'agence' => $agence,
                 'produits' => $produits,
                 'entrepots' => $entrepots,
                 'fournisseurs' => $fournisseurs,
             ));
-        // return $this->render('ProduitBundle:Approvisionnement:add.html.twig', array(
-        // 	'agence' => $agence,
-        //     'produits' => $produits,
-        //     'entrepots' => $entrepots,
-        //     'fournisseurs' => $fournisseurs,
-        // ));
+        
     }
 
     public function saveAction(Request $request)
     {
-        $id = $request->request->get('id');
+        // $id = $request->request->get('id');
         $montant_total = $request->request->get('montant_total');
         $date = $request->request->get('date');
         $date = \DateTime::createFromFormat('j/m/Y', $date);
-        
+
+        // $date = $date->format("j/m/Y");
         $user = $this->getUser();
         $userAgence = $this->getDoctrine()
                     ->getRepository('AppBundle:UserAgence')
@@ -76,146 +74,275 @@ class ApprovisionnementController extends Controller
                         'user' => $user
                     ));
         $agence = $userAgence->getAgence();
+        $em = $this->getDoctrine()->getManager();
+        // RAVITAILLEMENT
+        $ravitaillement = new Ravitaillement();
 
-        if ($id) {
-            $ravitaillement = $this->getDoctrine()
-                ->getRepository('AppBundle:Ravitaillement')
-                ->find($id);
-        } else {
-            $ravitaillement = new Ravitaillement();
-        }
-        
         $ravitaillement->setTotal($montant_total);
         $ravitaillement->setDate($date);
         $ravitaillement->setAgence($agence);
 
-        $em = $this->getDoctrine()->getManager();
+
         $em->persist($ravitaillement);
         $em->flush();
+        // RAVITAILLEMENT
 
+        $type_approList = $request->request->get('type_appro');
+        $prix_produitList = $request->request->get('prix_produit');
+        $qteList = $request->request->get('qte');
         $produitList = $request->request->get('produit');
         $entrepotList = $request->request->get('entrepot');
-        $qteList = $request->request->get('qte');
+        $ref_produit = $request->request->get('ref_produit');
         $fournisseurList = $request->request->get('fournisseur');
+
+        $totalList = $request->request->get('total');
+        $expirerList = $request->request->get('expirer');
+        $choix_nouveau = $request->request->get('choix_nouveau');
+
         $prixList = $request->request->get('prix');
         $chargeList = $request->request->get('charge');
         $prixRevientList = $request->request->get('prix_revient');
         $margeTypeList = $request->request->get('marge_type');
         $margeValeurList = $request->request->get('marge_valeur');
+
         $prixVenteList = $request->request->get('prix_vente');
-        $totalList = $request->request->get('total');
-        $expirerList = $request->request->get('expirer');
-        $approId = $request->request->get('appro_id');
 
-        if (!empty($produitList)) {
-            foreach ($produitList as $key => $value) {
-
-                $produit = $this->getDoctrine()
+        foreach ($type_approList as $key => $value) {
+            $produit = $this->getDoctrine()
                         ->getRepository('AppBundle:Produit')
-                        ->find( $produitList[$key] );
+            ->find($produitList[$key]);
 
-                $entrepot = $entrepotList[$key];
-                $qte = $qteList[$key];
-                $prix = $prixList[$key];
-                $prixRevient = $prixRevientList[$key];
-                $charge = $chargeList[$key];
-                $margeType = $margeTypeList[$key];
-                $margeValeur = $margeValeurList[$key];
-                $fournisseur = $fournisseurList[$key];
-                $total = $totalList[$key];
-                $vente = $prixVenteList[$key];
-                $expirer = $expirerList[$key];
-                $expirer = \DateTime::createFromFormat('j/m/Y', $expirer);
+            $entrepot = $this->getDoctrine()
+                ->getRepository('AppBundle:Entrepot')
+            ->find($entrepotList[$key]);
 
-                $entrepot = $this->getDoctrine()
-                        ->getRepository('AppBundle:Entrepot')
-                        ->find($entrepot);
+            if ($type_approList[$key] == 1) {
+                /**
+                 * ProduitEntrepot Nouveau
+                 */
 
-                if($vente){
+                $produitEntrepot = $this->getDoctrine()
+                    ->getRepository('AppBundle:ProduitEntrepot')
+                    ->findOneBy(array(
+                    'produit' => $produitList[$key],
+                    'entrepot' => $entrepotList[$key],
+                ));
 
-                    /**
-                     * ProduitEntrepot
-                     */
-                    $produitEntrepot = $this->getDoctrine()
-                                        ->getRepository('AppBundle:ProduitEntrepot')
-                                        ->findOneBy(array(
-                                            'produit' => $produit,
-                                            'entrepot' => $entrepot,
-                                        ));
-
-                    if (!$produitEntrepot) {
-                        $produitEntrepot = new ProduitEntrepot();
-                    }
-
-                    $produitEntrepot->setStock( $produitEntrepot->getStock() + $qte );
+                if (empty($produitEntrepot)) {
+                    $produitEntrepot = new ProduitEntrepot();
+                    $produitEntrepot->setStock($qteList[$key]);
                     $produitEntrepot->setProduit($produit);
                     $produitEntrepot->setEntrepot($entrepot);
+                    $produitEntrepot->setIndice($ref_produit[$key]);
+                } else {
+                    $produitEntrepot->setStock($produitEntrepot->getStock() + $qteList[$key]);
+                    if ($choix_nouveau[$key] == 1) { // Nouvelle indice
+                        $produitEntrepot->setIndice($ref_produit[$key]);
+                    }
+                }
+                $em->persist($produitEntrepot);
+                $em->flush();
 
-                    $em->persist($produitEntrepot);
-                    $em->flush();
+                if (empty($prix_produitList[$key])) {
+                    // VRAIMENT NOUVEAU
+                    $variationPrix = $this->getDoctrine()
+                        ->getRepository('AppBundle:VariationProduit')
+                        ->affichePrixProduit($produitList[$key]);
 
-                    /**
-                     * VariationProduit
-                     */
-                    $variation = $this->getDoctrine()
-                                        ->getRepository('AppBundle:VariationProduit')
-                                        ->findOneBy(array(
-                                            'prixVente' => $vente, 
-                                            'produitEntrepot' => $produitEntrepot
-                                        ));
-                    if ($variation) {
-                        $variation->setStock( $qte + $variation->getStock() );
+                    $present = False;
+                    $idVar = 0;
+                    foreach ($variationPrix as $varPrix) {
+                        if ($prixVenteList[$key] == $varPrix['prix_vente']) {
+                            $present = True;
+                            $idVar = $varPrix['id'];
+                            break;
+                        }
+                    }
+
+                    if ($present) {
+                        $variation = $this->getDoctrine()
+                            ->getRepository('AppBundle:VariationProduit')
+                        ->find($idVar);
+
+                        $variation->setStock($variation->getStock() + $qteList[$key]);
+                        $em->persist($variation);
+                        $em->flush();
+
+                        $approvisionnement = $this->getDoctrine()
+                            ->getRepository('AppBundle:Approvisionnement')
+                            ->findOneBy(array(
+                            "variationProduit" => $idVar
+                        ));
+
+                        if (empty($approvisionnement)) {
+                            $approvisionnement = new Approvisionnement();
+                        }
+                        if (isset($fournisseurList[$key]))
+                            $approvisionnement->setFournisseurs(json_encode($fournisseurList[$key]));
+                        $approvisionnement->setDate($date);
+                        $approvisionnement->setQte($qteList[$key]);
+                        $approvisionnement->setPrixAchat($prixList[$key]);
+                        $approvisionnement->setCharge($chargeList[$key]);
+                        $approvisionnement->setPrixRevient($prixRevientList[$key]);
+                        $approvisionnement->setTotal($totalList[$key]);
+                        $approvisionnement->setRavitaillement($ravitaillement);
+
+                        if (!empty($expirerList[$key])) {
+                            $approvisionnement->setDateExpiration($expirerList[$key]);
+                        }
+                        $approvisionnement->setDescription(' Approvisionnement du produit ' . $produit->getNom() . ' le ' . $date->format('d/m/Y') . ' (' . $qteList[$key] . ')');
+                        $approvisionnement->setVariationProduit($variation);
+                        $em->persist($approvisionnement);
+                        $em->flush();
                     } else {
                         $variation = new VariationProduit();
 
-                        $variation->setPrixVente($vente);
-                        $variation->setMargeType($margeType);
-                        $variation->setMargeValeur($margeValeur);
-                        $variation->setPrixVente($vente);
-                        $variation->setStock($qte); 
+                        $variation->setMargeType($margeTypeList[$key]);
+                        $variation->setMargeValeur($margeValeurList[$key]);
+                        $variation->setPrixVente($prixVenteList[$key]);
+                        $variation->setStock($qteList[$key]);
                         $variation->setProduitEntrepot($produitEntrepot);
-                    }
 
+                        $em->persist($variation);
+                        $em->flush();
+
+                        $approvisionnement = new Approvisionnement();
+                        if (isset($fournisseurList[$key]))
+                            $approvisionnement->setFournisseurs(json_encode($fournisseurList[$key]));
+                        $approvisionnement->setDate($date);
+                        $approvisionnement->setQte($qteList[$key]);
+                        $approvisionnement->setPrixAchat($prixList[$key]);
+                        $approvisionnement->setCharge($chargeList[$key]);
+                        $approvisionnement->setPrixRevient($prixRevientList[$key]);
+                        $approvisionnement->setTotal($totalList[$key]);
+                        $approvisionnement->setRavitaillement($ravitaillement);
+
+                        if (!empty($expirerList[$key])) {
+                            $approvisionnement->setDateExpiration($expirerList[$key]);
+                        }
+                        $approvisionnement->setDescription(' Approvisionnement du produit ' . $produit->getNom() . ' le ' . $date->format('d/m/Y') . ' (' . $qteList[$key] . ')');
+
+                        $approvisionnement->setVariationProduit($variation);
+                        $em->persist($approvisionnement);
+                        $em->flush();
+                    }
+                } else {
+                    /**
+                     * Variation Produit
+                     */
+                    $variation = $this->getDoctrine()
+                        ->getRepository('AppBundle:VariationProduit')
+                        ->find($prix_produitList[$key]);
+
+                    $variation->setStock($variation->getStock() + $qteList[$key]);
                     $em->persist($variation);
                     $em->flush();
 
                     /**
                      * Approvisionnement
                      */
-                    if($approId){
-                        $approvisionnement = $this->getDoctrine()
-                            ->getRepository('AppBundle:Approvisionnement')
-                            ->find($approId);
-                    }
-                    else
-                    {
-                        $approvisionnement = new Approvisionnement();
-                    }
 
-                    $approvisionnement->setFournisseurs(json_encode($fournisseur) );
+                    $approvisionnement = $this->getDoctrine()
+                    ->getRepository('AppBundle:Approvisionnement')
+                    ->findOneBy(array(
+                        "variationProduit" => $prix_produitList[$key]
+                    ));
+                    if (isset($fournisseurList[$key]))
+                        $approvisionnement->setFournisseurs(json_encode($fournisseurList[$key]));
                     $approvisionnement->setDate($date);
-                    $approvisionnement->setQte($qte);
-                    $approvisionnement->setPrixAchat($prix);
-                    $approvisionnement->setCharge($charge);
-                    $approvisionnement->setPrixRevient($prixRevient);
-                    $approvisionnement->setTotal($total);
+                    $approvisionnement->setQte($qteList[$key]);
+                    $approvisionnement->setTotal($totalList[$key]);
                     $approvisionnement->setRavitaillement($ravitaillement);
 
-                    if ($expirer) {
-                        $approvisionnement->setDateExpiration($expirer);
+                    if (empty($expirerList[$key])) {
+                        if (!empty($approvisionnement->getDate())) {
+                            $dateProduit = $approvisionnement->getDate()->format('Y-m-d');
+                            $dateNow = date("Y-m-d");
+                            $timesProduit = strtotime($dateProduit);
+                            $timesNow = strtotime($dateNow);
+                            if ($timesProduit > $timesNow) {
+                                $approvisionnement->setDateExpiration($dateNow);
+                            }
+                        }
+                    } else {
+                        $approvisionnement->setDateExpiration($expirerList[$key]);
                     }
 
-                    $approvisionnement->setDescription(' Approvisionnement du produit ' . $produit->getNom() . ' le ' . $date->format('d/m/Y') . ' ('. $qte .')' );
-
-
-                    $approvisionnement->setVariationProduit($variation);
+                    $approvisionnement->setDescription(' Approvisionnement du produit ' . $produit->getNom() . ' le ' . $date->format('d/m/Y') . ' (' . $qteList[$key] . ')');
                     $em->persist($approvisionnement);
                     $em->flush();
-                    
-                    $produit->setStock( $produit->getStock() + $qte );
-                    $em->persist($produit);
-                    $em->flush();
                 }
+            } else if ($type_approList[$key] == 2) {
+                /**
+                 * Variation Produit
+                 */
+                $variation = $this->getDoctrine()
+                    ->getRepository('AppBundle:VariationProduit')
+                    ->find($prix_produitList[$key]);
+
+                $variation->setStock($variation->getStock() + $qteList[$key]);
+                $em->persist($variation);
+                $em->flush();
+
+                /**
+                 * ProduitEntrepot
+                 */
+                $produitEntrepot = $this->getDoctrine()
+                    ->getRepository('AppBundle:ProduitEntrepot')
+                    ->find($variation->getProduitEntrepot());
+
+                if (empty($produitEntrepot)) {
+                    $produitEntrepot = new ProduitEntrepot();
+                    $produitEntrepot->setStock($qteList[$key]);
+                    $produitEntrepot->setProduit($produit);
+                    $produitEntrepot->setEntrepot($entrepot);
+                    $produitEntrepot->setIndice($ref_produit[$key]);
+                } else {
+                    $produitEntrepot->setStock($produitEntrepot->getStock() + $qteList[$key]);
+                }
+
+                $em->persist($produitEntrepot);
+                $em->flush();
+
+                /**
+                 * Approvisionnement
+                 */
+
+                $approvisionnement = $this->getDoctrine()
+                    ->getRepository('AppBundle:Approvisionnement')
+                    ->findOneBy(array(
+                        "variationProduit" => $prix_produitList[$key]
+                    ));
+
+                if (empty($approvisionnement)) {
+                    $approvisionnement = new Approvisionnement();
+                    $approvisionnement->setVariationProduit($variation);
+                }
+
+                if (isset($fournisseurList[$key]))
+                    $approvisionnement->setFournisseurs(json_encode($fournisseurList[$key]));
+                $approvisionnement->setDate($date);
+                $approvisionnement->setQte($qteList[$key]);
+                $approvisionnement->setTotal($totalList[$key]);
+                $approvisionnement->setRavitaillement($ravitaillement);
+
+                if (empty($expirerList[$key])) {
+                    if (!empty($approvisionnement->getDate())) {
+                        $dateProduit = $approvisionnement->getDate()->format("Y-m-d");
+                        $dateNow = date("Y-m-d");
+                        $timesProduit = strtotime($dateProduit);
+                        $timesNow = strtotime($dateNow);
+                        if ($timesProduit > $timesNow) {
+                            $approvisionnement->setDateExpiration($dateNow);
+                        }
+                    }
+                } else {
+                    $approvisionnement->setDateExpiration($expirerList[$key]);
+                }
+
+                $approvisionnement->setDescription(' Approvisionnement du produit ' . $produit->getNom() . ' le ' . $date->format('d/m/Y') . ' (' . $qteList[$key] . ')');
+                $em->persist($approvisionnement);
+                $em->flush();
             }
         }
 

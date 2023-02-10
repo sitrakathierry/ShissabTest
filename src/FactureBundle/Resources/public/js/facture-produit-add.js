@@ -1,5 +1,57 @@
 $(document).ready(function(){
 
+    function changeProduitFactDef()
+    {
+        $(".f_input_produit").click(function(){
+            var self = $(this) ;
+            var url = Routing.generate("variation_produit_affiche") ;
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: function(res) {
+                    // console.log(res) ;
+                    var options = ""
+                    for (let i = 0; i < res.length; i++) {
+                        const element = res[i];
+                        if(self.attr("data-id") == element.id)
+                        {
+                            options += ` 
+                        <option
+                                value="`+element.id+`"
+                                selected
+                                data-prixvente="`+element.prix_vente+`"
+                                data-stock="`+element.stock+`"
+                            >`+element.nom+" - "+element.prix_vente+` KMF</option>
+                        `
+                        }
+                        else
+                        {
+                            options += ` 
+                        <option
+                                value="`+element.id+`"
+                                data-prixvente="`+element.prix_vente+`"
+                                data-stock="`+element.stock+`"
+                            >`+element.nom+" - "+element.prix_vente+` KMF</option>
+                        `
+                        }
+                        
+                    }
+
+                    var content = `
+                    <select class="form-control f_produit" name="f_produit[]" style="min-width: 250px ;">
+                        `+options+`
+                    </select>
+                    `
+                    $(content).insertBefore(self) ;
+                    self.remove() ;
+                }
+            }) ;
+            
+            
+        })    
+    }
 
     $(document).on('change','.f_auto_devise',function(event) {
         event.preventDefault();
@@ -16,10 +68,16 @@ $(document).ready(function(){
 
     $(document).on('change', '.f_produit', function(event) {
         event.preventDefault();
+        
         var prixvente = $(this).children("option:selected").data('prixvente');
         $(this).closest('tr').find('.f_prix').val(prixvente);
+        var quantite = $(this).closest('tr').find('.f_qte').val();
+        $(this).closest('tr').find('.f_montant').val(prixvente*quantite);
+        calculMontant()
     });
 
+    
+    changeProduitFactDef()
     $('.f_designation').summernote();
 
     $(document).on('change','.f_libre',function(event) {
@@ -28,11 +86,12 @@ $(document).ready(function(){
         if (libre == 1) {
             $(this).closest('tr').find('.f_produit').addClass('hidden');
             $(this).closest('tr').find('.f_designation_container').removeClass('hidden');
-            
+            $(this).closest('tr').find('.f_prix').removeAttr("readonly")
             $('.f_designation').summernote();
         } else {
             $(this).closest('tr').find('.f_produit').removeClass('hidden');
             $(this).closest('tr').find('.f_designation_container').addClass('hidden');
+            $(this).closest('tr').find('.f_prix').attr("readonly","true")
         }
     })
 
@@ -54,7 +113,7 @@ $(document).ready(function(){
 
     });
 
-    $("#data_1 .input-group.date").datepicker('setDate', new Date());
+    $("#data_1 .input-group.date").datepicker('setDate', $(".f_date").attr("value"));
 
     $(document).on('click', '.btn-add-row', function(event) {
         event.preventDefault();
@@ -65,7 +124,7 @@ $(document).ready(function(){
         var a ='<td><div class="form-group"><div class="col-sm-12"><select class="form-control f_libre" name="f_libre[]"><option value="0">PRODUIT</option><option value="1">AUTRE</option></select></div></div></td>';
         var b = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control select2 f_produit" name="f_produit[]">'+ produits +'</select><div class="f_designation_container hidden"><textarea class="summernote f_designation" name="f_designation[]"></textarea></div></div></div></td>';
         var c = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control f_qte" name="f_qte[]"></div></div></td>';
-        var d = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control f_prix" name="f_prix[]"></div></div></td>';
+        var d = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control f_prix" name="f_prix[]" readonly></div></div></td>';
         var e = '<td><div class="form-group"><div class="col-sm-4"><select class="form-control f_remise_type_ligne" name="f_remise_type_ligne[]"><option value="0">%</option><option value="1">Montant</option></select></div><div class="col-sm-8"><input type="number" class="form-control f_remise_ligne" name="f_remise_ligne[]" ></div></div></td>';
         var f = '<td class="td-montant"><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control f_montant" name="f_montant[]"></div></div></td>';
         var g = '<td></td>';
@@ -305,17 +364,22 @@ $(document).ready(function(){
 
     $(document).on('change', '#f_recu', function(event) {
         var recu = $(this).val();
-
         var url = Routing.generate('facture_produit_recu', { recu : recu });
 
         $.ajax({
             url : url,
-            type : 'GET',
+            type : 'GET', 
             success : function(res) {
-                $('#table-fact-add tbody').html(res.tpl);
-                calculMontant();
+                if(res.tpl != "    ")
+                {
+                    $('#table-fact-add tbody').html(res.tpl);
+                    changeProduitFactDef() ;
+                    calculMontant();
+                } 
             }
         })
     });
+
+
 
 })

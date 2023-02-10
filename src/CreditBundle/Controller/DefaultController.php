@@ -10,7 +10,6 @@ use AppBundle\Entity\CreditDetails;
 use AppBundle\Entity\PaiementCredit;
 use AppBundle\Entity\Commande;
 use AppBundle\Entity\Pannier;
-
 class DefaultController extends Controller
 {
     public function indexAction()
@@ -430,7 +429,11 @@ class DefaultController extends Controller
                     ->getRepository('AppBundle:CreditDetails')
                     ->findBy(array(
                         'credit' => $credit
-                    ));
+        ));
+
+        $myVariationProduit = $this->getDoctrine()
+            ->getRepository('AppBundle:FactureProduitDetails')
+            ->findVariationByCredit($id);
 
         $user = $this->getUser();
         $userAgence = $this->getDoctrine()
@@ -469,6 +472,7 @@ class DefaultController extends Controller
             'services' => $services,
             'userAgence' => $userAgence,
             'paiements' => $paiements,
+            'myVariationProduit' => $myVariationProduit
         ));
     }
 

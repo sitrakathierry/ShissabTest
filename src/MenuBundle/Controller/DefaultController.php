@@ -10,25 +10,30 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-    	$user = $this->getUser();
+        if (readline_clear_history()) {
 
-        $role = $this->maxRole();
+            $user = $this->getUser();
 
-        // var_dump($role) ;
-        // die() ;
+            $role = $this->maxRole();
 
-        $menus  = $this->getDoctrine()
+            // var_dump($role) ;
+            // die() ;
+
+            $menus  = $this->getDoctrine()
+                ->getRepository('AppBundle:Menu')
+                ->byRole($role, $user);
+
+            /*$menus = $this->getDoctrine()
                         ->getRepository('AppBundle:Menu')
-                        ->byRole($role, $user); 
+                        ->getMenu($this->getUser());*/
 
-        /*$menus = $this->getDoctrine()
-                     ->getRepository('AppBundle:Menu')
-                     ->getMenu($this->getUser());*/
-
-        return $this->render('MenuBundle:Default:menu-gauche.html.twig',array(
-        	'user' => $user,
-        	'menus' => $menus
-        ));
+            return $this->render('MenuBundle:Default:menu-gauche.html.twig', array(
+                'user' => $user,
+                'menus' => $menus
+            ));
+        } else {
+            return new Response("Erreur");
+        }
     }
 
     public function ajoutAction()

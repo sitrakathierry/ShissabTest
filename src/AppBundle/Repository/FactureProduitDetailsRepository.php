@@ -92,6 +92,37 @@ class FactureProduitDetailsRepository extends \Doctrine\ORM\EntityRepository
         $result = $statement->fetchAll();
 
         return $result;
+    }
 
+    public function getFactureProduitDetails($factureDetail)
+    {
+        $sql = "SELECT distinct p.*, vp.stock,fp.commande, pe.indice, vp.id as vpId, fpd.* FROM `facture_produit_details` fpd 
+                JOIN facture_produit fp ON fp.id = fpd.facture_produit
+                JOIN commande c ON c.id = fp.commande
+                LEFT JOIN pannier pn ON pn.commande = c.id
+                LEFT JOIN variation_produit vp ON pn.variation_produit = vp.id
+                JOIN produit_entrepot pe ON pe.id = vp.produit_entrepot 
+                JOIN produit p ON p.id = pe.produit 
+                WHERE fpd.id = ? ";
+
+        $em = $this->getEntityManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($factureDetail));
+        $result = $statement->fetch();
+
+        return $result;
+    }
+
+    public function findVariationByCredit($idCredit)
+    {
+        $sql = " SELECT fpd.designation FROM `facture` f 
+                        JOIN facture_produit fp ON f.id = fp.facture 
+                        LEFT JOIN facture_produit_details fpd ON fp.id = fpd.facture_produit 
+                        WHERE f.credit = ? ";
+        $em = $this->getEntityManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idCredit));
+        $result = $statement->fetchAll();
+        return $result;
     }
 }

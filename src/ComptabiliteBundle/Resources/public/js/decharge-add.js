@@ -26,24 +26,39 @@ $(document).ready(function() {
 		var mode = $(this).children("option:selected").val();
 
 		if (mode == 1) {
-			$('#div-num-cheque').removeClass('hidden');
-			$('#div-date-cheque').removeClass('hidden');
+			$('#div-num-cheque').removeClass('hidden'); // Afficher
+			$('#div-date-cheque').removeClass('hidden'); // Afficher
 			$('#div-num-virement').addClass('hidden');
 			$('#div-date-virement').addClass('hidden');
+			$('#div-num-carte').addClass('hidden');
+			$('#div-num-facture').addClass('hidden');
 		}
 
 		if (mode == 2) {
 			$('#div-num-cheque').addClass('hidden');
 			$('#div-date-cheque').addClass('hidden');
 			$('#div-num-virement').addClass('hidden');
-			$('#div-date-virement').addClass('hidden');
+			$('#div-date-virement').addClass('hidden'); 
+			$('#div-num-carte').addClass('hidden');
+			$('#div-num-facture').removeClass('hidden'); // Afficher
 		}
 
 		if (mode == 3) {
 			$('#div-num-cheque').addClass('hidden');
 			$('#div-date-cheque').addClass('hidden');
-			$('#div-num-virement').removeClass('hidden');
-			$('#div-date-virement').removeClass('hidden');
+			$('#div-num-virement').removeClass('hidden'); // Afficher
+			$('#div-date-virement').removeClass('hidden'); // Afficher
+			$('#div-num-carte').addClass('hidden');
+			$('#div-num-facture').addClass('hidden');
+		}
+
+		if (mode == 4) { 
+			$('#div-num-cheque').addClass('hidden');
+			$('#div-date-cheque').addClass('hidden');
+			$('#div-num-virement').addClass('hidden');
+			$('#div-date-virement').addClass('hidden');
+			$('#div-num-carte').removeClass('hidden'); // Afficher
+			$('#div-num-facture').removeClass('hidden'); // Afficher
 		}
 
 	})
@@ -68,9 +83,11 @@ $(document).ready(function() {
 		event.preventDefault();
 
 		var mode_payement = $('#mode-paiement').val()
+
 		if(mode_payement == 1)
 		{
 			var val_str = [
+				$('#service').val(),
 				$('#motif').val(),
 				$('#cheque').val(),
 				$('#date_cheque').val(),
@@ -78,6 +95,7 @@ $(document).ready(function() {
 			]
 
 			var descri_str = [
+				"Service",
 				"Motif",
 				"Num Chèque",
 				"Date Chèque",
@@ -87,18 +105,23 @@ $(document).ready(function() {
 		else if(mode_payement == 2)
 		{
 			var val_str = [
+				$('#service').val(),
 				$('#motif').val(),
+				$('#num_facture'),
 				$('#montant').val()
 			]
 
 			var descri_str = [
+				"Service",
 				"Motif",
+				"Num Facture",
 				"Montant"
 			]
 		}
-		else
+		else if(mode_payement == 3)
 		{
 			var val_str = [
+				$('#service').val(),
 				$('#motif').val(),
 				$('#virement').val(),
 				$('#date_virement').val(),
@@ -106,9 +129,28 @@ $(document).ready(function() {
 			]
 
 			var descri_str = [
+				"Service",
 				"Motif",
 				"Num Virement",
 				"Date Virement",
+				"Montant"
+			]
+		}
+		else 
+		{
+			var val_str = [
+				$('#service').val(),
+				$('#motif').val(),
+				$('#carte_bancaire').val(),
+				$('#num_facture'),
+				$('#montant').val()
+			]
+
+			var descri_str = [
+				"Service",
+				"Motif",
+				"Ref CB",
+				"Num Facture",
 				"Montant"
 			]
 		}
@@ -132,7 +174,6 @@ $(document).ready(function() {
 			enregistre = false
 		}
 
-
 		if(enregistre)
 		{
 			var beneficiaire = $('#beneficiaire').val();
@@ -143,11 +184,14 @@ $(document).ready(function() {
 			var lettre = $('#lettre').val();
 			var mode_paiement = $('#mode-paiement').val();
 			var devise = $('#devise').val();
+			var service = $('#service').val();
 			var motif = $('#motif').val();
 			var date_cheque = $('#date_cheque').val();
 			var mois_facture = $('#mois_facture').val();
 			var virement = $('#virement').val();
-			var date_virement = $('#date_virement').val();
+			var date_virement = $('#date_virement').val(); 
+			var carte_bancaire = $('#carte_bancaire').val();
+			var num_facture = $('#num_facture').val();
 
 			if (beneficiaire == '' || montant == '') {
 				show_info('Erreur','Champs obligatoire','error');
@@ -164,25 +208,28 @@ $(document).ready(function() {
 					cancelButtonText: "Non",
 				},
 				function () {
-
+ 
 					disabled_confirm(true);
 
 					var url = Routing.generate('comptabilite_decharge_save');
-
+ 
 					var data = {
 						beneficiaire: beneficiaire,
 						cheque: cheque,
 						montant: montant,
 						raison: raison,
-						date: date,
+						date: date, 
 						lettre: lettre,
 						mode_paiement: mode_paiement,
 						devise: devise,
+						service:service,
 						motif: motif,
 						date_cheque: date_cheque,
 						mois_facture: mois_facture,
 						virement: virement,
 						date_virement: date_virement,
+						carte_bancaire: carte_bancaire,
+						num_facture:num_facture,
 					}
 
 					$.ajax({
@@ -190,7 +237,7 @@ $(document).ready(function() {
 						type: 'POST',
 						data: data,
 						success: function(res) {
-							show_success('Succès','Décharge enregistré');
+							show_success('Succès','Déclaration enregistré');
 						},
 						error: function() {
 							show_info('Erreur',"Erreur d'enregistrement",'error');
@@ -199,7 +246,6 @@ $(document).ready(function() {
 					
 				});
 
-				
 			}
 	
 		}

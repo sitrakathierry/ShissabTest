@@ -67,10 +67,11 @@ $(document).ready(function(){
     $(document).on('change', '.cl_produit', function(event) {
         event.preventDefault();
         var stock = $(this).find('option:selected').data('stock');
-        var prix = $(this).find('option:selected').data('prixvente');
+        // var prix = $(this).find('option:selected').data('prixvente');
         var code = ''+$(this).find('option:selected').data('code');
         var _tr = $(this).closest('tr');
         var produitSelected = $(this).val();
+        var self = $(this)
         // $(_tr).find('.cl_qte').val(stock);
 
         //Config code bar
@@ -84,7 +85,7 @@ $(document).ready(function(){
         var btype = "code128";
 
         $(_tr).find('.cl-code').html("").show().barcode(code, btype, settings);
-        $(_tr).find('.cl_prix').val(Number(prix));
+        // $(_tr).find('.cl_prix').val(Number(prix));
 
         var countPanier = $('table#table-commande-add > tbody  > tr').length;
         var isFind = false;
@@ -113,8 +114,8 @@ $(document).ready(function(){
             $('#btn-save').removeClass('disabled');
             if (Number(stock)) {
                 $(_tr).find('.cl_qte').attr('max', stock);
-                var total = Number( stock ) * Number( prix );
-                $(_tr).find('.cl_total').val( Number(total) );
+                // var total = Number( stock ) * Number( prix );
+                // $(_tr).find('.cl_total').val( Number(total) );
             } else {
                 var total = $(_tr).find('.cl_prix').val();
             }
@@ -123,6 +124,49 @@ $(document).ready(function(){
         }
 
         calculTotal();
+        var reference = "" ;
+        var url = Routing.generate("prix_produit_affiche")
+        $.ajax({
+            url: url, 
+            type: 'POST',
+            data: {idProduit:self.val()},
+            success: function(res) {
+                if(res.length > 0)
+                {
+                    if(res.length > 1)
+                    {
+                        var options = '<option value=""></option>' ;
+                        for (let i = 0; i < res.length; i++) {
+                            const element = res[i];
+                            if(element.indice != "")
+                            {
+                                reference = element.indice
+                            }
+            
+                            options += '<option value="'+element.prix_vente+'" data-variation="'+element.id+'" >'+element.prix_vente+' | '+reference+'</option>' ;
+                        }
+                    }
+                    else
+                    {
+                        self.closest('tr').find('.cl_variation').val(res[0].id) ;
+                        var options = '<option value="'+res[0].prix_vente+'" data-variation="'+res[0].id+'" >'+res[0].prix_vente+' | '+reference+'</option>' ;
+                    }
+                    _tr.find(".cl_prix").empty().append(options) ;
+                    
+                }
+                else
+                {
+                    _tr.find(".cl_prix").empty() ;
+                    swal({
+                        type: 'info',
+                        title: "Prix Produit vide",
+                        text: "Veullez ajouter une variation de prix pour ce produit"
+                    })
+                }
+                calculTotal();
+            }
+        })
+
     });
 
 	$(document).on('click', '.btn-add-row', function(event) {
@@ -152,8 +196,18 @@ $(document).ready(function(){
 
         var a = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control select2 cl_produit" name="produit[]">'+ produit_options +'</select></div></div></td>';
         e ='<td><div class="text-center"><div class="col-sm-12 cl-code"></div></div></td>';
-        b = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control cl_qte" name="qte[]" required=""></div></div></td>';
-        c = '<td class="td-montant"><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control cl_prix" name="prix[]" required=""></div></div></td>';
+        b = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control cl_qte" name="qte[]" required=""><input type="hidden" class="cl_variation" name="variation[]"></div></div></td>';
+        c = `
+                <td class="td-montant">
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                      <select name="prix[]" class="cl_prix form-control" id="cl_prix">
+                        <option value=""></option>
+                        </select>
+                      </div>
+                    </div>
+                  </td>
+        `;
         d = '<td class="td-montant"><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control cl_total" name="total[]" readonly=""></div></div></td><td></td>'
 
         var markup = '<tr data-id="'+ new_id +'">' + a + e +  b + c + d + '</tr>';
@@ -222,18 +276,18 @@ $(document).ready(function(){
         calculTotal()
     });
 
-    $(document).on('input','.cl_prix',function (event) {
+    $(document).on('change','.cl_prix',function (event) {
 
         var qte_selector = $(this).closest('tr').find('.cl_qte');
         var prix = event.target.value;
         var total_selector = $(this).closest('tr').find('.cl_total');
-
-        if ( qte_selector.val() ) {
+        $(this).closest('tr').find('.cl_variation').val($(this).find('option:selected').data("variation"))
+        if (qte_selector.val()) {
         	var total = Number( qte_selector.val() ) * Number( prix );
         } else {
-        	var total = prix;
+        	var total = 0;
         }
-
+        
         total_selector.val( total );
         calculTotal()
     });
@@ -303,8 +357,7 @@ $(document).ready(function(){
                 type: 'POST',
                 data: data,
                 success: function(res) {
-                    show_info('Succès', 'Achat éffectué');
-                    location.reload();
+                    show_success('Succès', 'Achat éffectué');
                 }
             })
         }

@@ -18,9 +18,44 @@ personne_add:
         expose: true
     methods: [POST]
 
+tache_valid_modif:
+    path:     /tache/modifie/valid
+    defaults: { _controller: TacheBundle:Default:validModifie }
+    options:
+        expose: true
+    methods: [POST]
+
+tache_afficher_recherche:
+    path:     /tache/affiche/recherche
+    defaults: { _controller: TacheBundle:Default:rechercher}
+    options:
+        expose: true
+    methods: [POST]
+
+tache_modifie:
+    path:     /tache/modifie 
+    defaults: { _controller: TacheBundle:Default:modifie }
+    options:
+        expose: true
+    methods: [POST]
+
 type_tache_add:
     path:     /type_tache/add 
     defaults: { _controller: TacheBundle:TypeTache:add }
+    options:
+        expose: true
+    methods: [POST]
+
+tache_supprime: 
+    path:     /tache/supprime 
+    defaults: { _controller: TacheBundle:Default:supprime }
+    options:
+        expose: true
+    methods: [POST]
+    
+tache_termine:
+    path:     /tache/termine 
+    defaults: { _controller: TacheBundle:Default:termine }
     options:
         expose: true
     methods: [POST]

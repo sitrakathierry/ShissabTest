@@ -107,6 +107,13 @@ class Decharge
     private $motif = 2;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type_motif", type="string", length=255, nullable=true)
+     */
+    private $typeMotif;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_cheque", type="datetime", nullable=true)
@@ -427,6 +434,30 @@ class Decharge
     public function getMotif()
     {
         return $this->motif;
+    }
+
+    /**
+     * Set typeMotif
+     *
+     * @param string $typeMotif
+     *
+     * @return Decharge
+     */
+    public function setTypeMotif($typeMotif)
+    {
+        $this->typeMotif = $typeMotif;
+
+        return $this;
+    }
+
+    /**
+     * Get typeMotif
+     *
+     * @return string
+     */
+    public function getTypeMotif()
+    {
+        return $this->typeMotif;
     }
 
     /**

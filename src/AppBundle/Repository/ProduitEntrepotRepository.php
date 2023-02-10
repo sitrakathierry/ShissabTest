@@ -78,7 +78,14 @@ class ProduitEntrepotRepository extends \Doctrine\ORM\EntityRepository
     public function getProduitParEntrepot($entrepot)
     {
         $em = $this->getEntityManager();
-        $sql = "SELECT DISTINCT p.id, p.nom, p.code_produit FROM `produit_entrepot` pe JOIN produit p ON p.id = pe.produit JOIN entrepot e ON e.id = pe.entrepot WHERE pe.entrepot = ? GROUP BY p.code_produit  ORDER BY p.code_produit ASC" ;
+        $sql = "SELECT p.nom, p.code_produit, p.id FROM produit_entrepot pe 
+                                JOIN produit p ON p.id = pe.produit 
+                                JOIN variation_produit vp on vp.produit_entrepot = pe.id
+                                AND pe.entrepot = ?
+                                AND p.is_delete IS NULL
+                                AND vp.is_delete IS NULL
+                                GROUP BY p.code_produit
+                                ORDER BY p.code_produit ASC";
         $statement = $em->getConnection()->prepare($sql);
         $statement->execute(array($entrepot));
         $result = $statement->fetchAll();

@@ -139,18 +139,26 @@ $(document).on('click', '#btn-save', function(event) {
 	if (enregistre)
 	{
 		var val_strPro = [
-			$('.indice'),
 			$('.entrepot'),
+			$('.prix_achat'),
+			$('.prix_revient'),
+			$('.prix_vente'),
+			$('.stock_alerte'),
 			$('.fournisseur'),
+			$('.stock'),
 		]
 
 		var str_descriPro = [
-			"Indice",
 			"Entrepot",
+			"Prix d'achat",
+			"Prix de revient",
+			"Prix de vente",
+			"Stock Alerte",
 			"Fournisseur",
+			"Stock",
 		]
 		vide = false
-
+		var negatif = false ;
 		var elem_descriPro = ""
 
 		for (let i = 0; i < val_strPro.length; i++) {
@@ -158,62 +166,29 @@ $(document).on('click', '#btn-save', function(event) {
 			element.each(function(){
 				if($(this).val() == "")
 				{
-					vide = true
+					vide = true ;
 					elem_descriPro = str_descriPro[i]
 					return 
 				}
+				if((i > 0 && i < 5) || i == 6)
+				{
+					if($(this).val() < 0)
+					{
+						negatif = true ;
+						elem_descriPro = str_descriPro[i]
+						return 
+					}
+				}
+				
 			})
 
-			if(vide)
+			if(vide || negatif)
 			{
 				break ;
 			}
 		}
 
-		// var val_num = [
-		// 	$('.prix_achat'),
-		// 	$('.charge'),
-		// 	$('.prix_revient'),
-		// 	$('.marge_valeur'),
-		// 	$('.prix_vente'),
-		// 	$('.stock'),
-		// 	$('.stock_alerte')
-		// 	]
-		
-		// var val_descri = [
-		// 	"Prix d'achat",
-		// 	"Charge",
-		// 	"Prix de revient",
-		// 	"Marge",
-		// 	"Prix de vente",
-		// 	"Stock",
-		// 	"Stock Alerte"
-		// ] ;
-	
-		
-		// positif = true
-		// 	for(var i = 0; i < val_num.length ; i++)
-		// 	{
-		// 		const element = val_num[i]  ;
-		// 		element.each(function(){
-		// 			if (element.val() < 0)
-		// 			{
-		// 				positif = false
-		// 				vide = false
-		// 				valeur_negatif = val_descri[i]
-		// 				return 
-		// 			}
-		// 			else if(!(Number.isInteger(element.val())))
-		// 			{
-		// 				positif = false
-		// 				vide = true
-		// 				valeur_negatif = val_descri[i]
-		// 				return 
-		// 			}
-		// 		})
-		// 	}
-
-		if(!vide)
+		if(!vide && !negatif)
 		{
 			var data = {
 				code : $('#code').val(),
@@ -234,9 +209,10 @@ $(document).on('click', '#btn-save', function(event) {
 				prix_vente : toArray('.prix_vente'),
 				stock : toArray('.stock'),
 				stock_alerte : toArray('.stock_alerte'),
-				expirer : toArray('.expirer'),	
+				expirer : toArray('.expirer')
 				};
-				var url = Routing.generate('produit_save');
+				
+				var url = Routing.generate('produit_save') ;
 				disabled_confirm(false); 
 	
 				swal({
@@ -262,12 +238,24 @@ $(document).on('click', '#btn-save', function(event) {
 		}
 		else
 		{
-			swal({
-				type: 'warning',
-				title: elem_descriPro+' vide ou invalide',
-				text: 'Remplissez ou corriger '+elem_descriPro+' !'
-				// footer: '<a href="">Misy olana be</a>'
-			})
+			if(negatif)
+			{
+				swal({
+					type: 'error',
+					title: elem_descriPro+' négatif',
+					text: 'Corriger '+elem_descriPro+' !'
+					// footer: '<a href="">Misy olana be</a>'
+				})
+			}
+			else
+			{
+				swal({
+					type: 'warning',
+					title: elem_descriPro+' vide ou invalide',
+					text: 'Remplissez '+elem_descriPro+' !'
+					// footer: '<a href="">Misy olana be</a>'
+				})	
+			}
 
 		}
 

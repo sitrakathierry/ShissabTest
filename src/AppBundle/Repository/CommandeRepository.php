@@ -23,8 +23,8 @@ class CommandeRepository extends \Doctrine\ORM\EntityRepository
 	{
 		$em = $this->getEntityManager();
 		
-		$query = "	select c.id, date_format(c.date, '%d/%m/%Y') as date, c.total as montant_total, LPAD(c.id, 6, '0') as recu
-					from commande c
+		$query = "	select distinct c.id, date_format(c.date, '%d/%m/%Y') as date, c.total as montant_total, LPAD(c.id, 6, '0') as recu
+					from commande c join pannier pn on pn.commande = c.id
 					where c.id is not null ";
 
 		if ($agence) {

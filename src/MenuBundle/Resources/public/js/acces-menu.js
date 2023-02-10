@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $(document).on('change', '.menu-select', function () {
         var checkbox = $(this);
         var state = checkbox.prop('checked');

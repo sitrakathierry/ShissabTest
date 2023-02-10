@@ -64,6 +64,20 @@ produit_approvisionnement_save:
         expose: true
     methods: [POST]
 
+produit_affiche_info_supp:
+    path:     /produit/prix/affiche/info_supp
+    defaults: { _controller: ProduitBundle:Default:afficheInfoSupp }
+    options:
+        expose: true
+    methods: [POST]
+
+prix_produit_affiche: 
+    path:     /produit/prix/affiche
+    defaults: { _controller: ProduitBundle:Default:affichePrix }
+    options:
+        expose: true
+    methods: [POST]
+    
 produit_entrepot_affiche : 
     path:     /produit/entrepot/affiche
     defaults: { _controller: ProduitBundle:Entrepot:affiche }
@@ -372,6 +386,13 @@ produit_verify:
 produit_list_deduit:
     path:     /produit/deduit/list
     defaults: { _controller: ProduitBundle:Default:listDeduit }
+    options:
+        expose: true
+    methods: [POST]
+
+variation_produit_affiche:
+    path:     /variation/produit/affiche
+    defaults: { _controller: ProduitBundle:VariationProduit:afficheVarPrix }
     options:
         expose: true
     methods: [POST]

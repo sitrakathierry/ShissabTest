@@ -52,6 +52,7 @@ class DechargeController extends Controller
         $lettre = $request->request->get('lettre');
         $mode_paiement = $request->request->get('mode_paiement');
         $devise = $request->request->get('devise');
+        $service = $request->request->get('service');
         $motif = $request->request->get('motif');
         $date_cheque = $request->request->get('date_cheque');
         $date_validation = $request->request->get('date_validation');
@@ -59,6 +60,8 @@ class DechargeController extends Controller
         $statut = $request->request->get('statut');
         $virement = $request->request->get('virement');
         $date_virement = $request->request->get('date_virement');
+        $carte_bancaire = $request->request->get('carte_bancaire');
+        $num_facture = $request->request->get('num_facture');
 
         $user = $this->getUser();
         $userAgence = $this->getDoctrine()
@@ -77,8 +80,19 @@ class DechargeController extends Controller
         }
 
         $decharge->setBeneficiaire($beneficiaire);
-        $decharge->setCheque($cheque);
-        $decharge->setVirement($virement);
+        if ($mode_paiement == 1) {
+            $decharge->setCheque($cheque);
+        } else if ($mode_paiement == 4) {
+            $decharge->setCheque($carte_bancaire);
+        }
+
+        // LE VIREMENT DEVIENT NUM FACTURE SI LE MODE DE PAYEMENT EST DE TYPE ESPECE OU CARTE BANCAIRE
+        if ($mode_paiement == 2 || $mode_paiement == 4) {
+            $decharge->setVirement($num_facture);
+        } else {
+            $decharge->setVirement($virement);
+        }
+
         $decharge->setMontant($montant);
         $decharge->setRaison($raison);
 
@@ -87,7 +101,6 @@ class DechargeController extends Controller
         } else {
             $decharge->setMoisFacture(null);
         }
-
 
         $decharge->setDate(\DateTime::createFromFormat('j/m/Y', $date));
         if ($date_cheque) {
@@ -100,8 +113,7 @@ class DechargeController extends Controller
             $decharge->setDateVirement(\DateTime::createFromFormat('j/m/Y', $date_virement));
         } else {
             $decharge->setDateVirement(null);
-        }
-        
+        } 
 
         if ($date_validation) {
             $decharge->setDateValidation(\DateTime::createFromFormat('j/m/Y', $date_validation));
@@ -113,15 +125,15 @@ class DechargeController extends Controller
         $decharge->setModePaiement($mode_paiement);
         $decharge->setDevise($devise);
 
-        if ($motif) {
-            $motif = $this->getDoctrine()
+        if ($service) {
+            $service = $this->getDoctrine()
                     ->getRepository('AppBundle:MotifDecharge')
-                    ->find($motif);
+            ->find($service);
 
-            $decharge->setMotifDecharge($motif);
+            $decharge->setMotifDecharge($service);
         }
 
-
+        $decharge->setTypeMotif($motif);
         $decharge->setStatut($statut ? $statut : 1);
 
         $decharge->setAgence($agence);
@@ -149,8 +161,8 @@ class DechargeController extends Controller
 
     public function declareAction()
     {
-
         $user = $this->getUser();
+        
         $userAgence = $this->getDoctrine()
                     ->getRepository('AppBundle:UserAgence')
                     ->findOneBy(array(
@@ -165,9 +177,6 @@ class DechargeController extends Controller
                         'agence' => $agence
                     ));
 
-        $motifs = $this->getDoctrine()
-            ->getRepository('AppBundle:MotifDecharge')
-            ->findAll();
 
         return $this->render('ComptabiliteBundle:Decharge:declare.html.twig',array(
             'motifs' => $motifs
@@ -213,7 +222,7 @@ class DechargeController extends Controller
                 $type_date,
                 $mois,
                 $annee,
-                $date_specifique,
+            $date_specifique, 
                 $debut_date,
                 $fin_date,
                 $filtre_motif

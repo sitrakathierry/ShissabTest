@@ -1,21 +1,37 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
 {{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/light.css') }}">
 <link rel="stylesheet" href=" {{ asset("bundles/tache/css/detail.css") }} ">
 <link rel="stylesheet" href=" {{ asset("bundles/tache/css/style.css") }} ">
 
 <style type="text/css">
+    .lcslt-multiple,#lc-select-dd li span
+    {
+        font-size: 1.2em !important;
+    }
+    
     .mr-3
     {
         margin-right : 15px ;
     }
+    .dt_date_Deb_et_Fin,.dt_duree
+    {
+        display : flex ;
+        flex-direction: row ;
+        /* justify-content: center ; */
+        align-items :center ;
+    }
+
 </style>
 {% endblock  %}
 {% block scripts %}
 {{ parent() }}
 {# <script src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script> #}
+<script src="{{ asset('js/lc_select.js') }}"></script>
 <script src="{{ asset('bundles/tache/js/add.js') }}"></script>
 <script src="{{ asset('bundles/tache/js/detail.js') }}"></script>
+
 {% endblock %}
 {% block contenu %}
     {% set statut = "" %}
@@ -37,10 +53,13 @@
                 <!-- <div class="col-md-1"></div> -->
                 <div class="col-md-10 dt_size">
                     <table class="table">
-                            <tr>
+                            
+                            <tr class="cal_date">
                                 <td class="text-center"><i class="fa fa-calendar" aria-hidden="true"></i></td>
                                 <th>Date d'éxécution</th>
-                                <td>Du {{ uneTache.dateDebut }} Au {{ uneTache.dateFin }}</td>
+                                <td class="dt_date_Deb_et_Fin">
+                                 Du {{ uneTache.dateDebut }} Au {{ uneTache.dateFin }} 
+                                </td>
                             </tr>
                             <tr>
                                 {% set typeDuree = "" %}
@@ -53,21 +72,23 @@
                                 {% endif %}
                                 <td class="text-center"><i class="fa fa-hourglass-half" aria-hidden="true"></i></td>
                                 <th>Durée </th>
-                                <td>{{ uneTache.duree }} {{ typeDuree }}</td>
+                                <td class="dt_duree">
+                                    {{ uneTache.duree }} {{ typeDuree }}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="text-center"><i class="fa fa-users" aria-hidden="true"></i></td>
                                 <th>Personne(s) assignée(s)</th>
-                                <td>
-                                {% for unePersonne in baseTachePers %}
-                                    {{ unePersonne.username }}, 
-                                {% endfor %}
+                                <td class="dt_personnes">
+                                    {% for unePersonne in baseTachePers %}
+                                        {{ unePersonne.username }}, 
+                                    {% endfor %}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-center"><i class="fa fa-archive" aria-hidden="true"></i></td>
                                 <th>Type de Tâche </th>
-                                <td>
+                                <td class="dt_types_tache">
                                 {% for uneType in baseTacheType %}
                                     {{ uneType.nom_type_tache }},
                                 {% endfor %}
@@ -76,15 +97,20 @@
                             <tr>
                                 <td class="text-center"><i class="fa fa-info"></i></td>
                                 <th>Description </th>
-                                <td>{{ uneTache.tache }}</td>
+                                <td class="dt_description">
+                                    {{ uneTache.description }}
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="dt_action text-right">
+                                <button class="btn btn-success dt_modif_tache" value="{{ uneTache.id }}"><i class="fa fa-edit"></i>&nbsp;Modifier</button>
+                                <input type="hidden" value="{{ path("tache_consultation") }}" class="redirect"  />
                                 {% if accessTache is not empty %}
-                                    <button class="btn btn-success dt_modif_tache"><i class="fa fa-edit"></i>&nbsp;Modifier</button>
-                                    <button class="btn btn-danger dt_suppr_tache"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
+                                    <button class="btn btn-danger dt_suppr_tache" value="{{ uneTache.id }}"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
                                 {% endif %}
-                                    <button class="btn btn-primary dt_termine_tache"><i class="fa fa-check"></i>&nbsp;Terminer</button>
+                                {% if uneTache.statut != 2 %}
+                                    <button class="btn btn-primary dt_termine_tache" value="{{ uneTache.id }}"><i class="fa fa-check"></i>&nbsp;Terminer</button>
+                                {% endif %}
                                 </td>
                             </tr>
                     </table>

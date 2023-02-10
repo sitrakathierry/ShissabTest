@@ -303,11 +303,6 @@ comptabilite_cheque_sortant_encours:
     options:
         expose: true
 
-comptabilite_cheque_sortant_encours:
-    path:     /comptabilite/cheque/sortant/encours
-    defaults: { _controller: ComptabiliteBundle:ChequeSortant:encours }
-    options:
-        expose: true
 
 comptabilite_cheque_sortant_list:
     path:     /comptabilite/cheque/sortant/list

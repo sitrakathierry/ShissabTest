@@ -124,7 +124,11 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
     public function getTotalVariationProduit($idAgence, $idProduit)
     {
         $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
-        $sql = "SELECT SUM(variation_produit.stock) stockG FROM `variation_produit` JOIN produit_entrepot ON produit_entrepot.id = variation_produit.produit_entrepot JOIN entrepot ON entrepot.id = produit_entrepot.entrepot WHERE entrepot.agence = ? AND produit_entrepot.produit = ? AND variation_produit.is_delete IS NULL" ; // PREPARATION DE LA REQUETE
+        $sql = "SELECT SUM(variation_produit.stock) stockG FROM `variation_produit` 
+                    JOIN produit_entrepot ON produit_entrepot.id = variation_produit.produit_entrepot 
+                    LEFT JOIN entrepot ON entrepot.id = produit_entrepot.entrepot WHERE entrepot.agence = ? 
+                    AND produit_entrepot.produit = ? AND variation_produit.is_delete IS NULL"; 
+                    // PREPARATION DE LA REQUETE
         $statement = $em->getConnection()->prepare($sql);
         $statement->execute(array($idAgence,$idProduit));
         $result = $statement->fetch();
@@ -150,4 +154,52 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
         $result = $statement->fetchAll();
         return $result ; 
     }
+
+    public function getAllVariationPrixProduit($idAgence)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE 
+        $sql = "SELECT p.nom, p.code_produit, vp.id, vp.prix_vente  FROM `variation_produit` vp 	
+                                JOIN produit_entrepot pe ON vp.produit_entrepot = pe.id 
+                                JOIN produit p ON p.id = pe.produit 
+                                JOIN agence ag ON ag.id = p.agence
+                                WHERE ag.id = ? 
+                                AND vp.is_delete IS NULL 
+                                AND p.is_delete IS NULL 
+                                ORDER BY p.code_produit ASC"; // PREPARATION DE LA REQUETE        
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idAgence));
+        $result = $statement->fetchAll();
+        return $result;
+    }
+
+    public function affichePrixProduit($idProduit)
+    {
+        $sql = "SELECT vp.id, p.nom, pe.indice,vp.prix_vente, p.code_produit FROM `variation_produit` vp 
+                    JOIN produit_entrepot pe ON pe.id = vp.produit_entrepot 
+                    JOIN produit p ON p.id = pe.produit 
+                    WHERE p.id = ? 
+                    AND vp.is_delete IS NULL 
+                    AND p.is_delete IS NULL 
+                    AND vp.stock > 0
+                    ORDER BY vp.id ASC ";
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE 
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idProduit));
+        $result = $statement->fetchAll();
+        return $result;
+    }
+
+    public function getOneVariationPrixProduit($idVariation)
+    {
+        $sql = "SELECT vp.id, p.nom, pe.indice,vp.prix_vente FROM `variation_produit` vp 
+                    JOIN produit_entrepot pe ON pe.id = vp.produit_entrepot 
+                    JOIN produit p ON p.id = pe.produit 
+                    WHERE vp.id = ? ";
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE 
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idVariation));
+        $result = $statement->fetch();
+        return $result;
+    }
+
 }

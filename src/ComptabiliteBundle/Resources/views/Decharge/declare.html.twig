@@ -29,13 +29,9 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-lg-12">
-                            <div class="row">
-
-                                <div class="col-lg-2">
+                                <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">MOTIF</label>
-                                        <div class="col-sm-8">
+                                        <label class="control-label">SERVICE</label>
                                             <select class="form-control m-b" id="filtre_motif">
                                                 <option value="">Tous</option>
                                                 {% for motif in motifs %}
@@ -44,36 +40,43 @@
                                                 {# <option value="1">Santé</option>
                                                 <option value="2">Divers</option> #}
                                             </select>
-                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="control-label">MOTIF</label>
+                                            <select class="form-control m-b" id="filtre_type_motif">
+                                                <option value="">Tous</option>
+                                                <option value="Achat" >Achat</option>
+                                                <option value="Dépense" >Dépense</option>
+                                                <option value="Autre" >Autre</option>
+                                            </select>
                                     </div>
                                 </div>
                                 
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">RECHERCHE PAR</label>
-                                        <div class="col-sm-8">
+                                        <label class="control-label">RECHERCHE PAR</label>
                                             <select class="form-control m-b" id="recherche_par">
                                                 {# <option value="1">N° POLICE CLIENT</option> #}
                                                 {# <option value="2">N° CONTRAT</option> #}
                                                 <option value="3" selected="">NOM BENEFICIAIRE</option>
                                                 {# <option value="4">IMMATRICULATION</option> #}
                                             </select>
-                                        </div>
                                     </div>
                                 </div>
                                 
-                                <div class="col-lg-2">
+                                <div class="col-lg-3">
                                     <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <input type="text" class="form-control" id="a_rechercher" placeholder="Texte à rechercher ..." style="margin-bottom:10px;">
-                                        </div>
+                                    <label class="control-label">TEXTE A RECHERCHER</label>
+                                    <input type="text" class="form-control" id="a_rechercher" placeholder="Texte à rechercher ..." style="margin-bottom:10px;">
                                     </div>
                                 </div>
 
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">Date déclaration</label>
-                                        <div class="col-sm-8">
+                                        <label class="control-label">Date déclaration</label>
+                                        <div class="">
                                             <select class="form-control m-b" id="type_date">
                                                 <option value="0">Tous</option>
                                                 <option value="1">Aujourd'hui</option>
@@ -89,8 +92,8 @@
 
                                 <div class="col-lg-3 selector_mois hidden">
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Mois</label>
-                                        <div class="col-sm-10">
+                                        <label class="control-label">Mois</label>
+                                        <div class="">
                                             <select class="form-control m-b" id="mois">
                                                 <option value=""></option>
                                                 <option value="01">Janvier</option>
@@ -112,8 +115,8 @@
 
                                 <div class="col-lg-3 selector_annee hidden">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Année</label>
-                                        <div class="col-sm-9">
+                                        <label class="control-label">Année</label>
+                                        <div class="">
                                             <input type="number" class="form-control" name="" min="2020" value="{{ "now" | date('Y') }}" id="annee">
                                         </div>
                                     </div>
@@ -121,8 +124,8 @@
 
                                 <div class="col-lg-3 selector_specifique hidden">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Date spécifique</label>
-                                        <div class="col-sm-9">
+                                        <label class="control-label">Date spécifique</label>
+                                        <div class="">
                                             <input type="text" class="form-control input-datepicker" id="date_specifique">
                                         </div>
                                     </div>
@@ -139,10 +142,9 @@
                                 </div>
                                 
 
-                                <div class="col-lg-2">
+                                <div class="col-lg-3">
                                     <div class="form-group">
-                                        <div class="col-sm-12">
-                                            
+                                    <label for=""> -</label>
                                             <div class="btn-group" style="width:100%">
                                                 <button class="btn btn-primary" id="btn_search" style="width:50%">
                                                     <i class="fa fa-search"></i>
@@ -156,13 +158,9 @@
                                                         </a>
                                                     </li>
                                                 </ul>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                        </div>
                     </div>
                     <br>
                 	<div class="row">

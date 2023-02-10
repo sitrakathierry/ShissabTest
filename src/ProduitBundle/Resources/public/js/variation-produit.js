@@ -81,14 +81,14 @@ $(document).on('click','#btn-save-variation', function(event) {
     event.preventDefault();
     var inputForm = [
         $('#variation_entrepot'),
-        $('#variation_indice'),
+        // $('#variation_indice'),
         $('#variation_prix_vente'),
         $('#variation_stock')
     ]
     enregistre = true ;
     var textForm = [
         'Entrepot',
-        'Indice',
+        // 'Indice',
         'Prix de Vente',
         'Stock'
     ]

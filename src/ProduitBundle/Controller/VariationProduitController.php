@@ -272,6 +272,24 @@ class VariationProduitController extends Controller
         return new JsonResponse($variationPrix) ;
     }
 
+    public function afficheVarPrixAction()
+    {
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+                    ->getRepository('AppBundle:UserAgence')
+                    ->findOneBy(array(
+                        'user' => $user
+                    ));
+
+        $agence = $userAgence->getAgence();
+
+        $variations = $this->getDoctrine()
+                ->getRepository('AppBundle:VariationProduit')
+                ->list($agence->getId());
+
+        return new JsonResponse($variations) ;
+    }   
+
     public function getDevise()
     {
         $user = $this->getUser();

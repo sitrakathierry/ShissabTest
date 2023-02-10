@@ -27,8 +27,8 @@ class DechargeRepository extends \Doctrine\ORM\EntityRepository
     {
 
         $em = $this->getEntityManager();
-        
-        $query = "  select d.id, d.beneficiaire, d.cheque, d.montant, date_format(d.date,'%d/%m/%Y') as date, d.mode_paiement as mode_paiement, m.libelle as motif, date_format(d.mois_facture,'%m/%Y') as mois, date_format(d.date_validation,'%d/%m/%Y') as date_validation, 1 as depense_type, d.virement
+
+        $query = "  select d.id, d.beneficiaire, d.cheque, d.montant, date_format(d.date,'%d/%m/%Y') as date, d.mode_paiement as mode_paiement, m.libelle as service, d.type_motif as motif, date_format(d.mois_facture,'%m/%Y') as mois, date_format(d.date_validation,'%d/%m/%Y') as date_validation, 1 as depense_type, d.virement
                     from decharge d
                     left join motif_decharge m on (d.motif_decharge = m.id)";
 

@@ -10,4 +10,23 @@ namespace AppBundle\Repository;
  */
 class AssignationRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function verifieAssignPers($idPers, $idTache)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "SELECT * FROM `assignation` WHERE `idpersonne` = ? AND `idtache` = ? ";
+        $statement = $em->getConnection()->prepare($sql);
+
+        $statement->execute(array($idPers, $idTache));
+        $result = $statement->fetch();
+        return $result;
+    }
+    public function affaceAssignation($idPers, $idTache)
+    {
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE
+        $sql = "DELETE FROM `assignation` WHERE `idpersonne` = ? AND `idtache` = ? ";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idPers, $idTache));
+        // $result = $statement->fetch();
+        // return $result ; 
+    }
 }

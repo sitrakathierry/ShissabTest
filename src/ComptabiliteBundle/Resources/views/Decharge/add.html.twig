@@ -38,14 +38,14 @@
     <div class="col-lg-12">
     	<div class="ibox float-e-margins">
     		<div class="ibox-title">
-    			<h5>Formulaire de Décharge</h5>
+    			<h5>Déclaration de dépense</h5>
     		</div>
     		<div class="ibox-content">
     			<div class="form-horizontal">
     				<div class="row">
     					<div class="col-lg-6">
                   <div class="form-group">
-                      <label class="col-sm-2 control-label">Je soussigne *</label>
+                      <label class="col-sm-2 control-label">Nom concerné *</label>
                       <div class="col-sm-10">
                           <input type="text" class="form-control" name="" id="beneficiaire">
                       </div>
@@ -62,6 +62,7 @@
                       <option value="1">Chèque</option>
                       <option value="2">Espèce</option>
                       <option value="3">Virement</option>
+                      <option value="4">Carte Bancaire</option>
                     </select>
                   </div>
                 </div>
@@ -75,17 +76,30 @@
                   </div>
               </div>
             </div>
-
+          
             <div class="row">
+              <div class="col-lg-6">
+                  <div class="form-group">
+                      <label class="col-sm-2 control-label">Service</label>
+                      <div class="col-sm-10">
+                        <select class="form-control" id="service">
+                          <option></option>
+                          {% for motif in motifs %}
+                            <option value="{{ motif.id }}">{{ motif.libelle }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                  </div>
+              </div>
               <div class="col-lg-6">
                   <div class="form-group">
                       <label class="col-sm-2 control-label">Motif</label>
                       <div class="col-sm-10">
                         <select class="form-control" id="motif">
-                          <option></option>
-                          {% for motif in motifs %}
-                            <option value="{{ motif.id }}">{{ motif.libelle }}</option>
-                          {% endfor %}
+                          <option value="" ></option>
+                          <option value="Achat" >Achat</option>
+                          <option value="Dépense" >Dépense</option>
+                          <option value="Autre" >Autre</option>
                         </select>
                       </div>
                   </div>
@@ -110,6 +124,14 @@
                       </div>
                   </div>
               </div>
+              <div class="col-lg-6 hidden" id="div-num-carte">
+                  <div class="form-group">
+                      <label class="col-sm-2 control-label">Ref CB</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" name="" id="carte_bancaire">
+                      </div>
+                  </div>
+              </div> 
               <input type="hidden" id="devise" value="{{ agence.deviseSymbole }}">
               {# <div class="col-lg-6">
                 <div class="form-group">
@@ -146,7 +168,16 @@
                   </div>
               </div>
             </div>
-
+            <div class="row">
+              <div class="col-lg-6 hidden" id="div-num-facture">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Num Facture</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="" id="num_facture">
+                        </div>
+                    </div>
+              </div>
+            </div>
             <div class="row">
               <div class="col-lg-6">
                   <div class="form-group">

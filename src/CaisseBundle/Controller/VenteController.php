@@ -21,13 +21,29 @@ class VenteController extends Controller
                     ));
         $agence = $userAgence->getAgence();
 
-        $variations = $this->getDoctrine()
-	    		->getRepository('AppBundle:VariationProduit')
-	            ->list($agence->getId());
+        $produits  = $this->getDoctrine()
+            ->getRepository('AppBundle:Produit')
+            ->getList($agence->getId());
 
+        // $variations = $this->getDoctrine()
+        // 		->getRepository('AppBundle:VariationProduit')
+        //         ->list($agence->getId());
+
+        for ($i = 0; $i < count($produits); $i++) {
+            $totalStock = $this->getDoctrine()
+                ->getRepository('AppBundle:VariationProduit')
+            ->getTotalVariationProduit($agence->getId(), $produits[$i]["id"]);
+            $produits[$i]["stock"] = number_format($totalStock["stockG"], 0, ".", " ");
+
+            if (empty($produits[$i]["stock"])) {
+                $produits[$i]["stock"] = 0;
+            }
+        }
+        
         return $this->render('CaisseBundle:Vente:add.html.twig', array(
         	'agence' => $agence,
-            'variations' => $variations,
+            // 'variations' => $variations,
+            'produits' => $produits
         ));
     }
 
@@ -61,20 +77,21 @@ class VenteController extends Controller
         $em->persist($commande);
         $em->flush();
 
-        $produitList = $request->request->get('produit');
+        // $produitList = $request->request->get('produit');
         $qteList = $request->request->get('qte');
         $prixList = $request->request->get('prix');
+        $variationList = $request->request->get('variation');
         $totalList = $request->request->get('total');
 
-        if (!empty($produitList)) {
-        	foreach ($produitList as $key => $value) {
+        if (!empty($variationList)) {
+            foreach ($variationList as $key => $value) {
 
         		$panier = new Pannier();
 
                 $qte = $qteList[$key];
                 $prix = $prixList[$key];
                 $total = $totalList[$key];
-                $variation = $produitList[$key];
+                $variation = $variationList[$key];
 
         		$variation = $this->getDoctrine()
                 		    		->getRepository('AppBundle:VariationProduit')
