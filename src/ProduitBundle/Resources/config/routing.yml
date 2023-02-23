@@ -77,6 +77,13 @@ prix_produit_affiche:
     options:
         expose: true
     methods: [POST]
+
+prix_produit_affiche_in_appro: 
+    path:     /produit/prix/affiche/appro
+    defaults: { _controller: ProduitBundle:Default:affichePrixInApro }
+    options:
+        expose: true
+    methods: [POST]
     
 produit_entrepot_affiche : 
     path:     /produit/entrepot/affiche

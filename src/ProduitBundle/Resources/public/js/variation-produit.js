@@ -231,28 +231,39 @@ if (selected.val() == 2 ) {
 $(document).on('click','#id_save_variation', function(event) {
     event.preventDefault();
 
-    var data = {
-        prix_vente : $('#variation_prix_vente_edit').val(),
-        id_variation : $('#id_variation_edit').val(),
-        is_deduct : $('#id-deduct').val(),
-        stock_deduit : $('#stock_deduit').val(),
-        type : $('#deduisement_type').val(),
-        cause : $('#id-cause').val()
-    };
+    if(parseInt($('#stock_deduit').val()) < 0)
+    {
+        swal({
+                type: 'error',
+                title: 'Valeur négative',
+                text: 'Corriger votre valeur'
+            })
+    }
+    else
+    {
+        var data = {
+            prix_vente : $('#variation_prix_vente_edit').val(),
+            id_variation : $('#id_variation_edit').val(),
+            is_deduct : $('#id-deduct').val(),
+            stock_deduit : $('#stock_deduit').val(),
+            type : $('#deduisement_type').val(),
+            cause : $('#id-cause').val()
+        };
 
-    var url = Routing.generate('produit_update_variation');
+        var url = Routing.generate('produit_update_variation');
 
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: data,
-        success: function(res) {
-            show_info('Succès', 'Variation Produit enregistré');
-            close_modal();
-            load_list_prix_produit();
-            location.reload() ;
-        }
-    });
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function(res) {
+                show_info('Succès', 'Variation Produit enregistré');
+                close_modal();
+                load_list_prix_produit();
+                location.reload() ;
+            }
+        });
+    }
 
 });
 

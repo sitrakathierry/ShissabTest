@@ -451,7 +451,7 @@ class DefaultController extends Controller
         return $this->render('ProduitBundle:Default:show.html.twig',array( 
             'userEntrepot' => $userEntrepot,
             'entrepots' => $entrepots,
-            'agence' => $agence,
+            'agence' => $agence, 
             'produit' => $produit,
             'categories' => $categories,
             'print' => $print, 
@@ -690,6 +690,17 @@ class DefaultController extends Controller
         $variationPrixProduit = $this->getDoctrine()
             ->getRepository('AppBundle:VariationProduit')
             ->affichePrixProduit($idProduit);
+
+        return new JsonResponse($variationPrixProduit);
+    }
+
+    public function affichePrixInAproAction(Request $request)
+    {
+        $idProduit = $request->request->get('idProduit');
+
+        $variationPrixProduit = $this->getDoctrine()
+            ->getRepository('AppBundle:VariationProduit')
+            ->affichePrixProduitInAppro($idProduit);
 
         return new JsonResponse($variationPrixProduit);
     }

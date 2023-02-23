@@ -31,7 +31,6 @@ $(document).ready(function() {
 			$('#div-num-virement').addClass('hidden');
 			$('#div-date-virement').addClass('hidden');
 			$('#div-num-carte').addClass('hidden');
-			$('#div-num-facture').addClass('hidden');
 		}
 
 		if (mode == 2) {
@@ -40,7 +39,6 @@ $(document).ready(function() {
 			$('#div-num-virement').addClass('hidden');
 			$('#div-date-virement').addClass('hidden'); 
 			$('#div-num-carte').addClass('hidden');
-			$('#div-num-facture').removeClass('hidden'); // Afficher
 		}
 
 		if (mode == 3) {
@@ -49,7 +47,6 @@ $(document).ready(function() {
 			$('#div-num-virement').removeClass('hidden'); // Afficher
 			$('#div-date-virement').removeClass('hidden'); // Afficher
 			$('#div-num-carte').addClass('hidden');
-			$('#div-num-facture').addClass('hidden');
 		}
 
 		if (mode == 4) { 
@@ -58,7 +55,6 @@ $(document).ready(function() {
 			$('#div-num-virement').addClass('hidden');
 			$('#div-date-virement').addClass('hidden');
 			$('#div-num-carte').removeClass('hidden'); // Afficher
-			$('#div-num-facture').removeClass('hidden'); // Afficher
 		}
 
 	})
@@ -89,6 +85,7 @@ $(document).ready(function() {
 			var val_str = [
 				$('#service').val(),
 				$('#motif').val(),
+				$('#num_facture'),
 				$('#cheque').val(),
 				$('#date_cheque').val(),
 				$('#montant').val()
@@ -97,6 +94,7 @@ $(document).ready(function() {
 			var descri_str = [
 				"Service",
 				"Motif",
+				"Num Facture",
 				"Num Chèque",
 				"Date Chèque",
 				"Montant"
@@ -123,6 +121,7 @@ $(document).ready(function() {
 			var val_str = [
 				$('#service').val(),
 				$('#motif').val(),
+				$('#num_facture'),
 				$('#virement').val(),
 				$('#date_virement').val(),
 				$('#montant').val()
@@ -131,6 +130,7 @@ $(document).ready(function() {
 			var descri_str = [
 				"Service",
 				"Motif",
+				"Num Facture",
 				"Num Virement",
 				"Date Virement",
 				"Montant"
@@ -193,8 +193,40 @@ $(document).ready(function() {
 			var carte_bancaire = $('#carte_bancaire').val();
 			var num_facture = $('#num_facture').val();
 
+			var datadetails = []
+
+			$('.mytbody').find('tr').each(function(){
+				var detls_designation = $(this).find('.detls_designation').val()
+				var detls_quantite = $(this).find('.detls_quantite').val()
+				var detls_prix_unitaire = $(this).find('.detls_prix_unitaire').val()
+
+				datadetails.push([
+						0,
+						detls_designation, 
+						detls_quantite, 
+						detls_prix_unitaire
+				])
+			})
+			
+			var type_payment = ''
+
+			$(".type_achat").each(function(){
+				if($(this).is(':checked'))
+				{
+					type_payment = $(this).val()
+				}
+			})
+			var montant_echeance_paye = ''
+			if(type_payment == 2)
+			{
+				montant_echeance_paye = $('#montant_echeance_paye').val()
+
+				if(montant_echeance_paye == '' || montant_echeance_paye < 0) 
+					beneficiaire = ''
+			}
+
 			if (beneficiaire == '' || montant == '') {
-				show_info('Erreur','Champs obligatoire','error');
+				show_info('Erreur','Champs obligatoire ou invalide','error');
 			} else {
 
 				disabled_confirm(false); 
@@ -230,6 +262,10 @@ $(document).ready(function() {
 						date_virement: date_virement,
 						carte_bancaire: carte_bancaire,
 						num_facture:num_facture,
+						datadetails:datadetails,
+						montant_echeance_paye:montant_echeance_paye,
+						type_payment:type_payment
+
 					}
 
 					$.ajax({
@@ -267,6 +303,86 @@ $(document).ready(function() {
 					text: "Vérifier et corriger "+elem_str,
 					})
 			}  
+		}
+	})
+
+	$('.btn_plus_details').click(function(){
+		var trElems = `
+			<tr>
+				<td>
+					<input type="hidden" value="0" class="id_dtls_dep">
+					<input type="text" class="form-control detls_designation" placeholder="Désignation" required>
+				</td>
+				<td>
+					<input type="number" class="form-control detls_quantite" placeholder="Quantité" required>
+				</td>
+				<td>
+					<input type="numbers" class="form-control detls_prix_unitaire" placeholder="Prix unitaire" required>
+				</td>
+			</tr>
+		`
+		$('.mytbody').append(trElems)
+	})
+	$('.btn_trash_details').click(function(){
+		var trElems = $('.mytbody').find('tr')
+		if(trElems.length > 1)
+			$('.mytbody').find('tr:last-child').remove()
+	})
+
+	function typePayementAchat()
+	{
+		$('.type_achat').click(function(){
+			if($(this).val() == 2)
+			{
+				$('.montant_echance').remove()
+
+				var montantEcheance = `
+					<div class="col-lg-6 montant_echance">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Montant payé</label>
+								<div class="col-sm-10">
+								<input type="number" class="form-control" id="montant_echeance_paye">
+								</div>
+						</div>
+						</div>
+				` ;
+				var elemParent = $(this).closest('.parent_achat')
+				$(montantEcheance).insertAfter(elemParent) ;
+			}
+			else
+			{
+				$('.montant_echance').remove()
+			}
+		})		
+	}
+
+	$('#motif').change(function(){
+		if($(this).val() == 'Achat')
+		{
+			var elemPayement = 
+			` <div class="col-lg-6 parent_achat" >
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-10">
+							<div class="row">
+								<div class="col-md-6 content_achat" >
+									<input type="radio" class="type_achat" name="type_achat" value="1" ><h4 for="html" class="ident_achat">Payer en totalité</h4>
+								</div>
+								<div class="col-md-6 content_achat" >
+									<input type="radio" class="type_achat" name="type_achat" value="2"><h4 for="html" class="ident_achat">Payer par échéance</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> `;
+			var elemParent = $(this).closest('#div-motif')
+			$(elemPayement).insertAfter(elemParent) ;	
+			typePayementAchat()		
+		}
+		else
+		{
+			$('.parent_achat').remove()
+			$('.montant_echance').remove()
 		}
 	})
 })

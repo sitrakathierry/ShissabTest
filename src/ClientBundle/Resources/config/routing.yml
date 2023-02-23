@@ -32,9 +32,10 @@ client_grid:
 
 client_add:
     path:     /client/add
-    defaults: { _controller: ClientBundle:Client:add }
+    defaults: { _controller: ClientBundle:Client:add}
     options:
         expose: true
+
 
 client_save:
     path:    /client/save

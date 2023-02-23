@@ -141,6 +141,17 @@ comptabilite_decharge_add:
     options:
         expose: true
 
+creation_design_depense:
+    path:     /comptabilite/creation/desingation
+    defaults: { _controller: ComptabiliteBundle:Decharge:creationDesignation }
+
+comptabilite_enregitre_designation:
+    path:     /comptabilite/designation/save
+    defaults: { _controller: ComptabiliteBundle:Decharge:saveDesignation }
+    methods:  [POST]
+    # options:
+    #     expose: true
+
 comptabilite_decharge_save:
     path:     /comptabilite/decharge/save
     defaults: { _controller: ComptabiliteBundle:Decharge:save }

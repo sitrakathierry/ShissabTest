@@ -28,6 +28,8 @@ class Booking
      */
     private $nbPers;
 
+    private $tarifPersPetitDejeuner ;
+
     /**
      * @var int
      *

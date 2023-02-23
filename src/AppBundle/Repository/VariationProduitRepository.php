@@ -51,7 +51,7 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
 
 
 
-        $query .= " and p.is_delete IS NULL";
+        $query .= " and p.is_delete IS NULL and vp.is_delete IS NULL";
 
         // $query .= " order by p.nom ASC";
 
@@ -60,7 +60,7 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
         $statement->execute();
 
         $result = $statement->fetchAll();
-
+ 
         return $result;
     }
 
@@ -181,6 +181,22 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
                     AND vp.is_delete IS NULL 
                     AND p.is_delete IS NULL 
                     AND vp.stock > 0
+                    ORDER BY vp.id ASC ";
+        $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE 
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($idProduit));
+        $result = $statement->fetchAll();
+        return $result;
+    }
+
+    public function affichePrixProduitInAppro($idProduit)
+    {
+        $sql = "SELECT vp.id, p.nom, pe.indice,vp.prix_vente, p.code_produit FROM `variation_produit` vp 
+                    JOIN produit_entrepot pe ON pe.id = vp.produit_entrepot 
+                    JOIN produit p ON p.id = pe.produit 
+                    WHERE p.id = ? 
+                    AND vp.is_delete IS NULL 
+                    AND p.is_delete IS NULL 
                     ORDER BY vp.id ASC ";
         $em = $this->getEntityManager(); // GESTIONNAIRE D'ENTITE 
         $statement = $em->getConnection()->prepare($sql);

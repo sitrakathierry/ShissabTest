@@ -20,7 +20,6 @@ class DefaultController extends BaseController
 
     public function addAction()
     {
-
     	$permission_user = $this->get('app.permission_user');
 
         $user = $this->getUser();
@@ -90,7 +89,7 @@ class DefaultController extends BaseController
                     ));
 
         $deviseEntrepot = $this->getDevise();
-
+ 
         $checkFactureProduit = $this->checkFactureProduit();
         $checkFactureService = $this->checkFactureService();
         $checkFactureCaisse = $this->checkFactureCaisse();
@@ -99,7 +98,7 @@ class DefaultController extends BaseController
 
         return $this->render('FactureBundle:Default:add.html.twig',array(
             'deviseEntrepot' => $deviseEntrepot, 
-            'agence' => $agence,
+            'agence' => $agence, 
             'devises' => $devises,
             'clients' => $clients,
             'variations' => $variations,

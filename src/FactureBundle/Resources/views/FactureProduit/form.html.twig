@@ -29,7 +29,7 @@
             {# <input type="text" class="form-control" name="f_designation[]" > #}
             <select class="form-control select2 f_produit" name="f_produit[]">
               <option></option>
-              {% for variation in variations %}
+              {% for variation in variations %} 
                 <option
                   value="{{ variation.id }}"
                   data-prixvente="{{ variation.prix_vente }}"

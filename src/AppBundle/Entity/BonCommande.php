@@ -105,9 +105,7 @@ class BonCommande
      * @var \AppBundle\Entity\Client
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Client")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="client", referencedColumnName="num_police")
-     * })
+     * @ORM\JoinColumn(name="client", referencedColumnName="num_police")
      */
     private $client;
 

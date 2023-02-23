@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
   {{ parent() }}
+  <link rel="stylesheet" href="{{asset('bundles/facture/css/style.css')}}">
 {% endblock  %}
 {% block scripts %}
   {{ parent() }}
@@ -16,7 +17,9 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="ibox float-e-margins">
+        
         <div class="ibox-title">
+          <button class="btn btn-success bouton_retour font-weight-bold text-white ml-auto float-right" onclick="history.back()"><i class="fa fa-arrow-left " ></i></button>
           <h5>
             Facture N° <span class="badge-warning">{{facture.formattedNum}}</span>
             {% if facture.type == 1 %}

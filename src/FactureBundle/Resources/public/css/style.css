@@ -1,0 +1,9 @@
+.ibox-title {
+    overflow: hidden !important;
+}
+
+.bouton_retour {
+    float: right !important;
+    margin-left: auto !important;
+    padding: 7px 29px !important;
+}

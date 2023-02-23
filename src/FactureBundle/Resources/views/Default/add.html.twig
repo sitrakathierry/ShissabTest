@@ -102,7 +102,8 @@
 
             <div class="form-group client_mac">
               <label class="col-sm-2 control-label">CLIENT *</label>
-              <div class="col-sm-10">
+              <div class="col-sm-10 row">
+                <div class="col-md-10">
                 <select class="form-control select2 m-b" name="f_client" id="f_client" required="">
                   <option value=""></option>
                   {% if is_granted('ROLE_ADMIN') %}
@@ -134,6 +135,11 @@
                   {% endif %}
 
                 </select>
+                </div>
+                <div class="col-md-2">
+                <a href="{{path('client_add')}}" class="btn btn-success btn-sm float-right text-white font-weight-bold"><i class="fa fa-plus"></i></a>
+                </div>
+                
               </div>
             </div>
 
@@ -145,7 +151,7 @@
 
             <div 
               id="form-produit" 
-              class="hidden"
+              class="hidden" 
               style="width: 100%;overflow: scroll;"
             >
                 {% include('FactureBundle:FactureProduit:form.html.twig') %}

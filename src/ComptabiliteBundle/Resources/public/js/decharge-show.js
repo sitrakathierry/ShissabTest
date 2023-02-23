@@ -94,6 +94,22 @@ $(document).ready(function() {
 		var statut = $('#statut').val();
 		var id = $('#id').val();
 
+		var datadetails = []
+
+			$('.mytbody').find('tr').each(function(){
+				var detls_designation = $(this).find('.detls_designation').val()
+				var detls_quantite = $(this).find('.detls_quantite').val()
+				var detls_prix_unitaire = $(this).find('.detls_prix_unitaire').val()
+				var id_dtls_dep = $(this).find('.id_dtls_dep').val()
+
+				datadetails.push([
+						id_dtls_dep,
+						detls_designation, 
+						detls_quantite, 
+						detls_prix_unitaire
+				])
+			})
+
 		if (beneficiaire == '') {
 			show_info('Erreur','Champs obligatoire','error');
 		} else {
@@ -113,7 +129,8 @@ $(document).ready(function() {
 				date_validation: date_validation,
 				mois_facture: mois_facture,
 				statut : statut,
-				id: id
+				id: id,
+				datadetails:datadetails
 			};
 
 			disabled_confirm(false); 
@@ -173,4 +190,28 @@ $(document).ready(function() {
 		    	})
 		    });
 	})
+
+		$('.btn_plus_details').click(function(){
+		var trElems = `
+			<tr>
+				<td>
+					<input type="hidden" value="0" class="id_dtls_dep">
+					<input type="text" class="form-control detls_designation" placeholder="Désignation" required>
+				</td>
+				<td>
+					<input type="number" class="form-control detls_quantite" placeholder="Quantité" required>
+				</td>
+				<td>
+					<input type="numbers" class="form-control detls_prix_unitaire" placeholder="Prix unitaire" required>
+				</td>
+			</tr>
+		`
+		$('.mytbody').append(trElems)
+	})
+	$('.btn_trash_details').click(function(){
+		var trElems = $('.mytbody').find('tr')
+		if(trElems.length > 1)
+			$('.mytbody').find('tr:last-child').remove()
+	})
+
 })
