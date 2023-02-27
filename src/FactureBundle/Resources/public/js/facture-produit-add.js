@@ -78,7 +78,7 @@ $(document).ready(function(){
 
     
     changeProduitFactDef()
-    $('.f_designation').summernote();
+    $('.f_designation').Editor();
 
     $(document).on('change','.f_libre',function(event) {
         var libre = $(this).children("option:selected").val();
@@ -87,7 +87,7 @@ $(document).ready(function(){
             $(this).closest('tr').find('.f_produit').addClass('hidden');
             $(this).closest('tr').find('.f_designation_container').removeClass('hidden');
             $(this).closest('tr').find('.f_prix').removeAttr("readonly")
-            $('.f_designation').summernote();
+            // $('.f_designation').Editor();
         } else {
             $(this).closest('tr').find('.f_produit').removeClass('hidden');
             $(this).closest('tr').find('.f_designation_container').addClass('hidden');
@@ -96,7 +96,7 @@ $(document).ready(function(){
     })
 
 
-    $('#descr').summernote();
+    // $('#descr').Editor();
 
     // $('#f_client').select2();
         
@@ -122,7 +122,7 @@ $(document).ready(function(){
         var produits = $('.f_produit').html();
 
         var a ='<td><div class="form-group"><div class="col-sm-12"><select class="form-control f_libre" name="f_libre[]"><option value="0">PRODUIT</option><option value="1">AUTRE</option></select></div></div></td>';
-        var b = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control select2 f_produit" name="f_produit[]">'+ produits +'</select><div class="f_designation_container hidden"><textarea class="summernote f_designation" name="f_designation[]"></textarea></div></div></div></td>';
+        var b = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control select2 f_produit" name="f_produit[]">'+ produits +'</select><div class="f_designation_container hidden"><textarea class="editor f_designation" name="f_designation[]"></textarea></div></div></div></td>';
         var c = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control f_qte" name="f_qte[]"></div></div></td>';
         var d = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control f_prix" name="f_prix[]" readonly></div></div></td>';
         var e = '<td><div class="form-group"><div class="col-sm-4"><select class="form-control f_remise_type_ligne" name="f_remise_type_ligne[]"><option value="0">%</option><option value="1">Montant</option></select></div><div class="col-sm-8"><input type="number" class="form-control f_remise_ligne" name="f_remise_ligne[]" ></div></div></td>';
@@ -131,7 +131,7 @@ $(document).ready(function(){
         var markup = '<tr class="fact-row row-'+ new_id +'">' + a + b + c + d + e + f + g + '</tr>';
         $("#table-fact-add tbody#principal").append(markup);
         $('#id-row').val(new_id);
-
+        $('.f_designation').Editor();
         $('.fact-row row-'+new_id).find(".select2").select2("destroy");
         $("select.select2").select2();
 
@@ -156,7 +156,7 @@ $(document).ready(function(){
             show_info("Attention", 'Le tableau devrait contenir au moins une ligne','error');
         }
 
-        $('.f_designation').summernote();
+        $('.f_designation').Editor();
 
         calculMontant();
     });

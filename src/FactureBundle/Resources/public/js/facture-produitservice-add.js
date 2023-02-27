@@ -1,4 +1,4 @@
-$('#descr').summernote();
+// $('#descr').Editor() ;
 
 
 $(document).on('change','.f_ps_designation',function(event) {

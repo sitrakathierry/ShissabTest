@@ -3,7 +3,7 @@ var cl_row_edited = 'r-cl-edited';
 var datas = [];
 $(document).ready(function(){
 
-    load_list();
+    // load_list();
 
     function instance_list_grid() {
         var colNames = ['Bénéficiaire','Mode de paiement','N° / Ref','Montant','Num Fact.','Date déclaration','Mois','Service','Motif', ''];
@@ -399,6 +399,215 @@ $(document).ready(function(){
     })
 
 
+    $('.payement').click(function(){
+        var id = $(this).closest('tr').attr('id');
+        var url = Routing.generate('comptabilite_depense_achat_paiement');
+        var data = {
+            id:id
+        }
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: data,
+            dataType: 'json',
+            success: function(result) {
+                // if(result.msg == "success")
+                // {
+                //     number_to_letter(450)
+                // }
+                var achat_nom = $('.achat_nom')
+                var achat_mode_payement = $('.achat_mode_payement')
+                var achat_type_payement = $('.achat_type_payement')
+                var achat_service = $('.achat_service')
+                var achat_motif = $('.achat_motif')
+                var achat_num_facture = $('.achat_num_facture')
+                var achat_date = $('.achat_date')
+                var achat_mois = $('.achat_mois')
+                var achat_montant = $('.achat_montant')
 
+                var  depenses = result.decharges[0];
+                 
+                var val_type_payement = 'Aucun'
+                if(depenses.type_payement == 1)
+                    val_type_payement = 'Total'
+                else if(depenses.type_payement == 1)
+                    val_type_payement = 'Echeance'
 
+                achat_nom.text(depenses.beneficiaire)
+                achat_mode_payement.text(depenses.mode_paiement)
+                achat_type_payement.text(val_type_payement)
+                achat_service.text(depenses.service)
+                achat_motif.text(depenses.motif)
+                achat_num_facture.text(depenses.num_facture)
+                achat_date.text(depenses.date)
+                achat_mois.text(depenses.mois)
+                achat_montant.text(Math.round(depenses.montant))
+                
+                $('#lettre').text(number_to_letter(Math.round(depenses.montant)))
+
+                var echeances = result.echeances
+                tableEcheance = ''
+                var totalPayee = 0
+                for (let i = 0; i < echeances[0].length; i++) {
+                    const element = echeances[0][i];
+                    
+                    tableEcheance += `
+                        <tr>
+                  <td>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" value="`+element.dateEch+`" disabled="">
+                        </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                          <input type="number" class="form-control" value="`+element.montant+`" disabled="">
+                        </div>
+                    </div>
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+                    ` ;
+                    totalPayee = totalPayee + parseInt(element.montant)
+                }
+                tableEcheance += `
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input type="hidden" value="`+depenses.montant+`" id="montantTotalDep">
+                                    <input type="hidden" value="`+depenses.id+`" id="idDepense">
+                                    <input type="date" class="form-control" id="date_paiement" value="">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input type="number" class="form-control" id="montant">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-full-width" id="btn-valider">
+                                <i class="fa fa-check"></i>
+                                VALIDER
+                            </button>
+                        </td>
+      					</tr>
+                `
+
+                $('.totalPayee').text(totalPayee+" KMF")
+                $('.totalRestant').text((Math.round(depenses.montant) - totalPayee)+" KMF") ;
+
+                $('.body_achat').empty().append(tableEcheance) ;
+
+                validerPayement() ;
+
+                $('#menu_achat').click()
+            }
+        });
+
+        
+    })
+
+    function validerPayement()
+    {
+            $('#btn-valider').click(function(){
+            var url = Routing.generate('comptabilite_depense_achat_valider');
+            var data = {
+                idDepense:$('#idDepense').val(),
+                date_paiement:$('#date_paiement').val(),
+                montant:$('#montant').val(),
+                montantTotalDep:$('#montantTotalDep').val()
+            }
+            swal({
+                    title: "Validation",
+                    text: "Etes-vous sure de vouloir valider ? ",
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Oui",
+                    cancelButtonText: "Non",
+                },
+                function () {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: data,
+                        success: function(res) {
+                            var echeances = res.echeances
+                            
+                            tableEcheance = ''
+                            var totalPayee = 0
+                            var idDep = ''
+                            
+                            for (let i = 0; i < echeances.length; i++) {
+                                const element = echeances[i];
+                                idDep = element.idDepense
+                                tableEcheance += `
+                                    <tr>
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" value="`+element.dateEch+`" disabled="">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                    <input type="number" class="form-control" value="`+element.montant+`" disabled="">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                            </td>
+                            </tr>
+                                ` ;
+                                totalPayee = totalPayee + parseInt(element.montant)
+                            }
+                            tableEcheance += `
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="hidden" value="`+res.totalDepense+`" id="montantTotalDep">
+                                                <input type="hidden" value="`+idDep+`" id="idDepense">
+                                                <input type="date" class="form-control" id="date_paiement" value="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="number" class="form-control" id="montant">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-full-width" id="btn-valider">
+                                            <i class="fa fa-check"></i>
+                                            VALIDER
+                                        </button>
+                                    </td>
+                                    </tr>
+                            `
+                            $('.body_achat').empty().append(tableEcheance) ;
+                            
+                            $('.totalPayee').text(totalPayee+" KMF")
+                            $('.totalRestant').text((Math.round(res.totalDepense) - totalPayee)+" KMF") ;
+
+                             validerPayement() ;
+                        },
+                        error: function() {
+                            show_info('Erreur',"Erreur de validation",'error');
+                        }
+                })
+                
+            });
+        })
+    }
 });

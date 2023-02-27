@@ -25,7 +25,9 @@ $(document).ready(function(){
 
 	$(document).on('click','#btn-save-cl',function(event) {
 		event.preventDefault();
-
+		var fact = ''
+		if($('.si_facture').val() != '')
+			var fact = $('.si_facture').val()
 		let statut = $('select[name=statut]').val();
 		let form = $('#form');
 
@@ -48,7 +50,7 @@ $(document).ready(function(){
 			    },
 			    function () {
 			    	disabled_confirm(true);
-					save_client(data, form.data('action'));
+					save_client(data, form.data('action'),fact);
 			    });
 
 			} else {
@@ -77,7 +79,7 @@ $(document).ready(function(){
 			    function () {
 			    	// $(".confirm").attr('disabled', 'disabled'); 
 		    		disabled_confirm(true); 
-					save_client(data, form.data('action'));
+					save_client(data, form.data('action'),fact);
 			    });
 
 			} else {
@@ -86,15 +88,21 @@ $(document).ready(function(){
 		}
 	});
 
-	function save_client(data,url) {
+	function save_client(data,url,fact) {
 		$.ajax({
 			url: url,
 			type: 'POST',
 			data: data,
 			success: function(res) {
 				if (res.success == true) {
-					// show_info('Succés','Client enregistré');
-					// location.reload();
+					if(fact == 'ok')
+					{
+						location.assign('/shissab/web/facture/add/ok')
+					}	
+					else
+					{
+
+					}
 					show_success('Succès','Enregistrement éffectué');
 				} else {
 	    		    disabled_confirm(false);
@@ -103,7 +111,6 @@ $(document).ready(function(){
 		                text: "Voulez-vous consulter les informations du client",
 		                type: "info",
 		                showCancelButton: true,
-		                // confirmButtonColor: "#DD6B55",
 		                confirmButtonText: "OUI",
 		                closeOnConfirm: false
 		            }, function () {
@@ -114,4 +121,6 @@ $(document).ready(function(){
 			}
 		})
 	}
+
+
 });

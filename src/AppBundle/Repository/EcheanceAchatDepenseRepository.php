@@ -10,4 +10,13 @@ namespace AppBundle\Repository;
  */
 class EcheanceAchatDepenseRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getAllEcheanceByDep($id)
+    {
+        $em = $this->getEntityManager();
+        $sql = "SELECT * FROM `echeance_achat_depense` WHERE `idDepense` = ? ";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($id));
+        $result = $statement->fetchAll();
+        return $result;
+    }
 }

@@ -152,6 +152,13 @@ class Decharge
     private $numFacture;
 
     /**
+     * @var json_array
+     *
+     * @ORM\Column(name="fournisseur", type="json_array", nullable=true)
+     */
+    private $fournisseur;
+
+    /**
      * @var \AppBundle\Entity\Agence
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Agence")
@@ -592,6 +599,30 @@ class Decharge
     public function getNumFacture()
     {
         return $this->numFacture;
+    }
+
+    /**
+     * Set fournisseur
+     *
+     * @param json_array $fournisseur
+     *
+     * @return Decharge
+     */
+    public function setFournisseur($fournisseur)
+    {
+        $this->fournisseur = $fournisseur;
+
+        return $this;
+    }
+
+    /**
+     * Get fournisseur
+     *
+     * @return json_array
+     */
+    public function getFournisseur()
+    {
+        return $this->fournisseur;
     }
 
     /**

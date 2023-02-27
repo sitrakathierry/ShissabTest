@@ -1,7 +1,7 @@
 function selToArray(selector, type = "default") {
   var taskArray = new Array();
   $(selector).each(function () {
-    if (type == "summernote") {
+    if (type == "summernote") { 
       taskArray.push($(this).code());
     } else {
       taskArray.push($(this).val());
@@ -10,7 +10,7 @@ function selToArray(selector, type = "default") {
   return taskArray;
 }
 
-function accompagnements() {
+function accompagnements() { 
   var data = [];
 
   $("table#table-emporter-add > tbody  > tr").each(function (index, tr) {
@@ -502,7 +502,7 @@ $(document).on("click", "#btn-save", function (event) {
   }
 });
 
-
+$("#descr").Editor();
 
 $(document).on("change", "#f_model", function (event) {
   event.preventDefault();
@@ -514,7 +514,7 @@ $(document).on("change", "#f_model", function (event) {
   var form_produitservice = $("#form-produitservice");
   var form_hebergement = $("#form-hebergement");
 
-  var form_facture = $("#form-facture");
+  var form_facture = $("#form-facture"); 
 
   form_produit.addClass("hidden");
   form_service.addClass("hidden");
@@ -523,7 +523,6 @@ $(document).on("change", "#f_model", function (event) {
   $(".heb").addClass("hidden");
 
   if (model != "") {
-    $("#descr").summernote();
 
     if (model == 1) {
       form_produit.removeClass("hidden");

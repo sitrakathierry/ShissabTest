@@ -186,7 +186,7 @@ class ClientController extends Controller
         return new Response(1);
     }
 
-    public function addAction(Request $request)
+    public function addAction($fact)
     {
         $typeSocieteList = $this->getDoctrine()
                     ->getRepository('AppBundle:TypeSociete')
@@ -219,6 +219,7 @@ class ClientController extends Controller
             'typeSocialList' => $typeSocialList,
             'agences' => $agences,
             'userAgence' => $userAgence,
+            'fact' => $fact
         ]);
     }
 
@@ -226,6 +227,7 @@ class ClientController extends Controller
     {
 
 
+        $si_facture = $request->request->get('si_facture');
         $statut = $request->request->get('statut');
         $agence = $request->request->get('agence');
         $num_police = $request->request->get('num_police');
@@ -280,6 +282,8 @@ class ClientController extends Controller
                     'id' => $exist
                 ));
             }
+
+            
 
         }
 
@@ -378,7 +382,8 @@ class ClientController extends Controller
 
         return new JsonResponse(array(
             'success' => true,
-            'id' => $num_police
+            'id' => $num_police,
+            'si_facture' => $si_facture
         ));
 
     }

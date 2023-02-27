@@ -141,7 +141,7 @@ $(document).ready(function(){
             show_info("Attention", 'Le tableau devrait contenir au moins une ligne','error');
         }
 
-        $('.f_service_designation').summernote();
+        $('.f_service_designation').Editor() ;
         
         calculMontantHebergement();
     });

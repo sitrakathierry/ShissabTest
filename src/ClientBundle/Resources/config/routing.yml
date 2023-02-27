@@ -31,8 +31,8 @@ client_grid:
         expose: true
 
 client_add:
-    path:     /client/add
-    defaults: { _controller: ClientBundle:Client:add}
+    path:     /client/add/{fact}
+    defaults: { _controller: ClientBundle:Client:add, fact:''} 
     options:
         expose: true
 

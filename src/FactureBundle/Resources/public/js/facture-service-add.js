@@ -48,7 +48,7 @@ $(document).ready(function(){
         $(this).closest('tr').find('.f_service_montant_converti').val( montant_converti.toFixed(2) );
     })
 
-    $('.f_service_designation').summernote();
+    $('.f_service_designation').Editor() ;
 
     $(document).on('change','.f_service_libre',function(event) {
         var libre = $(this).children("option:selected").val();
@@ -57,7 +57,7 @@ $(document).ready(function(){
             $(this).closest('tr').find('.f_service').addClass('hidden');
             $(this).closest('tr').find('.f_service_designation_container').removeClass('hidden');
             
-            $('.f_service_designation').summernote();
+            // $('.f_service_designation').Editor() ;
         } else {
             $(this).closest('tr').find('.f_service').removeClass('hidden');
             $(this).closest('tr').find('.f_service_designation_container').addClass('hidden');
@@ -65,7 +65,7 @@ $(document).ready(function(){
     })
 
 
-    $('#descr').summernote();
+    // $('#descr').Editor() ;
 
     // $('#f_client').select2();
     
@@ -92,7 +92,7 @@ $(document).ready(function(){
         var durees = $('.f_service_duree').html();
 
         var a ='<td><div class="form-group"><div class="col-sm-12"><select class="form-control f_service_libre" name="f_service_libre[]"><option value="0">PRESTATION</option><option value="1">AUTRE</option></select></div></div></td>';
-        var b = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control select2 f_service" name="f_service[]">'+ services +'</select><div class="f_service_designation_container hidden"><textarea class="f_service_designation" name="f_service_designation[]"></textarea></div></div></div></td>';
+        var b = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control select2 f_service" name="f_service[]">'+ services +'</select><div class="f_service_designation_container hidden"><textarea class="editor f_service_designation" name="f_service_designation[]"></textarea></div></div></div></td>';
         var c = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control f_service_periode" name="f_service_periode[]"></div></div></td>';
         var d = '<td><div class="form-group"><div class="col-sm-12"><select class="form-control f_service_duree" name="f_service_duree[]">'+ durees +'</select></div></div></td>';
         var e = '<td><div class="form-group"><div class="col-sm-12"><input type="number" class="form-control f_service_prix" name="f_service_prix[]"></div></div></td>';
@@ -102,7 +102,8 @@ $(document).ready(function(){
         var markup = '<tr class="fact-row row-'+ new_id +'">' + a + b + c + d + e + f + g + h + '</tr>';
         $("#table-service-add tbody#principal-service").append(markup);
         $('#id-row-service').val(new_id);
-
+        $('.f_service_designation').Editor() ;
+        
         $('.fact-row row-'+new_id).find(".select2").select2("destroy");
         $("select.select2").select2();
 
@@ -112,7 +113,7 @@ $(document).ready(function(){
 
     $(document).on('click', '.btn-remove-row-service', function(event) {
         event.preventDefault();
-        var id     = parseInt($('#id-row-service').val());
+        var id     = parseInt($('#id-row-service').val()); 
 
 
         var new_id = id - 1;
@@ -127,7 +128,7 @@ $(document).ready(function(){
             show_info("Attention", 'Le tableau devrait contenir au moins une ligne','error');
         }
 
-        $('.f_service_designation').summernote();
+        $('.f_service_designation').Editor() ;
         
         calculMontantService();
     });

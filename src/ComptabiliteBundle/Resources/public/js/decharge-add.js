@@ -73,7 +73,7 @@ $(document).ready(function() {
 		$('#lettre').val(lettre + ' ' + devise);
 	})
 
-	$('.summernote').summernote();
+	$('.summernote').Editor() ;
 
 	$(document).on('click','#btn-save',function(event) {
 		event.preventDefault();
@@ -179,7 +179,7 @@ $(document).ready(function() {
 			var beneficiaire = $('#beneficiaire').val();
 			var cheque = $('#cheque').val();
 			var montant = $('#montant').val();
-			var raison = $('#raison').code();
+			var raison = $('#raison').val();
 			var date = $('#date').val();
 			var lettre = $('#lettre').val();
 			var mode_paiement = $('#mode-paiement').val();
@@ -192,7 +192,7 @@ $(document).ready(function() {
 			var date_virement = $('#date_virement').val(); 
 			var carte_bancaire = $('#carte_bancaire').val();
 			var num_facture = $('#num_facture').val();
-
+			var fournisseur = $('#fournisseur').val()
 			var datadetails = []
 
 			$('.mytbody').find('tr').each(function(){
@@ -264,7 +264,8 @@ $(document).ready(function() {
 						num_facture:num_facture,
 						datadetails:datadetails,
 						montant_echeance_paye:montant_echeance_paye,
-						type_payment:type_payment
+						type_payment:type_payment,
+						fournisseur:fournisseur
 
 					}
 
@@ -329,6 +330,7 @@ $(document).ready(function() {
 			$('.mytbody').find('tr:last-child').remove()
 	})
 
+
 	function typePayementAchat()
 	{
 		$('.type_achat').click(function(){
@@ -340,12 +342,12 @@ $(document).ready(function() {
 					<div class="col-lg-6 montant_echance">
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Montant payé</label>
-								<div class="col-sm-10">
+							<div class="col-sm-10">
 								<input type="number" class="form-control" id="montant_echeance_paye">
-								</div>
+							</div>
 						</div>
-						</div>
-				` ;
+					</div>
+					` ; 
 				var elemParent = $(this).closest('.parent_achat')
 				$(montantEcheance).insertAfter(elemParent) ;
 			}
@@ -357,32 +359,72 @@ $(document).ready(function() {
 	}
 
 	$('#motif').change(function(){
+		
 		if($(this).val() == 'Achat')
 		{
-			var elemPayement = 
-			` <div class="col-lg-6 parent_achat" >
-					<div class="form-group">
-						<label class="col-sm-2 control-label"></label>
-						<div class="col-sm-10">
-							<div class="row">
-								<div class="col-md-6 content_achat" >
-									<input type="radio" class="type_achat" name="type_achat" value="1" ><h4 for="html" class="ident_achat">Payer en totalité</h4>
-								</div>
-								<div class="col-md-6 content_achat" >
-									<input type="radio" class="type_achat" name="type_achat" value="2"><h4 for="html" class="ident_achat">Payer par échéance</h4>
+			var url = Routing.generate('comptabilite_charger_fournisseur');
+			var data = {id:1}
+			var self = $(this)
+			$.ajax({
+					url: url,
+					type: 'POST',
+					data: data,
+					dateType: 'json',
+					success: function(res) {
+						var allFournisseur = ''
+						allFournisseur = res ;
+						var options = ''
+						for (let i = 0; i < allFournisseur.length; i++) {
+							const element = allFournisseur[i];
+							options += `
+								<option value="`+element.id+`">`+element.nom+`</option>
+							`
+						}
+						var fournisseur = `
+							<div class="col-lg-6" id="div-fournisseur">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Fournisseurs</label>
+									<div class="col-sm-10">
+										<select class="form-control" id="fournisseur"> 
+										<option value="" selected></option>
+										`+options+`
+										</select>
+									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-				</div> `;
-			var elemParent = $(this).closest('#div-motif')
-			$(elemPayement).insertAfter(elemParent) ;	
-			typePayementAchat()		
+						` ;
+						var elemPayement = fournisseur + ` <div class="col-lg-6 parent_achat" >
+								<div class="form-group">
+									<label class="col-sm-2 control-label"></label>
+									<div class="col-sm-10">
+										<div class="row">
+											<div class="col-md-6 content_achat" >
+												<input type="radio" class="type_achat" name="type_achat" value="1" ><h4 for="html" class="ident_achat">Payer en totalité</h4>
+											</div>
+											<div class="col-md-6 content_achat" >
+												<input type="radio" class="type_achat" name="type_achat" value="2"><h4 for="html" class="ident_achat">Payer par échéance</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> `;
+						var elemParent = self.closest('#div-motif')
+						$(elemPayement).insertAfter(elemParent) ;	
+						typePayementAchat()	
+					},
+					error: function() {
+						show_info('Erreur',"Erreur de chargement",'error');
+					}
+				}) 
+				
 		}
 		else
 		{
+			$('#div-fournisseur').remove()
 			$('.parent_achat').remove()
 			$('.montant_echance').remove()
 		}
 	})
+
+	
 })

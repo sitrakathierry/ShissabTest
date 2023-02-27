@@ -213,9 +213,29 @@ comptabilite_decharge_declare_export:
     options:
         expose: true
 
+comptabilite_depense_achat_paiement:
+    path:     /comptabilite/decharge/achat/payement
+    defaults: { _controller: ComptabiliteBundle:Decharge:payementAchat }
+    methods:  [POST]
+    options:
+        expose: true
+
+comptabilite_depense_achat_valider:
+    path:     /comptabilite/decharge/achat/valider
+    defaults: { _controller: ComptabiliteBundle:Decharge:validerPayementAchat }
+    methods:  [POST]
+    options:
+        expose: true
 comptabilite_decharge_valide_export:
     path:     /comptabilite/decharge/valide/export
     defaults: { _controller: ComptabiliteBundle:Decharge:exportValide }
+    methods:  [POST]
+    options:
+        expose: true
+
+comptabilite_charger_fournisseur:
+    path:     /comptabilite/charger/fournisseur
+    defaults: { _controller: ComptabiliteBundle:Depense:chargerFournisseur }
     methods:  [POST]
     options:
         expose: true

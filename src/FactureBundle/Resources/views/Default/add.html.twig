@@ -106,9 +106,14 @@
                 <div class="col-md-10">
                 <select class="form-control select2 m-b" name="f_client" id="f_client" required="">
                   <option value=""></option>
+                  {% if lastclient is not empty %}
+                  <option value="{{lastclient.id }}" data-police="{{lastclient.num_police}}" selected>
+                          {{lastclient.nom}}
+                        </option>
+                  {% else %}
                   {% if is_granted('ROLE_ADMIN') %}
                     {% for client in clients %}
-                      {% if client.statut == 1%}
+                      {% if client.statut == 1 %}
                         <option value="{{client.numPolice}}" data-police="{{client.formattedNum}}">
                           {{client.idClientMorale.nomSociete}}
                         </option>
@@ -121,7 +126,7 @@
                   {% else %}
                     {% for client in clients %}
                       {% if client.agence == userAgence.agence %}
-                        {% if client.statut == 1%}
+                        {% if client.statut == 1 %}
                           <option value="{{client.numPolice}}" data-police="{{client.formattedNum}}">
                             {{client.idClientMorale.nomSociete}}
                           </option>
@@ -133,11 +138,11 @@
                       {% endif %}
                     {% endfor %}
                   {% endif %}
-
+                  {% endif %}
                 </select>
                 </div>
                 <div class="col-md-2">
-                <a href="{{path('client_add')}}" class="btn btn-success btn-sm float-right text-white font-weight-bold"><i class="fa fa-plus"></i></a>
+                <a href="{{path('client_add',{fact:'ok'})}}" class="btn btn-success btn-sm float-right text-white font-weight-bold"><i class="fa fa-plus"></i></a>
                 </div>
                 
               </div>

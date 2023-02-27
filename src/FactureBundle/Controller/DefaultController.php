@@ -18,7 +18,7 @@ class DefaultController extends BaseController
         return $this->render('FactureBundle:Default:index.html.twig');
     }
 
-    public function addAction()
+    public function addAction($idclient)
     {
     	$permission_user = $this->get('app.permission_user');
 
@@ -96,6 +96,12 @@ class DefaultController extends BaseController
         $checkFactureHebergement = $this->checkFactureHebergement();
         $checkFactureRestaurant = $this->checkFactureRestaurant();
 
+        $lastclient = '';
+        if ($idclient !== '')
+            $lastclient = $clients = $this->getDoctrine()
+                ->getRepository('AppBundle:Client')
+                ->getLastClient($agence->getId());
+
         return $this->render('FactureBundle:Default:add.html.twig',array(
             'deviseEntrepot' => $deviseEntrepot, 
             'agence' => $agence, 
@@ -114,7 +120,8 @@ class DefaultController extends BaseController
             'checkFactureService' => $checkFactureService,  
             'checkFactureCaisse' => $checkFactureCaisse,
             'checkFactureHebergement' => $checkFactureHebergement,
-            'checkFactureRestaurant' => $checkFactureRestaurant
+            'checkFactureRestaurant' => $checkFactureRestaurant,
+            'lastclient' => $lastclient
         ));
     }
 

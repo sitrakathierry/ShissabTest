@@ -28,7 +28,9 @@
         "friendsofsymfony/user-bundle": "~2.0",
         "liuggio/excelbundle": "^2.1",
         "nelmio/cors-bundle": "^1.5",
-        "nikitospush/barcode-bundle": "^2.0"
+        "nikitospush/barcode-bundle": "^2.0",
+        "pear/numbers_words": "^0.18.2",
+        "egeloen/ckeditor-bundle": "^4.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
