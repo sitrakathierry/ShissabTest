@@ -495,6 +495,8 @@ $(document).on("click", "#btn-save", function (event) {
         if (res) {
           show_info("Succès", "Facture enregistré avec succès", "success");
           disabled_confirm(res);
+          var descr = $('.descr').find(".Editor-editor").html()
+          $('#descr').val(descr)
           $("#form-facture").submit();
         }
       }
@@ -503,6 +505,7 @@ $(document).on("click", "#btn-save", function (event) {
 });
 
 $("#descr").Editor();
+
 
 $(document).on("change", "#f_model", function (event) {
   event.preventDefault();

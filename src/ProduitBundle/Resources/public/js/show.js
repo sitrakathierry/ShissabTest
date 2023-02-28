@@ -40,7 +40,7 @@ $(document).on('change','#image',function(event) {
   });
 });
 
-$('.summernote').summernote()
+$('.summernote').Editor()
 
 var qrcode = new QRCode(document.getElementById("qrcode"), {
 	width : 100,
@@ -66,7 +66,7 @@ $(document).on('click', '#btn-save', function(event) {
 		code : $('#code').val(),
 		qrcode : $('#qrcode img').attr('src'),
 		nom : $('#nom').val(),
-		description : $('#description').code(),
+		description : $('#description').parent().find('.Editor-editor').html(),
 		prix_achat : $('#prix_achat').val(),
 		prix_vente : $('#prix_vente').val(),
 		stock : $('#stock').val(),

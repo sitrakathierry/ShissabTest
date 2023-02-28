@@ -10,9 +10,18 @@ namespace AppBundle\Repository;
  */
 class FactureServiceDetailsRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function recette($recherche_par,$a_rechercher,$type_date, $mois, $annee, $date_specifique, $debut_date, $fin_date, $par_agence = 0)
+    public function recette(
+        $recherche_par = '',
+        $a_rechercher = '',
+        $type_date = '',
+        $mois = '',
+        $annee = '',
+        $date_specifique = '',
+        $debut_date = '',
+        $fin_date = '',
+        $par_agence = 0
+    )
     {
-
         $em = $this->getEntityManager();
 
         $query = "  select date_format(f.date_creation,'%d/%m/%Y') as date_creation, date_format(f.date,'%d/%m/%Y') as date, IF(c.statut = 1,cm.nom_societe,cp.nom) as client, CONCAT( IF(f.type = 1, 'PR-','DF-') ,LPAD(f.num, 3, '0'),'/',date_format(f.date_creation,'%y')) as num_fact, fsd.montant as total, s.nom as service
@@ -79,16 +88,23 @@ class FactureServiceDetailsRepository extends \Doctrine\ORM\EntityRepository
             }
         }
 
-
         $query .= $where;
-
         $statement = $em->getConnection()->prepare($query);
-
         $statement->execute();
-
         $result = $statement->fetchAll();
-
         return $result;
-
     }
+
+    // public function getAllDetailsSerivce($idFacture)
+    // {
+    //     $query = "SELECT fsd.designation FROM `facture_service_details` fsd 
+	// 	    JOIN facture_service fs ON fs.id = fsd.facture_service
+    //     LEFT JOIN facture f ON f.id = fs.facture
+    //     WHERE f.id = ? ";
+    //     $em = $this->getEntityManager();
+    //     $statement = $em->getConnection()->prepare($query);
+    //     $statement->execute(array($idFacture));
+    //     $result = $statement->fetchAll();
+    //     return $result;
+    // }
 }

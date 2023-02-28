@@ -3,7 +3,7 @@ $(document).ready(function(){
     function changeProduitFactDef()
     {
         $(".f_input_produit").click(function(){
-            var self = $(this) ;
+            var self = $(this) ; 
             var url = Routing.generate("variation_produit_affiche") ;
             $.ajax({
                 type: 'POST',
@@ -78,7 +78,12 @@ $(document).ready(function(){
 
     
     changeProduitFactDef()
-    $('.f_designation').Editor();
+
+    $(document).ready(function(){
+        $('.f_designation').each(function(){
+            $('.f_designation').Editor();
+        })
+    })
 
     $(document).on('change','.f_libre',function(event) {
         var libre = $(this).children("option:selected").val();
@@ -132,12 +137,27 @@ $(document).ready(function(){
         $("#table-fact-add tbody#principal").append(markup);
         $('#id-row').val(new_id);
         $('.f_designation').Editor();
+        $('.f_designation').each(function(){
+            var self = $(this)
+            $(this).parent().find('.Editor-editor').mouseout(function()
+            {
+                self.val($(this).html())
+            })
+        })
         $('.fact-row row-'+new_id).find(".select2").select2("destroy");
         $("select.select2").select2();
 
         $('#table-fact-add tbody tr:last').find('.f_prix').val()
 
     });
+
+    $('.f_designation').each(function(){
+            var self = $(this)
+            $(this).parent().find('.Editor-editor').mouseout(function()
+            {
+                self.val($(this).html())
+            })
+        })
 
     $(document).on('click', '.btn-remove-row', function(event) {
         event.preventDefault();

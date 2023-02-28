@@ -57,7 +57,7 @@ $(document).ready(function(){
             success : function(res) {
                 $('#client').val( res.client_id ).trigger('change');
                 $('#table-commande-add tbody').html(res.tpl);
-                $('.designation_autre').summernote();
+                $('.designation_autre').Editor();
                 calculTotalHT();
             }
         });
@@ -85,7 +85,7 @@ $(document).ready(function(){
             		$(self).closest('tr').find('.designation').addClass('hidden');
             		$(self).closest('tr').find('.designation_autre_container').removeClass('hidden');
 
-            		$('.designation_autre').summernote();
+            		$('.designation_autre').Editor();
 
 	    		} else {
 
@@ -154,7 +154,7 @@ $(document).ready(function(){
             show_info("Attention", 'Le tableau devrait contenir au moins une ligne','error');
         }
 
-        $('.designation_autre').summernote();
+        $('.designation_autre').Editor();
 
         calculTotalHT();
     });
@@ -433,6 +433,7 @@ $(document).ready(function(){
                 lettre : $('#lettre').text(),
                 date : $('#date').val(),
                 lieu : $('#lieu').val(),
+                
             };
 
             if (data.client == '') {
@@ -495,7 +496,7 @@ $(document).ready(function(){
         $("." + selector).each(function() {
 
             if (type == 'summernote') {
-                taskArray.push($(this).code());
+                taskArray.push($(this).parent().find(".Editor-editor").html());
             } else {
                 taskArray.push($(this).val());
             }

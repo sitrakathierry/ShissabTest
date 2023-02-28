@@ -22,7 +22,33 @@ $(document).on('click','#btn-save', function(event) {
         show_info('Attention','Champs obligatoire','warning');
     }
 })
+var valDescr = $('#descr').val() ;
 
+$('#descr').Editor();
+
+$('#descr').parent().find('.Editor-editor').html(valDescr)
+
+// $('.f_designation').each(function(){
+//   $(this).Editor()
+//   // $(this).parent().find('.Editor-editor').html($(this).val())
+// })
+
+  window.onload = function()
+  {
+    var tableSelDetail = [
+        ".f_service_designation",
+        ".f_designation"
+    ]
+    for (let i = 0; i < tableSelDetail.length; i++) {
+      const element = tableSelDetail[i];
+      $(element).each(function(){
+        $(this).parent().find('.Editor-editor').html($(this).val())
+      })
+    }
+    
+  }
+
+  
 
 $(document).on('click', '#btn-delete', function(event) {
     event.preventDefault();

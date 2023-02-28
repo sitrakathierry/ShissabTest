@@ -7,6 +7,9 @@
   <script src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script>
   <script src="{{ asset('bundles/facture/js/add.js') }}"></script>
   <script src="{{ asset('bundles/facture/js/show.js') }}"></script>
+  <script>
+    
+  </script>
 {% endblock %}
 {% block contenu %}
 <div class="wrapper wrapper-content">
@@ -59,7 +62,7 @@
             </div>
 
 
-            {% if facture.client.statut == 1%}
+            {% if facture.client.statut == 1 %}
               <div class="form-group">
                 <label class="col-sm-2 control-label">Client</label>
                 <div class="col-sm-10">
@@ -79,7 +82,7 @@
             <input type="hidden" value="" name="f_nom">
 
             <div class="form-group">
-                <div class="col-sm-12">
+                <div class="col-sm-12 descr">
                     <textarea id="descr" name="descr">
                       {{ facture.descr | raw }}
                     </textarea>

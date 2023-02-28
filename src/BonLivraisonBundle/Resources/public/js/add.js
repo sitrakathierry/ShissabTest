@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    $('.description_detail').summernote();
+    $('.description_detail').Editor();
     $('.select2').select2();
 
     $(document).on('change','#bon_commande',function(event) {
@@ -16,8 +16,8 @@ $(document).ready(function(){
             success : function(res) {
                 $('#client').val( res.client_id ).trigger('change');
                 $('#table-commande-add tbody').html(res.tpl);
-                $('.designation_autre').summernote();
-                $('.description_detail').summernote();
+                $('.designation_autre').Editor();
+                $('.description_detail').Editor();
             }
         });
     })
@@ -35,8 +35,8 @@ $(document).ready(function(){
             success : function(res) {
                 $('#client').val( res.client_id ).trigger('change');
                 $('#table-commande-add tbody').html(res.tpl);
-                $('.designation_autre').summernote();
-                $('.description_detail').summernote();
+                $('.designation_autre').Editor();
+                $('.description_detail').Editor();
             }
         });
     })
@@ -63,7 +63,7 @@ $(document).ready(function(){
             		$(self).closest('tr').find('.designation').addClass('hidden');
             		$(self).closest('tr').find('.designation_autre_container').removeClass('hidden');
 
-            		$('.designation_autre').summernote();
+            		$('.designation_autre').Editor();
 
 	    		} else {
 
@@ -111,7 +111,7 @@ $(document).ready(function(){
         $("#table-commande-add tbody#principal").append(markup);
         $('#id-row').val(new_id);
 
-        $('.description_detail').summernote();
+        $('.description_detail').Editor();
 
 
     });
@@ -129,7 +129,7 @@ $(document).ready(function(){
             show_info("Attention", 'Le tableau devrait contenir au moins une ligne','error');
         }
 
-        $('.description_detail').summernote(); 
+        $('.description_detail').Editor(); 
 
     });
 
@@ -295,8 +295,8 @@ $(document).ready(function(){
         var taskArray = new Array();
         $("." + selector).each(function() {
 
-            if (type == 'summernote') {
-                taskArray.push($(this).code());
+            if (type == 'summernote') { 
+                taskArray.push($(this).parent().find('.Editor-editor').html());
             } else {
                 taskArray.push($(this).val());
             }

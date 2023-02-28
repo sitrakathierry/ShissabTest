@@ -81,7 +81,7 @@ $('.expirer').datepicker({
     language: 'fr'
 });
 
-$('.summernote').summernote()
+$('.summernote').Editor()
 
 var qrcode = new QRCode(document.getElementById("qrcode"), {
 	width : 100,
@@ -194,7 +194,7 @@ $(document).on('click', '#btn-save', function(event) {
 				code : $('#code').val(),
 				qrcode : $('#qrcode img').attr('src'),
 				nom : $('#nom').val(),
-				description : $('#description').code(),
+				description : $('#description').parent().find('.Editor-editor').html(),
 				unite : $('#unite').val(),
 				categorie: $('#categorie').val(),
 				produit_image : $('#produit_image').attr('src'),
@@ -370,7 +370,7 @@ function toArray(selector, type = 'default') {
     $(selector).each(function() {
 
         if (type == 'summernote') {
-            taskArray.push($(this).code());
+            taskArray.push($(this).parent().find('.Editor-editor').html());
         } else {
             taskArray.push($(this).val());
         }
