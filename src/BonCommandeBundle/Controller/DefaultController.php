@@ -450,8 +450,8 @@ class DefaultController extends BaseController
     public function showAction($id)
     {
         $commande = $this->getDoctrine()
-                        ->getRepository('AppBundle:BonCommande')
-                        ->find($id);
+                    ->getRepository('AppBundle:BonCommande')
+                    ->find($id);
 
         $panniers = $this->getDoctrine()
                     ->getRepository('AppBundle:PannierBon')
@@ -476,10 +476,10 @@ class DefaultController extends BaseController
                 ->getList($agence->getId());
 
         $clients = $this->getDoctrine()
-            ->getRepository('AppBundle:Client')
-            ->findBy(array(
-                'agence' => $agence
-            ));
+                ->getRepository('AppBundle:Client')
+                ->findBy(array(
+                    'agence' => $agence
+                ));
 
         $factureProduit = $this->getDoctrine()
                     ->getRepository('AppBundle:FactureProduit')

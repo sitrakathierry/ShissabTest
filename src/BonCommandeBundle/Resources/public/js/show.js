@@ -1,7 +1,24 @@
 $(document).ready(function(){
 
-	$('.designation_autre').summernote();
-	
+    $('.designation_autre').each(function(){
+        $(this).Editor()
+    })
+
+    window.onload = function()
+    {
+        var tableSelDetail = [
+            ".designation_autre",
+            ".description_detail"
+        ]
+        for (let i = 0; i < tableSelDetail.length; i++) {
+        const element = tableSelDetail[i];
+            $(element).each(function(){
+                $(this).parent().find('.Editor-editor').html($(this).val())
+            })
+        }
+        
+    }
+
 	$(document).on('change', '.type_designation', function(event) {
 		event.preventDefault();
 		
@@ -24,7 +41,7 @@ $(document).ready(function(){
             		$(self).closest('tr').find('.designation').addClass('hidden');
             		$(self).closest('tr').find('.designation_autre_container').removeClass('hidden');
 
-            		$('.designation_autre').summernote();
+            		$('.designation_autre').Editor();
 
 	    		} else {
 
@@ -92,7 +109,7 @@ $(document).ready(function(){
             show_info("Attention", 'Le tableau devrait contenir au moins une ligne','error');
         }
 
-        $('.designation_autre').summernote();
+        $('.designation_autre').Editor();
 
         calculTotalHT();
     });
@@ -388,7 +405,7 @@ $(document).ready(function(){
         $("." + selector).each(function() {
 
             if (type == 'summernote') {
-                taskArray.push($(this).code());
+                taskArray.push($(this).parent().find('.Editor-editor').html());
             } else {
                 taskArray.push($(this).val());
             }

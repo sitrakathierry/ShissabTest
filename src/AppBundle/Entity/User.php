@@ -28,7 +28,7 @@ class User extends 	FosUser
      * @ORM\Column(name="logo", type="text", nullable=true)
      */
     private $logo;
-	
+
 	function __construct()
 	{
 		parent::__construct();

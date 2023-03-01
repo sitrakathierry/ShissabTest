@@ -1,20 +1,5 @@
 $(document).ready(function(){
 
-    $('.description_detail,.designation_autre').summernote({
-        onpaste: function(e) {
-            var thisNote = $(this);
-            var update_pasted_text = function(someNote){
-                var original = someNote.code();
-                var cleaned = clean_pasted_html(original);
-                someNote.code('').html(cleaned);
-            };
-            setTimeout(function () {
-                update_pasted_text(thisNote);
-            }, 10);
-
-        }
-    });
-	
 	$(document).on('change', '.type_designation', function(event) {
 		event.preventDefault();
 		
@@ -98,23 +83,28 @@ $(document).ready(function(){
         $("#table-commande-add tbody#principal").append(markup);
         $('#id-row').val(new_id);
 
-        $('.description_detail').summernote({
-            onpaste: function(e) {
-                var thisNote = $(this);
-                var update_pasted_text = function(someNote){
-                    var original = someNote.code();
-                    var cleaned = clean_pasted_html(original);
-                    someNote.code('').html(cleaned);
-                };
-                setTimeout(function () {
-                    update_pasted_text(thisNote);
-                }, 10);
-
-            }
-        });
-
+        $('.description_detail').Edior() ;
 
     });
+
+$('.designation_autre, .description_detail').each(function(){
+  $(this).Editor()
+})
+
+window.onload = function()
+  {
+    var tableSelDetail = [
+        ".designation_autre",
+        ".description_detail"
+    ]
+    for (let i = 0; i < tableSelDetail.length; i++) {
+      const element = tableSelDetail[i];
+      $(element).each(function(){
+        $(this).parent().find('.Editor-editor').html($(this).val())
+      })
+    }
+    
+  }
 
     $(document).on('click', '.btn-remove-row', function(event) {
         event.preventDefault();
@@ -129,20 +119,7 @@ $(document).ready(function(){
             show_info("Attention", 'Le tableau devrait contenir au moins une ligne','error');
         }
 
-        $('.description_detail').summernote({
-            onpaste: function(e) {
-                var thisNote = $(this);
-                var update_pasted_text = function(someNote){
-                    var original = someNote.code();
-                    var cleaned = clean_pasted_html(original);
-                    someNote.code('').html(cleaned);
-                };
-                setTimeout(function () {
-                    update_pasted_text(thisNote);
-                }, 10);
-
-            }
-        });
+        $('.description_detail').Editor()
 
     });
 
@@ -233,7 +210,7 @@ $(document).ready(function(){
         $("." + selector).each(function() {
 
             if (type == 'summernote') {
-                taskArray.push($(this).code());
+                taskArray.push($(this).parent().find('.Editor-editor').html());
             } else {
                 taskArray.push($(this).val());
             }

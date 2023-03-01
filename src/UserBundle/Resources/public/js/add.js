@@ -60,7 +60,6 @@ $('#user-form').on('submit', function (e) {
     e.preventDefault();
     var data = $(this).serializeArray();
     data.push({name: "image_pic", value: $('.profile-pic').attr('src')});
-
     $.ajax({
     	url : Routing.generate('user_save'),
     	type: 'POST',

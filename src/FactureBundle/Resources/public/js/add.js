@@ -2,7 +2,7 @@ function selToArray(selector, type = "default") {
   var taskArray = new Array();
   $(selector).each(function () {
     if (type == "summernote") { 
-      taskArray.push($(this).code());
+      taskArray.push($(this).parent().find('.Editor-editor').html());
     } else {
       taskArray.push($(this).val());
     }

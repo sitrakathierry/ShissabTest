@@ -10,7 +10,7 @@ $(document).ready(function(){
 
         var url = Routing.generate('bon_livraison_bon_commande', { bonCommande : bon_commande });
 
-        $.ajax({
+        $.ajax({ 
             url : url,
             type : 'GET',
             success : function(res) {
@@ -301,7 +301,7 @@ $(document).ready(function(){
                 taskArray.push($(this).val());
             }
 
-        });
+        });  
         return taskArray;
     }
 

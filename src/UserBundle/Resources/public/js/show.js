@@ -60,7 +60,7 @@ $('#user-form').on('submit', function (e) {
     e.preventDefault();
     var data = $(this).serializeArray();
     data.push({name: "image_pic", value: $('.profile-pic').attr('src')});
-
+    // console.log(data)
     $.ajax({
     	url : Routing.generate('user_save'),
     	type: 'POST',
@@ -68,9 +68,11 @@ $('#user-form').on('submit', function (e) {
     	success: function(res) {
             if(res == -1)
     		    show_info('Erreur','Capacité compte atteint','error');
+            else if(res == -5)
+                show_info('Erreur','Erreur de modification de mot de passe','error');
             else{
-                show_info('Succès', 'Utilisateur enregistré');
-                location.reload();
+                show_success('Succès', 'Utilisateur enregistré');
+                // location.reload();
             }    		
     	}
     })
