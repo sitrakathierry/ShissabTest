@@ -233,12 +233,23 @@ class DechargeController extends Controller
 
     public function saveDesignationAction(Request $request)
     {
+
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:UserAgence')
+            ->findOneBy(array(
+                'user' => $user
+            ));
+        $agence = $userAgence->getAgence();
+        $agenceId = $agence->getId();
+
         $em = $this->getDoctrine()->getManager();
         $designation = $request->request->get('designation');
 
         $table_design = new DesignationDepense();
 
         $table_design->setNom($designation);
+        $table_design->setAgence($agenceId);
         $table_design->setCreatedAt(new \DateTime('now', new \DateTimeZone("+3")));
         $table_design->setUpdatedAt(new \DateTime('now', new \DateTimeZone("+3")));
 
@@ -361,9 +372,20 @@ class DechargeController extends Controller
 
     public function creationDesignationAction()
     {
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:UserAgence')
+            ->findOneBy(array(
+                'user' => $user
+            ));
+        $agence = $userAgence->getAgence();
+        $agenceId = $agence->getId();
+
         $listDesign = $this->getDoctrine()
             ->getRepository('AppBundle:DesignationDepense')
-            ->findAll();
+            ->findBy(array(
+                'agence' => $agenceId
+            ));
 
         return $this->render('ComptabiliteBundle:Decharge:designation.html.twig', array(
             "listDesign" => $listDesign

@@ -42,6 +42,36 @@ class DesignationDepense
      */
     private $updatedAt;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="agence", type="integer", nullable=true)
+     */
+    private $agence;
+
+    /**
+     * Set agence
+     *
+     * @param integer $agence
+     *
+     * @return Decharge
+     */
+    public function setAgence($agence)
+    {
+        $this->agence = $agence;
+
+        return $this;
+    }
+
+    /**
+     * Get agence
+     *
+     * @return integer
+     */
+    public function getAgence()
+    {
+        return $this->agence;
+    }
 
     /**
      * Get id
