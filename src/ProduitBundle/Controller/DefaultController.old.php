@@ -250,7 +250,7 @@ class DefaultController extends Controller
         $a_rechercher = $request->request->get('a_rechercher');
         $categorie = $request->request->get('categorie');
 
-        $produits  = $this->getDoctrine()
+        $produits  = $this->getDoctrine() 
                         ->getRepository('AppBundle:Produit')
                         ->getList($agence,
                             $recherche_par,

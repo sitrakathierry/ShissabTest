@@ -35,30 +35,10 @@ function accompagnements() {
 
 $(document).on("click", "#btn-save", function (event) {
   event.preventDefault();
-  // toastr.options = {
-  //   "closeButton": false,
-  //   "debug": false,
-  //   "newestOnTop": false,
-  //   "progressBar": true,
-  //   "positionClass": "toast-top-right",
-  //   "preventDuplicates": false,
-  //   "onclick": null,
-  //   "showDuration": "300",
-  //   "hideDuration": "1000",
-  //   "timeOut": "5000",
-  //   "extendedTimeOut": "1000",
-  //   "showEasing": "swing",
-  //   "hideEasing": "linear",
-  //   "showMethod": "fadeIn",
-  //   "hideMethod": "fadeOut"
-  // }
-  // toastr["error"]("Have fun storming the castle!") ;
-
-  
-
   var enregistre = true;
 
   var f_model = $("#f_model").val();
+ 
   if (f_model == "") {
     enregistre = false;
     swal({
@@ -113,94 +93,42 @@ $(document).on("click", "#btn-save", function (event) {
 
   var vide = false;
   if (enregistre) {
-    if (f_model == 1) {
-      // var passe = false;
-      // // MISE A JOUR DE CHAQUE LIGNE
+    if (f_model == 1) { 
+      var negatif = false ;
+        var elemProduit = [
+          ".f_qte"
+        ]
 
-      // $(".f_libre").each(function () {
-      //   // MISE A JOUR DE LA DESINGATION
+        var val_elem = [
+          "Quantité"
+        ]
+        var indice = 0
+        for (let i = 0; i < elemProduit.length; i++) {
+          const element = elemProduit[i];
+          $(element).each(function(){
+            if($(this).val() < 0)
+            {
+                negatif = true ;
+                indice = i
+                return 
+            }
+          })
+          if(negatif)
+          {
+            enregistre = false
+            break
+          }
+        }
 
-      //   if ($(this).val() == 0) {
-      //     $(".f_produit ").each(function () {
-      //         if ($(this).val() == "") {
-      //           enregistre = false;
-      //           vide = true;
-      //           return;
-      //        }
-      //     });
+        if(negatif)
+        {
+            swal({
+              type: "error",
+              title: val_elem[indice] + " Négatif",
+              text: "Sélectionnez une " + val_elem[indice]  + " !",
+            });
+        }
 
-      //     if (vide) {
-      //       passe = true;
-      //     }
-      //   }
-
-      //   if (!passe) {
-      //     // alert("PAssage ")
-      //     var val_num = [".f_qte", ".f_prix", ".f_remise_ligne"];
-
-      //     var val_descri = ["Quantité", "Prix", "Remise"];
-
-      //     var negatif = false;
-      //     for (let i = 0; i < val_num.length; i++) {
-      //       const element = val_num[i];
-      //       $(element).each(function () {
-      //         if (i != 2) {
-      //           if ($(this).val() == "") {
-      //             val_elem = val_descri[i];
-      //             vide = true;
-      //             return;
-      //           } else if ($(this).val() < 0) {
-      //             val_elem = val_descri[i];
-      //             vide = false;
-      //             negatif = true;
-      //             return;
-      //           }
-      //         } else {
-      //           if ($(this).val() < 0) {
-      //             val_elem = val_descri[i];
-      //             vide = false;
-      //             negatif = true;
-      //             return;
-      //           }
-      //         }
-      //       });
-
-      //       if (negatif || vide) {
-      //         break;
-      //       }
-      //     }
-      //     if (vide) {
-      //       enregistre = false;
-      //       swal({
-      //         type: "warning",
-      //         title: val_elem + " vide",
-      //         text: "Sélectionnez un " + val_elem + " !",
-      //       });
-      //       return;
-      //     } else if (negatif) {
-      //       enregistre = false;
-      //       swal({
-      //         type: "error",
-      //         title: val_elem + " Négatif",
-      //         text: "Corriger le champ " + val_elem + " !",
-      //       });
-      //       return;
-      //     }
-      //   } else {
-      //     enregistre = false;
-      //     swal({
-      //       type: "warning",
-      //       title: "Désignation vide",
-      //       text: "Sélectionnez un Désignation !",
-      //     });
-      //     return;
-      //   }
-
-      //   if (!enregistre) {
-      //     return;
-      //   }
-      // });
-      enregistre = true ;
     } else if (f_model == 2) {
       $(".f_service_libre").each(function () {
         if ($(this).val() == 0) {
@@ -497,6 +425,16 @@ $(document).on("click", "#btn-save", function (event) {
           disabled_confirm(res);
           var descr = $('.descr').find(".Editor-editor").html()
           $('#descr').val(descr)
+          var tableSelDetail = [
+                ".f_service_designation",
+                ".f_designation"
+            ]
+            for (let i = 0; i < tableSelDetail.length; i++) {
+              const element = tableSelDetail[i];
+              $(element).each(function(){
+                $(this).val($(this).parent().find('.Editor-editor').html())
+              })
+            }
           $("#form-facture").submit();
         }
       }
@@ -506,6 +444,56 @@ $(document).on("click", "#btn-save", function (event) {
 
 $("#descr").Editor();
 
+$('.f_produit').change(function(){
+  var type = $("#f_type").val();
+
+  if(type == 1)
+  {
+    var reference = "" ;
+    var self = $(this) ;
+    var _tr = $(this).closest('tr');
+    var url = Routing.generate("prix_produit_affiche")
+    $.ajax({
+        url: url, 
+        type: 'POST',
+        data: {idProduit:self.val()},
+        success: function(res) {
+            if(res.length > 0)
+            {
+                if(res.length > 1)
+                {
+                    var options = '<option value=""></option>' ;
+                    for (let i = 0; i < res.length; i++) {
+                        const element = res[i];
+                        if(element.indice != "")
+                        {
+                            reference = element.indice
+                        }
+        
+                        options += '<option value="'+element.prix_vente+'" data-variation="'+element.id+'" >'+element.prix_vente+' | '+reference+'</option>' ;
+                    }
+                }
+                else
+                {
+                    self.closest('tr').find('.f_prod_variation').val(res[0].id) ;
+                    var options = '<option value="'+res[0].prix_vente+'" data-variation="'+res[0].id+'" >'+res[0].prix_vente+' | '+reference+'</option>' ;
+                }
+                _tr.find(".f_prix").empty().append(options) ;
+                
+            }
+            else
+            {
+                _tr.find(".f_prix").empty() ;
+                swal({
+                    type: 'info',
+                    title: "Rupture de stock",
+                    text:  "Veullez faire un approvisionnement"
+                })
+            }
+        }
+    })
+  }
+})
 
 $(document).on("change", "#f_model", function (event) {
   event.preventDefault();

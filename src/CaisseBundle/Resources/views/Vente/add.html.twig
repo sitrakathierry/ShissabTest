@@ -52,7 +52,6 @@
                       <div class="col-sm-12">
                       	<select class="form-control select2 cl_produit" name="produit[]">
                       		<option></option>
-                          <option></option>
                       		{% for produit in produits %}
                             {% if produit.stock > 0 %}
                         			<option
@@ -89,7 +88,7 @@
                       <div class="col-sm-12">
                       <select name="prix[]" class="cl_prix form-control" id="cl_prix">
                         <option value=""></option>
-                        </select>
+                      </select>
                       </div>
                     </div>
                   </td>

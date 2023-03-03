@@ -137,27 +137,12 @@ $(document).ready(function(){
         $("#table-fact-add tbody#principal").append(markup);
         $('#id-row').val(new_id);
         $('.f_designation').Editor();
-        $('.f_designation').each(function(){
-            var self = $(this)
-            $(this).parent().find('.Editor-editor').mouseout(function()
-            {
-                self.val($(this).html())
-            })
-        })
         $('.fact-row row-'+new_id).find(".select2").select2("destroy");
         $("select.select2").select2();
 
         $('#table-fact-add tbody tr:last').find('.f_prix').val()
 
     });
-
-    $('.f_designation').each(function(){
-            var self = $(this)
-            $(this).parent().find('.Editor-editor').mouseout(function()
-            {
-                self.val($(this).html())
-            })
-        })
 
     $(document).on('click', '.btn-remove-row', function(event) {
         event.preventDefault();
@@ -318,7 +303,45 @@ $(document).ready(function(){
 
         calculMontant()
 
+        var stockProduit = $(this).closest('tr').find('.f_produit').find('option:selected').data('stock')
+        var codeProduit = $(this).closest('tr').find('.f_produit').find('option:selected').data('code')
+        // console.log(stockProduit)
+        var type = $("#f_type").val();
+        if(type == 1)
+        {
+            if(qte != '')
+            {
+                if(stockProduit == 0)
+                {
+                    swal({
+                    type: "warning",
+                    title: "Code Produit : "+codeProduit+" | Stock à 0",
+                    text: "Le produit "+codeProduit+" est en rupture de stock. Veuiller faire approvisionnement",
+                    });
 
+                    $('#btn-save').attr('disabled','')
+                }
+                else if(qte > stockProduit)
+                {
+                    swal({
+                    type: "warning",
+                    title: "La quantité dépasse le Stock",
+                    text: "La quantité du Produit "+codeProduit+" ne doit pas dépasser de "+stockProduit,
+                    });
+
+                    $('#btn-save').attr('disabled','')
+                }
+                else
+                {
+                    $('#btn-save').removeAttr('disabled')
+                }
+            }
+            else
+            {
+                $('#btn-save').removeAttr('disabled')
+            }
+        }
+        
     })
 
     var montant = 0;

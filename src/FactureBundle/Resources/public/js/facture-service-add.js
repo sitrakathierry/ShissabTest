@@ -55,13 +55,6 @@ $(document).ready(function(){
         })
     })
     
-    $('.f_service_designation').each(function(){
-            var self = $(this)
-            $(this).parent().find('.Editor-editor').mouseout(function()
-            {
-                self.val($(this).html())
-            })
-        })
     $(document).on('change','.f_service_libre',function(event) {
         var libre = $(this).children("option:selected").val();
 
@@ -114,18 +107,7 @@ $(document).ready(function(){
         var markup = '<tr class="fact-row row-'+ new_id +'">' + a + b + c + d + e + f + g + h + '</tr>';
         $("#table-service-add tbody#principal-service").append(markup);
         $('#id-row-service').val(new_id);
-
-
         $('.f_service_designation').Editor() ;
-
-        $('.f_service_designation').each(function(){
-            var self = $(this)
-            self.parent().find('.Editor-editor').mouseout(function()
-            {
-                self.val($(this).html())
-            })
-        })
-
         $('.fact-row row-'+new_id).find(".select2").select2("destroy");
         $("select.select2").select2();
 

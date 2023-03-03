@@ -70,7 +70,7 @@ $('#user-form').on('submit', function (e) {
     		    show_info('Erreur','Capacité compte atteint','error');
             else if(res == -5)
                 show_info('Erreur','Erreur de modification de mot de passe','error');
-            else{
+            else{ 
                 show_success('Succès', 'Utilisateur enregistré');
                 // location.reload();
             }    		

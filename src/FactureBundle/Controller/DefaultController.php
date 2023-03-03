@@ -39,10 +39,30 @@ class DefaultController extends BaseController
             ->findBy(array(
                 'agence' => $agence
             ));
-
+ 
         $variations = $this->getDoctrine()
                 ->getRepository('AppBundle:VariationProduit')
                 ->list($agence->getId());
+
+
+        $produits  = $this->getDoctrine()
+            ->getRepository('AppBundle:Produit')
+            ->getList($agence->getId(),'','',0);
+
+        // $variations = $this->getDoctrine()
+        // 		->getRepository('AppBundle:VariationProduit')
+        //         ->list($agence->getId());
+        for ($i = 0; $i < count($produits); $i++) {
+            $totalStock = $this->getDoctrine()
+                ->getRepository('AppBundle:VariationProduit')
+                ->getTotalVariationProduit($agence->getId(), $produits[$i]["id"]);
+            $produits[$i]["stock"] = number_format($totalStock["stockG"], 0, ".", " ");
+
+            if (empty($produits[$i]["stock"])) {
+                $produits[$i]["stock"] = 0;
+            }
+        }
+        $variations = $produits ;
 
         $services = $this->getDoctrine()
             ->getRepository('AppBundle:Service')

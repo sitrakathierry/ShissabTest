@@ -12,7 +12,6 @@ class VenteController extends Controller
 {
 	public function addAction()
     {
-
     	$user = $this->getUser();
         $userAgence = $this->getDoctrine()
                     ->getRepository('AppBundle:UserAgence')

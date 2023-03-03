@@ -231,12 +231,11 @@ comptabilite_decharge_valide_export:
     defaults: { _controller: ComptabiliteBundle:Decharge:exportValide }
     methods:  [POST]
     options:
-        expose: true
+        expose: true 
 
 comptabilite_charger_fournisseur:
     path:     /comptabilite/charger/fournisseur
     defaults: { _controller: ComptabiliteBundle:Depense:chargerFournisseur }
-    methods:  [POST]
     options:
         expose: true
 

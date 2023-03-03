@@ -124,6 +124,7 @@ $(document).ready(function(){
         }
 
         calculTotal();
+        
         var reference = "" ;
         var url = Routing.generate("prix_produit_affiche")
         $.ajax({

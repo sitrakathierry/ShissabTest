@@ -1,11 +1,11 @@
-$('.summernote').summernote()
+$('.summernote').Editor()
 
 $(document).on('click', '#btn-save', function(event) {
 	event.preventDefault();
 
 	var data = {
 		nom : $('#nom').val(),
-		description : $('#description').code(),
+		description : $('#description').parent().find('.Editor-editor').html(),
 		statut : 1,
 	};
 

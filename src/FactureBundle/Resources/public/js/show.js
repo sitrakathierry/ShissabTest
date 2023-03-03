@@ -16,6 +16,18 @@ $(document).on('click','#btn-save', function(event) {
         },
         function () {
             disabled_confirm(true);
+            var descr = $('.descr').find(".Editor-editor").html()
+            $('#descr').val(descr)
+            var tableSelDetail = [
+                ".f_service_designation",
+                ".f_designation"
+            ]
+            for (let i = 0; i < tableSelDetail.length; i++) {
+              const element = tableSelDetail[i];
+              $(element).each(function(){
+                $(this).val($(this).parent().find('.Editor-editor').html())
+              })
+            }
             $('#form-facture').submit();
         });
     } else {
