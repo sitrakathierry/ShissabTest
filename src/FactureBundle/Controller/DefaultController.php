@@ -40,18 +40,16 @@ class DefaultController extends BaseController
                 'agence' => $agence
             ));
  
-        $variations = $this->getDoctrine()
-                ->getRepository('AppBundle:VariationProduit')
-                ->list($agence->getId());
+        // $variations = $this->getDoctrine()
+        //         ->getRepository('AppBundle:VariationProduit')
+        //         ->list($agence->getId());
 
 
         $produits  = $this->getDoctrine()
             ->getRepository('AppBundle:Produit')
             ->getList($agence->getId(),'','',0);
 
-        // $variations = $this->getDoctrine()
-        // 		->getRepository('AppBundle:VariationProduit')
-        //         ->list($agence->getId());
+        
         for ($i = 0; $i < count($produits); $i++) {
             $totalStock = $this->getDoctrine()
                 ->getRepository('AppBundle:VariationProduit')
@@ -145,12 +143,54 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function listVariationAction(Request $request)
+    {
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:UserAgence')
+            ->findOneBy(array(
+                'user' => $user
+            ));
+        $agence = $userAgence->getAgence();
+        $agenceId = $agence->getId();
+
+        $type = $request->request->get('type');
+
+        if($type == 1)
+        {
+            $variations = $this->getDoctrine()
+                ->getRepository('AppBundle:VariationProduit')
+                ->list($agenceId);
+        }
+        else if($type == 2)
+        {
+            $produits  = $this->getDoctrine()
+            ->getRepository('AppBundle:Produit')
+            ->getList($agence->getId(), '', '', 0);
+
+
+            for ($i = 0; $i < count($produits); $i++) {
+                $totalStock = $this->getDoctrine()
+                    ->getRepository('AppBundle:VariationProduit')
+                    ->getTotalVariationProduit($agence->getId(), $produits[$i]["id"]);
+                $produits[$i]["stock"] = number_format($totalStock["stockG"], 0, ".", " ");
+
+                if (empty($produits[$i]["stock"])) {
+                    $produits[$i]["stock"] = 0;
+                }
+            }
+            $variations = $produits;
+        }
+
+       
+
+        return new JsonResponse($variations);
+    }
+
+
     public function saveAction(Request $request)
     {
         $f_libre = $request->request->get('f_libre');
-
-        var_dump($f_libre);
-        die();
 
         $f_type = $request->request->get('f_type');
         $f_client = $request->request->get('f_client');

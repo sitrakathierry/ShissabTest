@@ -142,9 +142,10 @@ class FactureProduitController extends BaseController
         if (!empty($f_produit)) {
             foreach ($f_produit as $key => $value) {
                 $detail = new FactureProduitDetails();
-
+                if(empty($f_produit[$key]))
+                    continue ;
                 $libre = $f_libre[$key];
-                $designation = ($f_designation) ? $f_designation[$key] : '';
+                $designation = (isset($f_designation[$key])) ? $f_designation[$key] : '';
                 $prix = $f_prix[$key];
                 $qte = $f_qte[$key];
                 $montant = $f_montant[$key];

@@ -1,9 +1,24 @@
+<style>
+  .f_produit 
+  {
+		width: 100% !important;
+	}
+  .select2
+  {
+    width: 300px !important;
+  }
+
+</style>
+
+
 <div class="hr-line-dashed"></div>
 <table class="table table-bordered mw-1500" id="table-fact-add">
   <thead class="thead-dark">
     <tr>
       <th scope="col">TYPE DESIGNATION</th>
-      <th scope="col">DESIGNATION</th>
+<th scope="col" style="width:300px ;">DESIGNATION</th>
+
+
       <th scope="col-sm-1">QTE</th>
       <th scope="col">PRIX ({{ deviseEntrepot.symbole }}) </th>
       <th scope="col">REMISE</th>
@@ -27,7 +42,7 @@
         <div class="form-group">
           <div class="col-sm-12">
             {# <input type="text" class="form-control" name="f_designation[]" > #}
-            <select class="form-control select2 f_produit" name="f_code_produit[]">
+            <select class="form-control f_produit" name="f_code_produit[]">
               <option></option>
               {% for variation in variations %}
                   <option value="{{ variation.id }}" data-stock="{{ variation.stock }}" data-code="{{ variation.code_produit }}">
@@ -42,20 +57,6 @@
                   </option>
               {% endfor %}
             </select>
-
-            {# <select class="form-control select2 f_produit" name="f_produit[]">
-              <option></option>
-              {% for variation in variations %} 
-                <option
-                  value="{{ variation.id }}"
-                  data-prixvente="{{ variation.prix_vente }}"
-                  data-stock="{{ variation.stock }}"
-                >
-                  {{ variation.code_produit }}/{{ variation.indice }} |
-                  {{ variation.nom }} - {{ variation.prix_vente }} {{ deviseEntrepot.symbole }}
-                </option>
-              {% endfor %}
-            </select> #}
             <div class="f_designation_container hidden">
               <textarea class="f_designation" name="f_designation[]">
               </textarea>
@@ -67,7 +68,6 @@
         <div class="form-group">
           <div class="col-sm-12">
             <input type="number" class="form-control f_qte" name="f_qte[]" >
-            <input type="hidden" class="f_prod_variation" name="f_produit[]">
           </div>
         </div>
       </td>

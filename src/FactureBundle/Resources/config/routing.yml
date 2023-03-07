@@ -20,6 +20,13 @@ facture_show:
         expose: true
     methods: [GET]
 
+facture_produit_variation_list:
+    path:    /facture/produit/variation/list
+    defaults: { _controller: FactureBundle:Default:listVariation }
+    options:
+        expose: true
+    
+
 facture_delete:
     path:     /facture/delete/{id}
     defaults: { _controller: FactureBundle:Default:delete }
