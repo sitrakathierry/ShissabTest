@@ -203,12 +203,12 @@ var parent = null
                 parent = $('.f_produit').parent()
 
               parent.empty().append(`
-                <select class="form-control f_produit" name="f_produit[]">
+                <select class="form-control select2 f_produit" name="f_produit[]">
                   <option></option>
                   `+options+`
                 </select> 
                 `)
-
+               $('.select2').select2();
               $('.f_prix').parent().empty().append(`
                   <input type="number" class="f_prix form-control" name="f_prix[]">
                 `)
@@ -245,11 +245,12 @@ var parent = null
                 parent = $('.f_produit').parent()
 
               parent.empty().append(`
-                <select class="form-control f_produit" name="f_code_produit[]">
+                <select class="form-control select2 f_produit" name="f_code_produit[]">
                 <option></option>
                 `+options+`
                 </select>
                 `)
+                 $('.select2').select2();
               
               $('.f_prix').parent().empty().append(`
                 <input type="hidden" class="f_prod_variation" name="f_produit[]">

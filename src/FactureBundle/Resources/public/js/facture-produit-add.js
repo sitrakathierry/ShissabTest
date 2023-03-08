@@ -39,7 +39,7 @@ $(document).ready(function(){
                     }
 
                     var content = `
-                    <select class="form-control f_produit" name="f_produit[]" style="min-width: 250px ;">
+                    <select class="form-control select2 f_produit" name="f_produit[]" style="min-width: 250px ;">
                         `+options+`
                     </select>
                     `
@@ -90,9 +90,9 @@ $(document).ready(function(){
 
     // $('#descr').Editor();
 
-    // $('#f_client').select2();
+    $('#f_client').select2();
         
-    // $('.select2').select2();
+    $('.select2').select2();
 
     $('#data_1 .input-group.date').datepicker({
         todayBtn: "linked",
@@ -122,7 +122,7 @@ $(document).ready(function(){
              b = `<td>
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <select class="form-control f_produit" name="f_produit[]">
+                            <select class="form-control select2 f_produit" name="f_produit[]">
                             `+ produits +`
                             </select>
                             <div class="f_designation_container hidden">
@@ -138,7 +138,7 @@ $(document).ready(function(){
              b = `<td>
                     <div class="form-group">
                         <div class="col-sm-12">
-                        <select class="form-control f_produit" name="f_code_produit[]">
+                        <select class="form-control select2 f_produit" name="f_code_produit[]">
                             `+ produits +`
                         </select>
                         <div class="f_designation_container hidden">
@@ -175,7 +175,7 @@ $(document).ready(function(){
         $('#id-row').val(new_id);
         $('.f_designation').Editor();
         // $('.fact-row row-'+new_id).find(".select2").select2("destroy");
-        // $("select.select2").select2();
+        $("select.select2").select2();
         chargeProduit()
         changePrix()
         $('#table-fact-add tbody tr:last').find('.f_prix').val()

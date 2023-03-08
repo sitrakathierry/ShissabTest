@@ -42,7 +42,7 @@
         <div class="form-group">
           <div class="col-sm-12">
             {# <input type="text" class="form-control" name="f_designation[]" > #}
-            <select class="form-control f_produit" name="f_code_produit[]">
+            <select class="form-control select2 f_produit" name="f_code_produit[]">
               <option></option>
               {% for variation in variations %}
                   <option value="{{ variation.id }}" data-stock="{{ variation.stock }}" data-code="{{ variation.code_produit }}">

@@ -5,9 +5,20 @@
     /*.select2-container {
           width: 100% !important;
       }*/
+      .ma_date
+      {
+          line-height: 24px !important;
+          margin-top: 10px ;
+      }
 
       .select2-container--bootstrap4 .select2-selection--single {
           height: calc(3rem + 3.5px) !important;
+      }
+
+      .mtn_depot
+      {
+          margin-top: 5px !important ;
+          width: 250px ;
       }
   </style>
 {% endblock  %}
@@ -20,6 +31,10 @@
   <script src="{{ asset('bundles/facture/js/facture-produitservice-add.js') }}"></script>
   <script src="{{ asset('bundles/facture/js/facture-hebergement-add.js') }}"></script>
   <script src="{{ asset('bundles/facture/js/facture-restaurant-add.js') }}"></script>
+  <style>
+
+
+  </style>
 {% endblock %}
 {% block contenu %}
 <div class="wrapper wrapper-content">
@@ -146,6 +161,51 @@
                 
               </div>
             </div>
+
+            <div class="form-group date_depot_final">
+              <label class="col-sm-2 control-label">DATE PREVU COMMANDE</label>
+              <div class="col-sm-4">
+                <input type="date" class="form-control ma_date input_date_depot_final m-b" >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-12">
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                        <th>Date dépôt</th>
+                        <th>Montant à déposer</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>
+                            <input type="date" class="form-control ma_date">
+                          </td>
+                          <td>
+                            <input type="number" class="form-control mtn_depot">
+                          </td>
+                          <td class="text-right">
+                              <button class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+                          </td>
+                      </tr>
+                  </tbody>
+                  <tfoot>
+                      <tr>
+                        <td colspan="3" class="text-right">
+                            <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-sm btn-success"><i class="fa fa-plus"></i></button>
+                        </td>
+                      </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+
 
             <div class="form-group">
                 <div class="col-sm-12 descr">

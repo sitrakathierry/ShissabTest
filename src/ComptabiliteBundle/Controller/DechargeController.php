@@ -39,7 +39,9 @@ class DechargeController extends Controller
 
         $designations = $this->getDoctrine()
             ->getRepository('AppBundle:DesignationDepense')
-            ->findAll();
+            ->findBy(array(
+                'agence' => $agence->getId()
+            ));
 
         return $this->render('ComptabiliteBundle:Decharge:add.html.twig',array(
             'agence' => $agence,

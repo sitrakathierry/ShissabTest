@@ -15,7 +15,7 @@ $(document).ready(function() {
 		$('#lettre').val(lettre + ' ' + devise);
 	})
 
-	$('.summernote').summernote();
+	$('.summernote').Editor();
 
 	$(document).on('click','#btn-save',function(event) {
 		event.preventDefault();
@@ -57,7 +57,7 @@ $(document).ready(function() {
 		{
 			var cheque = $('#cheque').val();
 			var montant = $('#montant').val();
-			var raison = $('#raison').code();
+			var raison = $('#raison').parent().find('.Editor-editor').html();
 			var date = $('#date').val();
 			var lettre = $('#lettre').val();
 			var devise = $('#devise').val();
