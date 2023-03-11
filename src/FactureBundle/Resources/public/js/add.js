@@ -49,7 +49,7 @@ function accompagnements() {
         var f_remise_type = $('#f_remise_type').val();
 
         if (f_remise_type == 0) {
-            remise = (montant * pourcentage) / 100;
+            remise = (montant * pourcentage) / 100 ; 
         } else {
             remise = pourcentage;
         }
@@ -143,7 +143,7 @@ function accompagnements() {
             var prixvente = $(this).find("option:selected").attr('data-prixvente');
             var quantite = $(this).closest('tr').find('.f_qte').val();
 
-            console.log(prixvente)
+            // console.log(prixvente)
 
             priceParent.empty().append(`
                 <input type="number" class="f_prix form-control" name="f_prix[]" value="`+prixvente+`">
@@ -178,8 +178,13 @@ var parent = null
     if(f_model == 1)
     {
       var url = Routing.generate('facture_produit_variation_list')
-      if($(this).val() == 1)
+      if($(this).val() == 1 || $(this).val() == 3)
       {
+        $('#f_is_credit').empty().append(`
+              <option></option>
+              <option value="3">SOUS ACOMPTE</option>
+            `)
+
         $.ajax({
           url: url,
           type:'POST',
@@ -220,6 +225,15 @@ var parent = null
       }
       else
       {
+        $('#f_is_credit').empty().append(`
+                <option value="0">ESPECE</option>
+                <option value="1">SOUS CREDIT</option>
+                <option value="2">CARTE BANCAIRE</option>
+            `)
+
+          $('.date_depot_final').remove()
+          $('.table_calendrier_depot').remove()
+
         $.ajax({
           url: url,
           type:'POST',
@@ -266,12 +280,112 @@ var parent = null
     }
   })
 
+  function ajouterLigneDepot()
+  {
+      $('.add_row_depot').click(function(e){
+        e.preventDefault()
+          $('.calendar_depot').append(`
+              <tr>
+                  <td>
+                    <input type="date" class="form-control ma_date date_depot" name="date_depot[]">
+                  </td>
+                  <td>
+                    <input type="number" class="form-control mtn_depot montant_depot" name="montant_depot[]">
+                  </td>
+                  <td class="text-right">
+                      <button type="button" class="btn btn-danger btn-sm remove_row_depot"><i class="fa fa-times"></i></button>
+                  </td>
+              </tr>
+          `)
+          enleverLigneDepot()
+      })
+  }
+
+  function enleverLigneDepot()
+  {
+      $('.remove_row_depot').click(function(e){
+        e.preventDefault()
+        $(this).closest('tr').remove()
+      })
+  }
+
+  function supprimeToutDepot()
+  {
+      $('.remove_all_depot').click(function(e){
+        e.preventDefault()
+        $('.calendar_depot').empty()
+      })
+  }
+
+  $('#f_is_credit').change(function(){
+            var elementsAdd = `
+          <div class="form-group date_depot_final">
+              <label class="col-sm-2 control-label">DATE PREVU LIVRAISON COMMANDE</label>
+              <div class="col-sm-4">
+                <input type="date" class="form-control ma_date input_date_depot_final m-b" name="date_livraison_commande">
+              </div>
+            </div>
+
+            <div class="form-group table_calendrier_depot">
+              <div class="col-sm-12">
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                        <th>Date dépôt</th>
+                        <th>Montant à déposer</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="calendar_depot">
+                      <tr>
+                          <td>
+                            <input type="date" class="form-control ma_date date_depot" name="date_depot[]">
+                          </td>
+                          <td>
+                            <input type="number" class="form-control mtn_depot montant_depot" name="montant_depot[]">
+                          </td>
+                          <td class="text-right">
+                              <button type="button"  class="btn btn-danger btn-sm remove_row_depot"><i class="fa fa-times"></i></button>
+                          </td>
+                      </tr>
+                  </tbody>
+                  <tfoot>
+                      <tr>
+                        <td colspan="3" class="text-right">
+                            <button type="button" class="btn btn-sm btn-danger remove_all_depot"><i class="fa fa-trash"></i></button>
+                            <button type="button" class="btn btn-sm btn-success add_row_depot"><i class="fa fa-plus"></i></button>
+                        </td>
+                      </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        `
+        if($(this).val() == 3)
+        {
+            $(elementsAdd).insertAfter($('.client_mac'))
+            ajouterLigneDepot()
+            enleverLigneDepot()
+            supprimeToutDepot()
+        }
+        else
+        {
+          $('.date_depot_final').remove()
+          $('.table_calendrier_depot').remove()
+        }
+        
+  })
+
 $(document).on("click", "#btn-save", function (event) {
   event.preventDefault();
   var enregistre = true;
 
   var f_model = $("#f_model").val();
- 
+  var f_type = $("#f_type").val();
+  var f_client = $("#f_client").val();
+
   if (f_model == "") {
     enregistre = false;
     swal({
@@ -280,9 +394,6 @@ $(document).on("click", "#btn-save", function (event) {
       text: "Sélectionnez un modèle !",
     });
   } else {
-    var f_type = $("#f_type").val();
-    var f_client = $("#f_client").val();
-
     if (f_model == 1) {
       var recu = true;
 
@@ -654,7 +765,6 @@ $(document).on("click", "#btn-save", function (event) {
       },
       function (res) {
         if (res) {
-          show_info("Succès", "Facture enregistré avec succès", "success");
           disabled_confirm(res);
           var descr = $('.descr').find(".Editor-editor").html()
           $('#descr').val(descr)
@@ -680,8 +790,39 @@ $(document).on("click", "#btn-save", function (event) {
             //       $('<input type="hidden" class="f_prod_variation" name="f_produit[]" value="'+idvariation+'">').insertAfter(tr.find('.f_qte'))
             //     })
             // }
+            depasse = false
+            codeProduit = ''
+            if(f_model == 1)
+            {
+              if(f_type == 2 && f_recu == "")
+              {
+                
+                  $('.f_produit').each(function(){ 
+                    var stock = parseInt($(this).find('option:selected').attr('data-stock'))
+                    var qte = parseInt($(this).closest('tr').find('.f_qte').val())
+                    var codeP = $(this).find('option:selected').text()
+                    // console.log(qte)
+                    if(qte > stock)
+                    {
+                        // console.log('mandalo eto io zao')
+                        depasse = true ;
+                        codeProduit = codeP
+                        return 
+                    }
 
-          $("#form-facture").submit();
+                  })
+              }
+            }
+            if(!depasse)
+            {
+              show_info("Succès", "Facture enregistré avec succès", "success");
+              $("#form-facture").submit();
+            }
+            else
+            {
+              show_info('Stock insuffisant','La quantité dépasse le stock pour le Produit '+codeProduit,'error')
+            }
+            
         }
       }
     );

@@ -41,6 +41,15 @@ class Facture
     private $date = '';
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_livr_c", type="date", nullable=true)
+     */
+    private $dateLivrCom = '';
+
+    
+
+    /**
      * @var string
      *
      * @ORM\Column(name="lieu", type="text", nullable=true)
@@ -275,6 +284,31 @@ class Facture
     public function getDate()
     {
         return $this->date;
+    }
+
+
+    /**
+     * Set dateLivrCom
+     *
+     * @param \DateTime $dateLivrCom
+     *
+     * @return Facture
+     */
+    public function setDateLivrCom($dateLivrCom)
+    {
+        $this->dateLivrCom = $dateLivrCom;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDateLivrCom()
+    {
+        return $this->dateLivrCom;
     }
 
     /**

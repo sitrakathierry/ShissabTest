@@ -1,24 +1,27 @@
-$('#texte_haut').summernote({
-  	toolbar: [
-	    ['style', ['style']],
-	    ['fontsize', ['fontsize']],
-	    ['font', ['bold', 'italic', 'underline', 'clear']],
-	    ['fontname', ['fontname']],
-	    ['color', ['color']],
-	    ['para', ['ul', 'ol', 'paragraph']],
-	    ['height', ['height']],
-	    ['table', ['table']]
-  	],
-  	onpaste: function (e) {
-		    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+// $('#texte_haut').summernote({
+//   	toolbar: [
+// 	    ['style', ['style']],
+// 	    ['fontsize', ['fontsize']],
+// 	    ['font', ['bold', 'italic', 'underline', 'clear']],
+// 	    ['fontname', ['fontname']],
+// 	    ['color', ['color']],
+// 	    ['para', ['ul', 'ol', 'paragraph']],
+// 	    ['height', ['height']],
+// 	    ['table', ['table']]
+//   	],
+//   	onpaste: function (e) {
+// 		    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
 
-		    e.preventDefault();
+// 		    e.preventDefault();
 
-		    setTimeout( function(){
-		        document.execCommand( 'insertText', false, bufferText );
-		    }, 10 );
-		}
-});
+// 		    setTimeout( function(){
+// 		        document.execCommand( 'insertText', false, bufferText );
+// 		    }, 10 );
+// 		}
+// });
+
+$('#texte_haut').Editor()
+
 $('input:radio[name=modele]').change(function () {
 
 	var id = $(this).attr('id');
@@ -129,7 +132,7 @@ $(document).on('click', '#btn-save-modele', function(event) {
 		logo_gauche_img : $('#logo_gauche_img').attr('src'),
 		logo_centre_img : $('#logo_centre_img').attr('src'),
 		logo_droite_img : $('#logo_droite_img').attr('src'),
-		texte_haut : $('#texte_haut').code(),
+		texte_haut : $('#texte_haut').parent().find('.Editor-editor').html(),
 	}
 
 	var url = Routing.generate('pdf_save');

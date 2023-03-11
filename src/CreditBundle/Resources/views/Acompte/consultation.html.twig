@@ -11,6 +11,15 @@
         {
             width: 100% !important ;
         }
+        .mt-2
+        {
+            margin-top : 10px ;
+        }
+        .tabl-sm
+        {
+            font-size : 0.95em!important ;
+        }
+
     </style>
 {% endblock  %}
 
@@ -18,7 +27,7 @@
    {{ parent() }}
    <script src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jqGrid/jquery.jqGrid.min.js') }}"></script>
-    <script src="{{ asset('bundles/credit/js/consultation.js') }}"></script>
+    {# <script src="{{ asset('bundles/credit/js/consultation.js') }}"></script> #}
 {% endblock %}
 
 {% block contenu %}
@@ -147,7 +156,7 @@
                                         <label class="control-label">RECHERCHE PAR</label>
                                         <select class="form-control m-b statut" id="recherche_par">
                                             <option></option>
-                                            <option value="1">N° VENTE</option>
+                                            {# <option value="1">N° VENTE</option> #}
                                             {# <option value="2">NOM CLIENT</option> #}
                                         </select>
                                     </div>
@@ -206,12 +215,100 @@
                                 <div 
                                     id="list_commande"
                                     style="width: 100%;overflow: scroll;height: 400px;"
-                                ></div>
+                                >
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>DATE PREVU LIVRAISON COMMANDE</th>
+                                            <th>N° FACTURE</th>
+                                            <th>CLIENT</th>
+                                            <th>DESIGNATION</th>
+                                            <th>QTE</th>
+                                            <th>PRIX UNITAIRE</th>
+                                            <th>REMISE</th>
+                                            <th>TOTAL</th>
+                                            <th>STATUT</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                                    <tr>
+                                                            <td rowspan="7">{{ 'credit.date' }}</td>
+                                                            <td rowspan="7">{{ 'credit.recu' }}</td>
+                                                            <td rowspan="7">{{ 'credit.client' }}</td>
+                                                        <td>
+                                                            {{ 'detail.produit' }}
+                                                            |
+                                                            {{ 'detail.service' }}
+                                                            |
+                                                            {{ 'detail.designation_autre | raw' }}
+                                                        </td>
+                                                        <td>
+                                                            {{ 'detail.qte|round' }}
+                                                        </td>
+                                                        <td>{{ 'detail.prix|round' }}</td>
+                                                        <td>
+                                                            {{ 'detail.montant_remise|round' }}
+                                                        </td>
+                                                        <td>{{ 'detail.montant|round' }}</td>
+
+                                                            <td rowspan="7">
+                                                                EN_COURS
+                                                            </td>
+
+
+                                                            <td rowspan="7">
+                                                                    <a href="#" class="btn btn-info">
+                                                                        <i class="fa fa-cube"></i>&nbsp;
+                                                                        Paiement
+                                                                    </a>
+                                                            </td>
+
+                                                        
+                                                    </tr>
+                                                    
+                                                <tr>
+                                                    <th colspan="4">TOTAL</th>
+                                                    <th>{{ 'credit.ht|round' }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="4">REMISE</th>
+                                                    {# <th>{{ credit.remise }}%</th> #}
+                                                    <th>{{ 'credit.montant_remise|round' }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="4">TVA</th>
+                                                    {# <th>{{ credit.tva }}%</th> #}
+                                                    <th>{{ 'credit.montant_tva|round' }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="4">TTC</th>
+                                                    <th>{{ 'credit.montant_total|round' }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="4">PAYEE</th>
+                                                    <th>{{ 'credit_payee[j]|round' }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="4">TTC RESTANT</th>
+                                                    <th>{{ 'ttc_restant|round' }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="10" bgcolor="#ddd"></th>
+                                                </tr>
+
+                                                <tr>
+                                                    <th colspan="7" class="text-right ">TOTAL GENERAL&emsp;&emsp;&emsp;</th>
+                                                    <th colspan="3" bgcolor="#eff">{{ 'total_general|round' }}</th>
+                                                </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                </div>
+                </div>  
             </div>
         </div>
     </div>

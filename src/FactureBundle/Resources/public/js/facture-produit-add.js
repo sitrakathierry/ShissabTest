@@ -114,7 +114,7 @@ $(document).ready(function(){
         var produits = $('.f_produit').html();
         var type = $("#f_type").val();
 
-        console.log(produits)
+        // console.log(produits)
         var a ='<td><div class="form-group"><div class="col-sm-12"><select class="form-control f_libre" name="f_libre[]"><option value="0">PRODUIT</option><option value="1">AUTRE</option></select></div></div></td>';
         var b = ''
         if(type == 1)
@@ -222,7 +222,7 @@ $(document).ready(function(){
         } else {
             remise_ligne_montant = (total * Number( f_remise_ligne )) / 100;
 
-            console.log(remise_ligne_montant)
+            // console.log(remise_ligne_montant)
         }
 
         total = total - remise_ligne_montant;
@@ -258,7 +258,7 @@ $(document).ready(function(){
         } else {
             remise_ligne_montant = (total * Number( f_remise_ligne )) / 100;
 
-            console.log(remise_ligne_montant)
+            // console.log(remise_ligne_montant)
         }
 
         total = total - remise_ligne_montant;

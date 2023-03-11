@@ -10,4 +10,34 @@ namespace AppBundle\Repository;
  */
 class DepotRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getASousAccopmteInFacture($agence)
+    {
+        
+        $em = $this->getEntityManager();
+        $sql = " SELECT f.id,  
+                    CONCAT( IF(f.type = 1, 'PR-', IF(f.type = 3, 'PR-','DF-')) ,LPAD(f.num, 3, '0'),'/',date_format(f.date_creation,'%y')) as num_fact, 
+                    IF(c.statut = 1,cm.nom_societe,cp.nom) as client, 
+                    `date_livr_c` 
+                    FROM `facture` f 
+                        left join client c on (f.client = c.num_police)
+						left join client_morale cm on (c.id_client_morale = cm.id)
+						left join client_physique cp on (c.id_client_physique = cp.id)
+                        WHERE f.agence = ? AND f.is_credit = 3 ";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($agence));
+        $result = $statement->fetchAll();
+        return $result;
+    }
+
+    public function getSommeDepotFacture($facture)
+    {
+        
+        $em = $this->getEntityManager();
+        $sql = "SELECT SUM(`Montant`) as totalD FROM `depot` WHERE `idFacture` = ?";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($facture));
+        $result = $statement->fetch();
+        return $result;
+    }
+   
 }

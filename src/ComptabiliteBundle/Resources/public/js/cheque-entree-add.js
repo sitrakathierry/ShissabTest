@@ -141,6 +141,8 @@ $(document).ready(function() {
 		
 	});
 
+	$('#raison').parent().find('.Editor-editor').html($('#raison').val())
+
 	$(document).on('click','#btn-delete',function(event) {
 		event.preventDefault();
 

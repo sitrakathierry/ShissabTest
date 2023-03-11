@@ -9,6 +9,7 @@ use AppBundle\Entity\BonCommande;
 use AppBundle\Entity\PannierBon;
 use AppBundle\Entity\Credit;
 use AppBundle\Entity\CreditDetails;
+use AppBundle\Entity\Depot;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FactureBundle\Controller\BaseController;
@@ -24,6 +25,7 @@ class FactureProduitController extends BaseController
         $f_date = $request->request->get('f_date');
         $f_lieu = $request->request->get('f_lieu');
         $descr = $request->request->get('descr');
+        $date_livraison_commande = $request->request->get('date_livraison_commande');
 
         $montant = $request->request->get('montant');
         $f_remise = $request->request->get('f_remise');
@@ -35,6 +37,7 @@ class FactureProduitController extends BaseController
         $f_is_credit = $request->request->get('f_is_credit');
         $f_auto_devise = $request->request->get('f_auto_devise');
         $f_auto_montant_converti = $request->request->get('f_auto_montant_converti');
+        
 
         $f_id = $request->request->get('f_id');
         $list_id = $request->request->get('list_id');
@@ -60,7 +63,6 @@ class FactureProduitController extends BaseController
             $facture = new Facture();
             $newNum = $this->prepareNewNumFacture($agence->getId());
             $facture->setNum(intval($newNum));
-
             $factureProduit = new FactureProduit();
 
         }
@@ -91,7 +93,14 @@ class FactureProduitController extends BaseController
         
         $date = \DateTime::createFromFormat('j/m/Y', $f_date);
 
+        if($date_livraison_commande != '')
+            $dateLivreCom = new \DateTime($date_livraison_commande, new \DateTimeZone("+3"));  // \DateTime::createFromFormat('j/m/Y', $date_livraison_commande);
+
         $facture->setDate($date);
+
+        if ($f_is_credit == 3)
+            $facture->setDateLivrCom($dateLivreCom);
+
         $facture->setLieu($f_lieu);
 
         $facture->setAgence($agence);
@@ -99,6 +108,29 @@ class FactureProduitController extends BaseController
         $em = $this->getDoctrine()->getManager();
         $em->persist($facture);
         $em->flush();
+
+
+        $date_depot = $request->request->get('date_depot');
+        $montant_depot = $request->request->get('montant_depot');
+
+        if ($f_type != 2 && $f_is_credit == 3) {
+            for ($i = 0; $i < count($date_depot); $i++) {
+                $depot = new Depot();
+                // $dateDebut =  new \DateTime($t_date_debut, new \DateTimeZone("+3"));
+                $dateDepotCal = new \DateTime($date_depot[$i], new \DateTimeZone("+3"));
+
+                $depot->setIdFacture($facture->getId())  ;
+                $depot->setDate($dateDepotCal) ;
+                $depot->setMontant($montant_depot[$i]) ;
+                $depot->setCeatedAt($dateCreation) ;
+                $depot->setUpdatedAt($dateCreation) ;
+
+                $em->persist($depot);
+                $em->flush();
+
+            }
+        }
+
 
         if ($f_recu) {
             $commande = $this->getDoctrine()
@@ -175,7 +207,7 @@ class FactureProduitController extends BaseController
                 $detail->setMontantRemise($remise_ligne);
                 $detail->setFactureProduit($factureProduit);
 
-                // var_dump("expression");die();
+                // var_dump("expression"); die();
 
                 $em->persist($detail);
                 $em->flush();

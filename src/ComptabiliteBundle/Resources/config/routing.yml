@@ -165,7 +165,7 @@ comptabilite_decharge_declare:
     options:
         expose: true
 
-comptabilite_decharge_list:
+comptabilite_decharge_list: 
     path:     /comptabilite/decharge/list
     defaults: { _controller: ComptabiliteBundle:Decharge:list }
     methods:  [POST]

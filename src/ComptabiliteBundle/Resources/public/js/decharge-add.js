@@ -308,21 +308,26 @@ $(document).ready(function() {
 	})
 
 	$('.btn_plus_details').click(function(){
+		var eledesign = $('.detls_designation').html()
 		var trElems = `
 			<tr>
 				<td>
-					<input type="hidden" value="0" class="id_dtls_dep">
-					<input type="text" class="form-control detls_designation" placeholder="Désignation" required>
+					<select name="designation" id="" class="detls_designation pers-ass-form">
+                        `+eledesign+`
+                    </select>
 				</td>
 				<td>
 					<input type="number" class="form-control detls_quantite" placeholder="Quantité" required>
 				</td>
 				<td>
-					<input type="numbers" class="form-control detls_prix_unitaire" placeholder="Prix unitaire" required>
+					<input type="number" class="form-control detls_prix_unitaire" placeholder="Prix unitaire" required>
 				</td>
 			</tr>
 		`
 		$('.mytbody').append(trElems)
+		new lc_select('.detls_designation', {
+			wrap_width : '100%',
+		});
 	})
 	$('.btn_trash_details').click(function(){
 		var trElems = $('.mytbody').find('tr')

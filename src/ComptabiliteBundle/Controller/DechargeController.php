@@ -464,9 +464,14 @@ class DechargeController extends Controller
                     ->findBy(array(
                         'agence' => $agence
                     ));
+
+        $decharges = $this->getDoctrine()
+            ->getRepository('AppBundle:Decharge')
+            ->consultation($agence->getId(),2,false,false,false,false,false,false,false,false, false);
                     
         return $this->render('ComptabiliteBundle:Decharge:valide.html.twig',array(
-            'motifs' => $motifs
+            'motifs' => $motifs,
+            'decharges' => $decharges
         ));
     }
 

@@ -100,3 +100,8 @@ credit_dashboard:
     options:
         expose: true
     methods: [GET]
+
+
+acompte_consultation: 
+    path:     /acompte/consultation
+    defaults: { _controller: CreditBundle:Default:consultationAcompte}

@@ -217,8 +217,17 @@ class DefaultController extends Controller
                     ));
         $agence = $userAgence->getAgence();
 
-        return $this->render('CreditBundle:Default:consultation.html.twig',array( 
-            'userAgence' => $userAgence
+
+
+        $clients = $this->getDoctrine()
+            ->getRepository('AppBundle:Client')
+            ->findBy(array(
+                'agence' => $agence
+            ));
+
+        return $this->render('CreditBundle:Default:consultation.html.twig',array(
+            'userAgence' => $userAgence,
+            'clients' => $clients 
         ));
     }
 
@@ -999,5 +1008,61 @@ class DefaultController extends Controller
         return $devise;
         
 
+    }
+
+    public function consultationAcompteAction()
+    {
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:UserAgence')
+            ->findOneBy(array(
+                'user' => $user
+            ));
+        $agence = $userAgence->getAgence();
+
+        $sousAcompte = $this->getDoctrine()
+            ->getRepository('AppBundle:Depot')
+            ->getASousAcopmteInFacture($agence->getId()) ;
+
+
+        $produitsDetails = [];
+        $sommeDepot = [] ;
+        foreach ($sousAcompte as $sousAcompte) {
+            # f.modele = 1
+            $factureProduit  = $this->getDoctrine()
+                ->getRepository('AppBundle:FactureProduit')
+                ->findOneBy(array(
+                    'facture' => $sousAcompte['id']
+                ));
+            $details = $this->getDoctrine()
+            ->getRepository('AppBundle:FactureProduitDetails')
+            ->findBy(array(
+                'factureProduit' => $factureProduit
+            ));
+            
+            foreach ($details as $detail) {
+                $detailsProduit = $this->getDoctrine()
+                ->getRepository('AppBundle:FactureProduitDetails')
+                ->getFactureProduitDetails($detail->getId());
+                array_push($produitsDetails, $detailsProduit);
+            }
+
+            $totalDepot = $this->getDoctrine()
+                ->getRepository('AppBundle:Depot')
+                ->getSommeDepotFacture($agence->getId());
+            
+            array_push($sommeDepot, $totalDepot['totalD']) ;
+        }
+
+        $clients = $this->getDoctrine()
+            ->getRepository('AppBundle:Client')
+            ->findBy(array(
+                'agence' => $agence
+            ));
+        return $this->render('CreditBundle:Acompte:consultation.html.twig', array(
+            'userAgence' => $userAgence,
+            'clients' => $clients,
+            '' => $depots
+        ));
     }
 }

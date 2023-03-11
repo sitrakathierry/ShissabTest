@@ -13,7 +13,7 @@ class DechargeRepository extends \Doctrine\ORM\EntityRepository
 
     public function consultation(
         $agence,
-        $statut = null,
+        $statut = 1,
         $recherche_par = false,
         $a_rechercher = false,
         $type_date = false,
@@ -33,7 +33,7 @@ class DechargeRepository extends \Doctrine\ORM\EntityRepository
                     join mode_payement mp on (d.mode_paiement = mp.id)
                     left join motif_decharge m on (d.motif_decharge = m.id)";
 
-        $where = "  where d.statut = 1 ";
+        $where = "  where d.statut = ". $statut;
         $where .= "  and d.agence = " . $agence;
 
         if($recherche_par == 3){

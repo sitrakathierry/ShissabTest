@@ -139,4 +139,7 @@ $(document).ready(function() {
 		}
 		
 	})
+
+	$('#raison').parent().find('.Editor-editor').html($('#raison').val())
+	
 })
