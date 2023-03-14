@@ -181,6 +181,9 @@ class VariationProduitController extends Controller
         $type  = $request->request->get('type');
         $cause = $request->request->get('cause');
 
+        if($stock == '')
+            $stock = 0 ;
+
         $variation = $this->getDoctrine()->getRepository('AppBundle:VariationProduit')
             ->find($id_variation);
         $entrepot = ($variation->getProduitEntrepot()) ? $variation->getProduitEntrepot() : null;
@@ -331,9 +334,7 @@ class VariationProduitController extends Controller
             }
         }
 
-
         return $devise;
-        
-
     }
+
 }

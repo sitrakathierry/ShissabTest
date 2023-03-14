@@ -174,7 +174,7 @@ class VariationProduitRepository extends \Doctrine\ORM\EntityRepository
 
     public function affichePrixProduit($idProduit)
     {
-        $sql = "SELECT vp.id, p.nom, pe.indice,vp.prix_vente, p.code_produit FROM `variation_produit` vp 
+        $sql = "SELECT vp.id, p.nom, pe.indice,vp.prix_vente, p.code_produit, vp.stock FROM `variation_produit` vp 
                     JOIN produit_entrepot pe ON pe.id = vp.produit_entrepot 
                     JOIN produit p ON p.id = pe.produit 
                     WHERE p.id = ? 

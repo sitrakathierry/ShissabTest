@@ -232,75 +232,92 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                                    <tr>
-                                                            <td rowspan="7">{{ 'credit.date' }}</td>
-                                                            <td rowspan="7">{{ 'credit.recu' }}</td>
-                                                            <td rowspan="7">{{ 'credit.client' }}</td>
-                                                        <td>
-                                                            {{ 'detail.produit' }}
-                                                            |
-                                                            {{ 'detail.service' }}
-                                                            |
-                                                            {{ 'detail.designation_autre | raw' }}
-                                                        </td>
-                                                        <td>
-                                                            {{ 'detail.qte|round' }}
-                                                        </td>
-                                                        <td>{{ 'detail.prix|round' }}</td>
-                                                        <td>
-                                                            {{ 'detail.montant_remise|round' }}
-                                                        </td>
-                                                        <td>{{ 'detail.montant|round' }}</td>
+                                    {% set i = 0 %}
+                                    {% set totalGeneral = 0 %}
+                                    {% set myrowspan = 6 %}
+                                    {% for sousACT in factures %}
+                                        {% set myrowspan = (produitsDetails[i]|length) + 6 %}
+                                        {% if sommeDepot[i] is not empty %}
+                                            {% set sommeD = sommeDepot[i] %}
+                                        {% else %}
+                                            {% set sommeD = 0 %}
+                                        {% endif %}
+                                        <tr>
+                                            <td rowspan="{{ myrowspan }}">{{ (sousACT.date_livr_c is null ) ? '' : sousACT.date_livr_c }}</td>
+                                            <td rowspan="{{ myrowspan }}">{{ sousACT.num_fact }}</td>
+                                            <td rowspan="{{ myrowspan }}">{{ sousACT.client }}</td>
+                                        </tr>
+                                        {% set totalProduit = 0 %}
+                                            {% set montantRemise = 0 %}
+                                            {% set totalPartiel = 0 %}
+                                            {% set j = 0 %}
+                                                {% for detail in produitsDetails[i] %}
+                                                <tr>
+                                                <td>
+                                                    {{ detail.nom }}
+                                                </td>
+                                                <td>
+                                                    {{ detail.qte|round  }}
+                                                </td>
+                                                <td>{{ detail.prix|round  }}</td>
+                                                <td>
+                                                    {{ detail.montant_remise ~ " " ~ detail.type_remise }}
+                                                </td>
+                                                {% set montant = detail.qte * detail.prix %}
+                                                <td>{{ montant|round }}</td>
 
-                                                            <td rowspan="7">
-                                                                EN_COURS
-                                                            </td>
+                                                {% if j == (( produitsDetails[i]|length) - 1) %}
+                                                    <td rowspan="{{ myrowspan }}" class="text-center align-middle">
+                                                        {% if totalProduit == sommeD %}
+                                                            TERMINEE
+                                                        {% else %}
+                                                            EN_COURS
+                                                        {% endif %}
+                                                    </td>
+                                                    <td rowspan="{{ myrowspan }}" class="text-center align-middle">
+                                                        <a href=" {{ path('acompte_details', {idFacture:sousACT.id} ) }} " class="btn btn-info">
+                                                            <i class="fa fa-cube"></i>&nbsp;
+                                                            Dépot
+                                                        </a>
+                                                    </td>
+                                                {% endif %}
+                                                </tr>
+                                                {% set totalProduit = totalProduit + montant %}
+                                                {% set montantRemise = montantRemise + detail.montant_remise %}
+                                                {% set j = j + 1 %}
+                                            {% endfor %}
+                                            <tr>
+                                                <th colspan="4">TOTAL</th>
+                                                <th>{{ totalProduit }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="4">REMISE</th>
+                                                <th>{{ montantRemise }}</th>
+                                            </tr>
+                                            {% set totalPartiel = totalProduit + montantRemise %}
+                                            <tr>
+                                                <th colspan="4">TTC</th>
+                                                <th>{{ totalPartiel }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="4">PAYEE</th>
+                                                <th>{{  sommeD  }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="4">TTC RESTANT</th>
+                                                <th>{{ totalPartiel - sommeDepot[i] }}</th>
+                                            </tr>
+                                        {% set totalGeneral = totalGeneral + totalPartiel %} 
+                                        {% set i = i + 1 %}
+                                    {% endfor %}
+                                        <tr>
+                                            <th colspan="10" bgcolor="#ddd"></th>
+                                        </tr>
 
-
-                                                            <td rowspan="7">
-                                                                    <a href="#" class="btn btn-info">
-                                                                        <i class="fa fa-cube"></i>&nbsp;
-                                                                        Paiement
-                                                                    </a>
-                                                            </td>
-
-                                                        
-                                                    </tr>
-                                                    
-                                                <tr>
-                                                    <th colspan="4">TOTAL</th>
-                                                    <th>{{ 'credit.ht|round' }}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">REMISE</th>
-                                                    {# <th>{{ credit.remise }}%</th> #}
-                                                    <th>{{ 'credit.montant_remise|round' }}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">TVA</th>
-                                                    {# <th>{{ credit.tva }}%</th> #}
-                                                    <th>{{ 'credit.montant_tva|round' }}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">TTC</th>
-                                                    <th>{{ 'credit.montant_total|round' }}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">PAYEE</th>
-                                                    <th>{{ 'credit_payee[j]|round' }}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">TTC RESTANT</th>
-                                                    <th>{{ 'ttc_restant|round' }}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="10" bgcolor="#ddd"></th>
-                                                </tr>
-
-                                                <tr>
-                                                    <th colspan="7" class="text-right ">TOTAL GENERAL&emsp;&emsp;&emsp;</th>
-                                                    <th colspan="3" bgcolor="#eff">{{ 'total_general|round' }}</th>
-                                                </tr>
+                                        <tr>
+                                            <th colspan="7" class="text-right ">TOTAL GENERAL&emsp;&emsp;&emsp;</th>
+                                            <th colspan="3" bgcolor="#eff">{{ totalGeneral }}</th>
+                                        </tr>
                                     </tbody>
                                     </table>
                                 </div>

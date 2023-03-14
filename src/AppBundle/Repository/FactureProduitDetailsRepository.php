@@ -96,7 +96,7 @@ class FactureProduitDetailsRepository extends \Doctrine\ORM\EntityRepository
 
     public function getFactureProduitDetails($factureDetail)
     {
-        $sql = "SELECT distinct p.*, vp.stock,fp.commande, pe.indice, vp.id as vpId, fpd.* FROM `facture_produit_details` fpd 
+        $sql = "SELECT distinct p.*, vp.stock, fp.commande, pe.indice, vp.id as vpId, fpd.* FROM `facture_produit_details` fpd 
                 JOIN facture_produit fp ON fp.id = fpd.facture_produit
                 JOIN commande c ON c.id = fp.commande
                 LEFT JOIN pannier pn ON pn.commande = c.id
@@ -112,7 +112,7 @@ class FactureProduitDetailsRepository extends \Doctrine\ORM\EntityRepository
 
         return $result;
     }
-
+    
     public function findVariationByCredit($idCredit)
     {
         $sql = " SELECT fpd.designation FROM `facture` f 

@@ -105,3 +105,7 @@ credit_dashboard:
 acompte_consultation: 
     path:     /acompte/consultation
     defaults: { _controller: CreditBundle:Default:consultationAcompte}
+
+acompte_details:  
+    path:     /acompte/details/{idFacture}
+    defaults: { _controller: CreditBundle:Default:detailsAcompte}

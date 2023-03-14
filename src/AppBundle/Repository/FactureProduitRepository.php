@@ -10,4 +10,20 @@ namespace AppBundle\Repository;
  */
 class FactureProduitRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getFactureProduit($id)
+    {
+        $sql = "SELECT distinct p.*, vp.stock, fp.commande, pe.indice, vp.id as vpId, fpd.* FROM `facture_produit_details` fpd 
+                JOIN facture_produit fp ON fp.id = fpd.facture_produit
+                LEFT JOIN variation_produit vp ON fpd.variation_produit = vp.id
+                JOIN produit_entrepot pe ON pe.id = vp.produit_entrepot 
+                JOIN produit p ON p.id = pe.produit 
+                WHERE fp.id = ? ";
+
+        $em = $this->getEntityManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($id));
+        $result = $statement->fetchAll();
+
+        return $result;
+    }
 }

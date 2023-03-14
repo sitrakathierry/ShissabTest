@@ -115,13 +115,13 @@ function accompagnements() {
                                     reference = element.indice
                                 }
                                 
-                                options += '<option value="'+element.prix_vente+'" data-variation="'+element.id+'" >'+element.prix_vente+' | '+reference+'</option>' ;
+                                options += '<option value="'+element.prix_vente+'" data-variation="'+element.id+'" data-stock="'+element.stock+'" >'+element.prix_vente+' | '+reference+'</option>' ;
                             }
                         }
                         else
                         {
                           _tr.find('.f_prod_variation').val(res[0].id)
-                          var options = '<option value="'+res[0].prix_vente+'" data-variation="'+res[0].id+'" >'+res[0].prix_vente+' | '+reference+'</option>' ;
+                          var options = '<option value="'+res[0].prix_vente+'" data-variation="'+res[0].id+'" data-stock="'+res[0].stock+'" >'+res[0].prix_vente+' | '+reference+'</option>' ;
                         }
                         _tr.find(".f_prix").empty().append(options) ;
                     }
@@ -796,20 +796,17 @@ $(document).on("click", "#btn-save", function (event) {
             {
               if(f_type == 2 && f_recu == "")
               {
-                
                   $('.f_produit').each(function(){ 
-                    var stock = parseInt($(this).find('option:selected').attr('data-stock'))
+                    var stock = parseInt($(this).closest('tr').find('.f_prix').find('option:selected').attr('data-stock'))
                     var qte = parseInt($(this).closest('tr').find('.f_qte').val())
                     var codeP = $(this).find('option:selected').text()
-                    // console.log(qte)
+                    
                     if(qte > stock)
                     {
-                        // console.log('mandalo eto io zao')
                         depasse = true ;
                         codeProduit = codeP
                         return 
                     }
-
                   })
               }
             }

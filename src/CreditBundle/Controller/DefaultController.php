@@ -1024,45 +1024,101 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Depot')
             ->getASousAcopmteInFacture($agence->getId()) ;
 
-
+        $factures = $sousAcompte;
         $produitsDetails = [];
         $sommeDepot = [] ;
+
         foreach ($sousAcompte as $sousAcompte) {
             # f.modele = 1
-            $factureProduit  = $this->getDoctrine()
-                ->getRepository('AppBundle:FactureProduit')
-                ->findOneBy(array(
-                    'facture' => $sousAcompte['id']
-                ));
-            $details = $this->getDoctrine()
-            ->getRepository('AppBundle:FactureProduitDetails')
-            ->findBy(array(
-                'factureProduit' => $factureProduit
-            ));
+
+            // $factureProduit  = $this->getDoctrine()
+            //     ->getRepository('AppBundle:FactureProduit')
+            //     ->findOneBy(array(
+            //         'facture' => $sousAcompte['id']
+            //     ));
+
+            // var_dump($sousAcompte['idFProd']);
             
-            foreach ($details as $detail) {
-                $detailsProduit = $this->getDoctrine()
-                ->getRepository('AppBundle:FactureProduitDetails')
-                ->getFactureProduitDetails($detail->getId());
-                array_push($produitsDetails, $detailsProduit);
-            }
+            $details = $this->getDoctrine()
+            ->getRepository('AppBundle:FactureProduit')
+            ->getFactureProduit($sousAcompte['idFProd']);
+
+            if (empty($details))
+                    array_push($produitsDetails, '');
+                else
+                    array_push($produitsDetails, $details);
+
+            // foreach ($details as $detail) {
+            //     $detailsProduit = $this->getDoctrine()
+            //     ->getRepository('AppBundle:FactureProduitDetails')
+            //     ->getFactureProduitDetails($detail->getId());
+
+            //     if (empty($detailsProduit))
+            //         array_push($produitsDetails, '');
+            //     else
+            //         array_push($produitsDetails, $detailsProduit);
+
+            //     var_dump($detail->getId());
+            // }
+
 
             $totalDepot = $this->getDoctrine()
                 ->getRepository('AppBundle:Depot')
-                ->getSommeDepotFacture($agence->getId());
-            
-            array_push($sommeDepot, $totalDepot['totalD']) ;
+                ->getSommeDepotFacture($sousAcompte['id']);
+
+            if (empty($totalDepot))
+                array_push($sommeDepot, 0);
+            else
+                array_push($sommeDepot, $totalDepot['totalD']);
         }
+
+
 
         $clients = $this->getDoctrine()
             ->getRepository('AppBundle:Client')
             ->findBy(array(
                 'agence' => $agence
             ));
+
         return $this->render('CreditBundle:Acompte:consultation.html.twig', array(
             'userAgence' => $userAgence,
             'clients' => $clients,
-            '' => $depots
+            'factures' => $factures,
+            'produitsDetails' => $produitsDetails,
+            'sommeDepot' => $sommeDepot
+        ));
+    }
+
+    public function detailsAcompteAction($idFacture)
+    {
+
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:UserAgence')
+            ->findOneBy(array(
+                'user' => $user
+            ));
+        $agence = $userAgence->getAgence();
+
+        $sousAcompte = $this->getDoctrine()
+            ->getRepository('AppBundle:Depot')
+            ->getASousAcopmteInFacture($agence->getId(), $idFacture);
+
+        $details = $this->getDoctrine()
+            ->getRepository('AppBundle:FactureProduit')
+            ->getFactureProduit($sousAcompte['idFProd']);
+
+        $totalDepot = $this->getDoctrine()
+            ->getRepository('AppBundle:Depot')
+            ->getSommeDepotFacture($sousAcompte['id']);
+
+            
+        return $this->render('CreditBundle:Acompte:details.html.twig', array(
+            // 'userAgence' => $userAgence,
+            // 'clients' => $clients,
+            // 'factures' => $factures,
+            // 'produitsDetails' => $produitsDetails,
+            // 'sommeDepot' => $sommeDepot
         ));
     }
 }

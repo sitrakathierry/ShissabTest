@@ -799,6 +799,18 @@ class DefaultController extends BaseController
         if($facture_produit){
             if($facture_produit_details){
                 for ($i=0; $i < count($facture_produit_details) ; $i++) {
+                    $variation = $facture_produit_details[$i]->getVariationProduit() ;
+                    $factureType = $facture->getType() ;
+                    if(!empty($variation) && $factureType == 2)
+                    {
+                        // $infoVariation = $this->getDoctrine()
+                        //         ->getRepository('AppBundle:VariationProduit')
+                        //         ->find($variation) ;
+
+                        $variation->setStock($variation->getStock() + $facture_produit_details[$i]->getQte()) ;
+                        $em->flush();
+                    }
+
                     $em->remove($facture_produit_details[$i]);
                     $em->flush();
                 }
