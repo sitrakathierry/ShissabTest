@@ -9,7 +9,10 @@ use AppBundle\Entity\Credit;
 use AppBundle\Entity\CreditDetails;
 use AppBundle\Entity\PaiementCredit;
 use AppBundle\Entity\Commande;
+use AppBundle\Entity\Depot;
 use AppBundle\Entity\Pannier;
+use Symfony\Component\HttpFoundation\Response;
+
 class DefaultController extends Controller
 {
     public function indexAction()
@@ -1110,15 +1113,118 @@ class DefaultController extends Controller
 
         $totalDepot = $this->getDoctrine()
             ->getRepository('AppBundle:Depot')
-            ->getSommeDepotFacture($sousAcompte['id']);
+            ->getSommeDepotFacture($sousAcompte['id']);   
 
-            
+        $depotFacture = $this->getDoctrine()
+            ->getRepository('AppBundle:Depot')
+            ->getDepotFacture($sousAcompte['id']); 
+
         return $this->render('CreditBundle:Acompte:details.html.twig', array(
-            // 'userAgence' => $userAgence,
-            // 'clients' => $clients,
-            // 'factures' => $factures,
-            // 'produitsDetails' => $produitsDetails,
-            // 'sommeDepot' => $sommeDepot
+            'userAgence' => $userAgence,
+            'sousACT' => $sousAcompte,
+            'details' => $details,
+            'depotFacture' => $depotFacture,
+            'totalDepot' => $totalDepot
         ));
+    }
+
+    public function enregistreDepotAction(Request $request)
+    {
+        $date_depot = $request->request->get('date_depot') ;
+        $montant_depot = $request->request->get('montant_depot') ;
+        $idFacture = $request->request->get('idFacture') ;
+
+        $em = $this->getDoctrine()->getManager();
+        $depot = new Depot();
+        // $dateDebut =  new \DateTime($t_date_debut, new \DateTimeZone("+3"));
+        $dateDepotCal = new \DateTime($date_depot, new \DateTimeZone("+3"));
+        $dateCreation = new \DateTime('now');
+
+        $depot->setIdFacture($idFacture);
+        $depot->setDate($dateDepotCal);
+        $depot->setMontant($montant_depot);
+        $depot->setCeatedAt($dateCreation);
+        $depot->setUpdatedAt($dateCreation);
+
+        $em->persist($depot);
+        $em->flush();
+
+        return $this->redirectToRoute('acompte_details', ['idFacture' => $idFacture]);
+        // return $this->redirectToRoute(
+        //     'acompte_details',
+        //     $idFacture
+        // );
+    }
+
+    public function pdfDepotAction($id)
+    {
+        $facture  = $this->getDoctrine()
+            ->getRepository('AppBundle:Facture')
+            ->find($id);
+
+        $factureProduit  = $this->getDoctrine()
+            ->getRepository('AppBundle:FactureProduit')
+            ->findOneBy(array(
+                'facture' => $facture
+            ));
+
+        // $details = $this->getDoctrine()
+        //     ->getRepository('AppBundle:FactureProduitDetails')
+        //     ->findBy(array(
+        //         'factureProduit' => $factureProduit
+        //     ));
+
+        // $produitsDetails = [];
+        // foreach ($details as $detail) {
+        //     $detailsProduit = $this->getDoctrine()
+        //         ->getRepository('AppBundle:FactureProduitDetails')
+        //         ->getFactureProduitDetails($detail->getId());
+        //     array_push($produitsDetails, $detailsProduit);
+        // }
+        $depotFacture = $this->getDoctrine()
+            ->getRepository('AppBundle:Depot')
+            ->getDepotFacture($id); 
+
+        $details = $depotFacture;
+
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:UserAgence')
+            ->findOneBy(array(
+                'user' => $user
+            ));
+        $agence = $userAgence->getAgence();
+
+        $produits = $this->getDoctrine()
+            ->getRepository('AppBundle:Produit')
+            ->findBy(array(
+                'agence' => $agence
+            ));
+
+        $pdfAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:PdfAgence')
+            ->findOneBy(array(
+                'agence' => $agence
+            ));
+
+        $modelePdf = $facture->getModelePdf();
+
+        $deviseEntrepot = $this->getDevise();
+
+        $template = $this->renderView('CreditBundle:Acompte:pdfDepot.html.twig', array(
+            'deviseEntrepot' => $deviseEntrepot,
+            'agence' => $agence,
+            'facture' => $facture,
+            'factureProduit' => $factureProduit,
+            'details' => $details,
+            'produits' => $produits,
+            'modelePdf' => $modelePdf,
+        ));
+
+        $html2pdf = $this->get('app.html2pdf');
+
+        $html2pdf->create();
+
+        return $html2pdf->generatePdf($template, "depot" . $facture->getId());
     }
 }

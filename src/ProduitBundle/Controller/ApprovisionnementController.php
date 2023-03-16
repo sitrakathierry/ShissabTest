@@ -188,7 +188,8 @@ class ApprovisionnementController extends Controller
                         $approvisionnement->setRavitaillement($ravitaillement);
 
                         if (!empty($expirerList[$key])) {
-                            $approvisionnement->setDateExpiration($expirerList[$key]);
+                            $dateExpiration = \DateTime::createFromFormat('j/m/Y', $expirerList[$key]);
+                            $approvisionnement->setDateExpiration($dateExpiration);
                         }
                         $approvisionnement->setDescription(' Approvisionnement du produit ' . $produit->getNom() . ' le ' . $date->format('d/m/Y') . ' (' . $qteList[$key] . ')');
                         $approvisionnement->setVariationProduit($variation);
@@ -218,7 +219,8 @@ class ApprovisionnementController extends Controller
                         $approvisionnement->setRavitaillement($ravitaillement);
 
                         if (!empty($expirerList[$key])) {
-                            $approvisionnement->setDateExpiration($expirerList[$key]);
+                            $dateExpiration = \DateTime::createFromFormat('j/m/Y', $expirerList[$key]);
+                            $approvisionnement->setDateExpiration($dateExpiration);
                         }
                         $approvisionnement->setDescription(' Approvisionnement du produit ' . $produit->getNom() . ' le ' . $date->format('d/m/Y') . ' (' . $qteList[$key] . ')');
 
@@ -265,7 +267,8 @@ class ApprovisionnementController extends Controller
                             }
                         }
                     } else {
-                        $approvisionnement->setDateExpiration($expirerList[$key]);
+                        $dateExpiration = \DateTime::createFromFormat('j/m/Y', $expirerList[$key]);
+                        $approvisionnement->setDateExpiration($dateExpiration);
                     }
 
                     $approvisionnement->setDescription(' Approvisionnement du produit ' . $produit->getNom() . ' le ' . $date->format('d/m/Y') . ' (' . $qteList[$key] . ')');
@@ -337,7 +340,8 @@ class ApprovisionnementController extends Controller
                         }
                     }
                 } else {
-                    $approvisionnement->setDateExpiration($expirerList[$key]);
+                    $dateExpiration = \DateTime::createFromFormat('j/m/Y', $expirerList[$key]);
+                    $approvisionnement->setDateExpiration($dateExpiration);
                 }
 
                 $approvisionnement->setDescription(' Approvisionnement du produit ' . $produit->getNom() . ' le ' . $date->format('d/m/Y') . ' (' . $qteList[$key] . ')');

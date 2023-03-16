@@ -38,7 +38,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>
-                        Liste des ventes à crédit
+                        Liste des acomptes
                     </h5>
                 </div>
                 <div class="ibox-content">
@@ -247,7 +247,7 @@
                                             <td rowspan="{{ myrowspan }}">{{ sousACT.num_fact }}</td>
                                             <td rowspan="{{ myrowspan }}">{{ sousACT.client }}</td>
                                         </tr>
-                                        {% set totalProduit = 0 %}
+                                            {% set totalProduit = 0 %}
                                             {% set montantRemise = 0 %}
                                             {% set totalPartiel = 0 %}
                                             {% set j = 0 %}
@@ -266,9 +266,9 @@
                                                 {% set montant = detail.qte * detail.prix %}
                                                 <td>{{ montant|round }}</td>
 
-                                                {% if j == (( produitsDetails[i]|length) - 1) %}
+                                                {% if j == 0 %}
                                                     <td rowspan="{{ myrowspan }}" class="text-center align-middle">
-                                                        {% if totalProduit == sommeD %}
+                                                        {% if sommeD >= sousACT.total   %}
                                                             TERMINEE
                                                         {% else %}
                                                             EN_COURS

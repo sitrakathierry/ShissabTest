@@ -198,7 +198,7 @@ var parent = null
                   <option
                       value="`+element.id+`"
                       data-prixvente="`+element.prix_vente+`"
-                      data-stock="`+element.stock+`"
+                      data-stock="`+Math.round(element.stock)+`"
                     >
                     `+element.code_produit+` / `+element.indice+` | `+element.nom+` - `+element.prix_vente+`  `+element.code_produit+`
                     </option>
@@ -475,14 +475,13 @@ $(document).on("click", "#btn-save", function (event) {
 
     } else if (f_model == 2) {
       $(".f_service_libre").each(function () {
+        var self = $(this) ;
         if ($(this).val() == 0) {
-          $(".f_service ").each(function () {
-            if ($(this).val() == "") {
+          var f_service = self.closest('tr').find(".f_service ").val()
+            if (f_service == "") {
               vide = true;
               enregistre = false;
-              return;
             }
-          });
         }
 
         if (vide) {
@@ -552,6 +551,7 @@ $(document).on("click", "#btn-save", function (event) {
       });
     } else if (f_model == 3) {
       $(".f_ps_type_designation").each(function () {
+        var self = $(this)
         if ($(this).val() == "") {
           enregistre = false;
           swal({
@@ -560,13 +560,11 @@ $(document).on("click", "#btn-save", function (event) {
             text: "Sélectionnez un Type désignation !",
           });
         } else {
-          $(".f_ps_designation ").each(function () {
-            if ($(this).val() == "") {
+          var f_ps_designation = self.closest('tr').find(".f_ps_designation").val()
+            if (f_ps_designation == "") {
               vide = true;
               enregistre = false;
-              return;
             }
-          });
 
           if (vide) {
             swal({
@@ -574,6 +572,7 @@ $(document).on("click", "#btn-save", function (event) {
               title: "Désignation vide",
               text: "Sélectionnez un Désignation !",
             });
+
           } else {
             if ($(this).val() == 1) {
               var val_num = [".f_ps_qte", ".f_ps_prix", ".f_ps_remise_ligne"];
@@ -592,27 +591,25 @@ $(document).on("click", "#btn-save", function (event) {
             var negatif = false;
             for (let i = 0; i < val_num.length; i++) {
               const element = val_num[i];
-              $(element).each(function () {
+                var unelem = self.closest('tr').find(element).val()
                 if (i != 2) {
-                  if ($(this).val() == "") {
+                  if (unelem == "") {
                     val_elem = val_descri[i];
                     vide = true;
-                    return;
-                  } else if ($(this).val() < 0) {
+                    
+                  } else if (unelem < 0) {
                     val_elem = val_descri[i];
                     vide = false;
                     negatif = true;
-                    return;
+                   
                   }
                 } else {
-                  if ($(this).val() < 0) {
+                  if (unelem < 0) {
                     val_elem = val_descri[i];
                     vide = false;
                     negatif = true;
-                    return;
                   }
                 }
-              });
 
               if (negatif || vide) {
                 break;
@@ -797,10 +794,13 @@ $(document).on("click", "#btn-save", function (event) {
               if(f_type == 2 && f_recu == "")
               {
                   $('.f_produit').each(function(){ 
-                    var stock = parseInt($(this).closest('tr').find('.f_prix').find('option:selected').attr('data-stock'))
-                    var qte = parseInt($(this).closest('tr').find('.f_qte').val())
+                    // var stock = parseInt($(this).closest('tr').find('.f_prix').find('option:selected').attr('data-stock'))
+                    var stock = $(this).find('option:selected').attr('data-stock')
+                    var qte = $(this).closest('tr').find('.f_qte').val()
                     var codeP = $(this).find('option:selected').text()
-                    
+                    stock = parseInt(stock.split(" ").join("")) ;
+                    qte = parseInt(qte.split(" ").join("")) ;
+                    console.log(stock)
                     if(qte > stock)
                     {
                         depasse = true ;

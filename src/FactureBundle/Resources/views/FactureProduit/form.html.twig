@@ -45,7 +45,7 @@
             <select class="form-control select2 f_produit" name="f_code_produit[]">
               <option></option>
               {% for variation in variations %}
-                  <option value="{{ variation.id }}" data-stock="{{ variation.stock }}" data-code="{{ variation.code_produit }}">
+                  <option value="{{ variation.id }}" data-stock="{{variation.stock | trans }}" data-code="{{ variation.code_produit }}">
                     {{ variation.code_produit }}
                     |
                     {{ variation.code_produit }}

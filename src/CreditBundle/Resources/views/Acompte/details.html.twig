@@ -24,11 +24,11 @@
 </style>
 {% endblock %}
 {% block scripts %}
-{{ parent() }}
+{{ parent() }} 
 <script src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script>
-<script src="{{ asset('bundles/credit/js/paiement.js') }}"></script>
+<script src="{{ asset('bundles/credit/js/detail_acompte.js') }}"></script>
 {% endblock %}
-{% block contenu %}
+{% block contenu %} depot_print
 <div class="wrapper wrapper-content">
     {# {% if permissions.facture.create %} #}
     <input type="hidden" id="statut" value="{{ 'credit.statut' }}">
@@ -40,13 +40,13 @@
                     <button type="button" class="float-right history_back btn btn-success"
                         onclick="history.back()"><b><i class="fa fa-arrow-left" aria-hidden="true"></i></b></button>
                     <h5>
-                        Paiement Vente à crédit N° <span class="badge-warning">{{ 'credit.recu' }}</span>
+                        Paiement Facture Sous Acompte N° <span class="badge-warning">{{ sousACT.num_fact }}</span>
                     </h5>
                 </div>
                 <div class="ibox-content">
                     <div class="form-horizontal" id="form-commande">
 
-                        <input type="hidden" name="id" id="id" value="{{ 'credit.id' }}">
+                        <input type="hidden" name="id" id="id" value="{{ sousACT.id }}">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group client_mac">
@@ -58,7 +58,7 @@
                                             value="{{'credit.client.idClientMorale.nomSociete'}}" disabled="">
                                         {% else %} #}
                                         <input type="text" class="form-control"
-                                            value="{{'credit.client.idClientPhysique.nom'}}" disabled="">
+                                            value="{{ sousACT.client }}" disabled="">
                                         {# {% endif %} #}
 
                                     </div>
@@ -72,7 +72,7 @@
                         <table class="table table-bordered" id="table-commande-add">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>TYPE DESIGNATION</th>
+                                    <th>TYPE FACTURE</th>
                                     <th>DESIGNATION</th>
                                     <th>QTÉ</th>
                                     <th>PRIX</th>
@@ -81,95 +81,70 @@
                                 </tr>
                             </thead>
                             <tbody id="principal">
-                                {# {% set i = 0 %}
-                                {% for detail in details %} #}
+                                {% set totalProduit = 0 %}
+                                {% set montantRemise = 0 %}
+                                {% set totalPartiel = 0 %}
+                                {% set i = 0 %}
+                                {% for detail in details %} 
                                 <tr>
                                     <td>
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                            PRODUIT
-                                                {# {% if detail.type == 1 %} PRODUIT {% endif %} #}
-                                                {# {% if detail.type == 2 %} SERVICE {% endif %} #}
+                                            PROFORMA
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                                {# {% if detail.type == 1 %}
-                                                {% if detail.variationProduit is empty %}
-                                                {% if myVariationProduit is empty %}
-                                                - {{ detail.prix }} KMF
-                                                {% else %}
-                                                {{ myVariationProduit[i].designation }} - {{ detail.prix }} KMF
-                                                {% endif %}
-                                                {% else %}
-                                                {{ detail.variationProduit.produitEntrepot.produit.nom }} - {{
-                                                detail.variationProduit.prixVente }} KMF
-                                                {% endif %}
-                                                {% endif %}
-                                                {% if detail.type == 2 %} #}
-                                                {{ 'detail.nom' }}
-                                                {# {% endif %} #}
+                                                {{ detail.nom }}
                                             </div>
                                         </div>
                                     </td>
                                     <td class="soustable">
-                                        {# {% if detail.type == 1 or detail.type == 3%} #}
-                                        {{ 'detail.qte' }}
-                                        {# {% endif %}
-                                        {% if detail.type == 2 %}
-                                        {{ detail.periode }}
-                                        {% if detail.duree == 1 %} Heures {% endif %}
-                                        {% if detail.duree == 2 %} Jours {% endif %}
-                                        {% if detail.duree == 3 %} Moiss {% endif %}
-                                        {% if detail.duree == 4 %} Années {% endif %}
-
-                                        {% endif %} #}
+                                        {{ detail.qte }}
                                     </td>
                                     <td>
-                                        {{ 'detail.prix' }}
+                                        {{ detail.prix }}
                                     </td>
                                     <td>
-                                        {{'detail.montantRemise' }}
-                                        {# {% if detail.typeRemise == 0 %} % {% endif %}
-                                        {% if detail.typeRemise == 1 %} KMF {% endif %} #}
+                                        {{ detail.montant_remise ~ " " ~ detail.type_remise }}
                                     </td>
                                     <td class="td-montant">
-                                        {{ 'detail.montant' }}
+                                        {% set montant = detail.qte * detail.prix %}
+                                        {{ montant|round }}
                                     </td>
                                 </tr>
-                                {# {% set i = i + 1 %}
-                                {% endfor %} #}
+                                    {% set totalProduit = totalProduit + montant %}
+                                    {% set montantRemise = montantRemise + detail.montant_remise %}
+                                {% set i = i + 1 %}
+                                {% endfor %}
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th colspan="5">TOTAL</th>
                                     <th>
-                                        {{ 'credit.ht' }}
+                                        {{ totalProduit|round }}
                                     </th>
                                 </tr>
                                 <tr>
                                     <th colspan="5">REMISE</th>
                                     <th>
-                                        {{ 'credit.montantRemise' }}
+                                        {{ montantRemise }}
                                     </th>
-                                </tr>
-                                <tr>
-                                    <th colspan="5">REMISE</th>
-                                    <th>{{ 'credit.montantTva' }}</th>
                                 </tr>
                                 <tr>
                                     <th colspan="5">TTC</th>
                                     <th>
-                                        {{ 'credit.total' }}
+                                        {% set totalPartiel = totalProduit + montantRemise %}
+                                        {{ totalPartiel }}
                                     </th>
                                 </tr>
                             </tfoot>
                         </table>
                         <div class="hr-line-dashed"></div>
-                        <p>Arrêté la présente facture à la somme de <b id="lettre" style="text-transform: uppercase;">{{
-                               ' credit.lettre' }}</b>
+                        {# <p>Arrêté la présente facture à la somme de <b id="lettre" style="text-transform: uppercase;">{{
+                               ' credit.lettre' }}</b> #}
                         <p>
                         <div class="hr-line-dashed"></div>
                     </div>
@@ -179,21 +154,21 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Date de paiement</th>
-                                        <th>Montant Payé</th>
+                                        <th>Date dépot</th>
+                                        <th>Montant déposé</th>
                                         <th></th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    {# {% set total_paye = 0 %}
-                                    {% for paiement in paiements %} #}
+                                    {% set total_paye = 0 %}
+                                    {% for depot in depotFacture %}
                                     <tr>
                                         <td>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <input type="text" class="form-control"
-                                                        value="{{' paiement.date | date(d/m/Y)' }}" disabled="">
+                                                    <input type="date" class="form-control"
+                                                        value="{{ depot.Date}}" disabled="">
                                                 </div>
                                             </div>
                                         </td>
@@ -201,7 +176,7 @@
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     <input type="number" class="form-control"
-                                                        value="{{ 'paiement.montant' }}" disabled="">
+                                                        value="{{ depot.Montant }}" disabled="">
                                                 </div>
                                             </div>
                                         </td>
@@ -212,50 +187,54 @@
                                             </button> #}
                                         </td>
                                     </tr>
-                                    {# {% set total_paye = total_paye + paiement.montant %} #}
+                                    {% set total_paye = total_paye + depot.Montant %}
+                                    {% endfor %}
 
-                                    {# {% endfor %} #}
-
-                                    {# {% if credit.statutPaiement != 1 %} #}
+                                    {% if total_paye < totalPartiel %}
+                                    <form action="{{path('acompte_enregistre')}}" method="POST">
                                     <tr>
                                         <td>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <input type="text" class="form-control input-datepicker"
-                                                        id="date_paiement" value="{{ " now" | date('d/m/Y') }}">
+                                                    <input type="date" class="form-control date_depot" name="date_depot">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <input type="number" class="form-control" id="montant">
+                                                    <input type="number" class="form-control montant_depot" name="montant_depot" >
+                                                    <input type="hidden" value="{{sousACT.id}}" name="idFacture">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <button class="btn btn-primary btn-full-width" id="btn-valider">
+                                            <button type="submit" class="btn btn-primary btn-full-width"  id="btn-valider">
                                                 <i class="fa fa-check"></i>
                                                 VALIDER
                                             </button>
                                         </td>
                                     </tr>
-                                    {# {% endif %} #}
+                                    </form>
+                                    {% endif %}
 
                                 </tbody>
 
                                 <tfoot>
                                     <tr>
                                         <th>TOTAL PAYÉ</th>
-                                        <th>{{ 'total_paye' }}</th>
+                                        <th>{{ total_paye }}</th>
                                     </tr>
                                     <tr>
                                         <th>TOTAL RESTANT</th>
-                                        <th>{{ 'credit.total - total_paye' }}</th>
+                                        <th>{{ totalPartiel - total_paye }}</th>
                                     </tr>
                                 </tfoot>
 
                             </table>
+                            <div class="text-right" style="width : 100%">
+                                <button class="btn btn-success depot_print" value="{{sousACT.id}}" > <i class="fa fa-print"></i>&nbsp;Imprimer</button>
+                            </div>
                         </div>
                     </div>
 

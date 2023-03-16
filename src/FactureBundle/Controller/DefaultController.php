@@ -371,13 +371,13 @@ class DefaultController extends BaseController
                 $dataModele = 'HÉBERGEMENT';
             }
 
-           $sheet->setCellValue('A'.$index,$data->num_fact); 
-           $sheet->setCellValue('B'.$index,$dataModele); 
-           $sheet->setCellValue('C'.$index,$data->type); 
-           $sheet->setCellValue('D'.$index,$data->date_creation); 
-           $sheet->setCellValue('E'.$index,$data->date); 
-           $sheet->setCellValue('F'.$index,$data->client); 
-           $sheet->setCellValue('G'.$index,round($data->total * 100)/100); 
+            $sheet->setCellValue('A'.$index,$data->num_fact); 
+            $sheet->setCellValue('B'.$index,$dataModele); 
+            $sheet->setCellValue('C'.$index,$data->type); 
+            $sheet->setCellValue('D'.$index,$data->date_creation); 
+            $sheet->setCellValue('E'.$index,$data->date); 
+            $sheet->setCellValue('F'.$index,$data->client); 
+            $sheet->setCellValue('G'.$index,round($data->total * 100)/100); 
             $totalGeneral += $data->total;
             $index++;
         }
@@ -598,7 +598,6 @@ class DefaultController extends BaseController
         $debut_date = $request->request->get('debut_date');
         $fin_date = $request->request->get('fin_date');
         $par_agence = $request->request->get('par_agence');
-
 
         $factures = $this->getDoctrine() 
             ->getRepository('AppBundle:Facture')

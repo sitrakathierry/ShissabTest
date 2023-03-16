@@ -22,6 +22,7 @@ class DepotRepository extends \Doctrine\ORM\EntityRepository
         IF(c.statut = 1,cm.nom_societe,cp.nom) as client, 
         f.date_livr_c, 
         f.modele,
+        f.total,
         fp.id as idFProd
         FROM `facture` f 
         RIGHT JOIN facture_produit fp ON fp.facture = f.id 
@@ -31,10 +32,15 @@ class DepotRepository extends \Doctrine\ORM\EntityRepository
         WHERE f.agence = ? $specifique AND f.is_credit = 3 ";
         $statement = $em->getConnection()->prepare($sql);
         if ($idFacture != null)
+        {
             $statement->execute(array($agence, $idFacture));
+            $result = $statement->fetch();
+        }    
         else
+        {
             $statement->execute(array($agence));
-        $result = $statement->fetchAll();
+            $result = $statement->fetchAll();
+        }
         return $result;
     }
 
@@ -45,6 +51,16 @@ class DepotRepository extends \Doctrine\ORM\EntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $statement->execute(array($facture));
         $result = $statement->fetch();
+        return $result;
+    }
+
+    public function getDepotFacture($facture)
+    {
+        $em = $this->getEntityManager();
+        $sql = "SELECT * FROM `depot` WHERE `idFacture` = ?";
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute(array($facture));
+        $result = $statement->fetchAll();
         return $result;
     }
    

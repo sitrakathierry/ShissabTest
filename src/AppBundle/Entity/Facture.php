@@ -208,7 +208,7 @@ class Facture
     public function getFormattedNum()
     {
 
-        $this->formattedNum = (($this->type == 1) ? "PR-" : "DF-") . str_pad($this->num, 3, '0', STR_PAD_LEFT) . "/" . $this->dateCreation->format('y');
+        $this->formattedNum = (($this->type == 1 || $this->type == 3 ) ? "PR-" : "DF-") . str_pad($this->num, 3, '0', STR_PAD_LEFT) . "/" . $this->dateCreation->format('y');
 
         return $this->formattedNum;
     }

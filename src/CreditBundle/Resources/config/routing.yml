@@ -109,3 +109,15 @@ acompte_consultation:
 acompte_details:  
     path:     /acompte/details/{idFacture}
     defaults: { _controller: CreditBundle:Default:detailsAcompte}
+
+acompte_enregistre:  
+    path:     /acompte/depot/enregistre
+    defaults: { _controller: CreditBundle:Default:enregistreDepot}
+
+acompte_depot_pdf:  
+    path:     /acompte/depot/pdf/{id}
+    defaults: { _controller: CreditBundle:Default:pdfDepot}
+    options:
+        expose: true
+    methods: [GET]
+

@@ -93,13 +93,15 @@ class FactureProduitController extends BaseController
         
         $date = \DateTime::createFromFormat('j/m/Y', $f_date);
 
-        if($date_livraison_commande != '')
+        if(isset($date_livraison_commande) && $date_livraison_commande != '')
             $dateLivreCom = new \DateTime($date_livraison_commande, new \DateTimeZone("+3"));  // \DateTime::createFromFormat('j/m/Y', $date_livraison_commande);
 
         $facture->setDate($date);
 
         if ($f_is_credit == 3)
             $facture->setDateLivrCom($dateLivreCom);
+        else
+            $facture->setDateLivrCom(NULL);
 
         $facture->setLieu($f_lieu);
 
@@ -113,21 +115,23 @@ class FactureProduitController extends BaseController
         $date_depot = $request->request->get('date_depot');
         $montant_depot = $request->request->get('montant_depot');
 
-        if ($f_type != 2 && $f_is_credit == 3) {
+        if ($f_type != 2 && $f_is_credit == 3 && isset($date_depot) && isset($montant_depot)) {
             for ($i = 0; $i < count($date_depot); $i++) {
-                $depot = new Depot();
-                // $dateDebut =  new \DateTime($t_date_debut, new \DateTimeZone("+3"));
-                $dateDepotCal = new \DateTime($date_depot[$i], new \DateTimeZone("+3"));
+                if(!empty($date_depot[$i]) && !empty($montant_depot[$i]) && intval($montant_depot[$i]) > 0)
+                {
+                    $depot = new Depot();
+                    // $dateDebut =  new \DateTime($t_date_debut, new \DateTimeZone("+3"));
+                    $dateDepotCal = new \DateTime($date_depot[$i], new \DateTimeZone("+3"));
 
-                $depot->setIdFacture($facture->getId())  ;
-                $depot->setDate($dateDepotCal) ;
-                $depot->setMontant($montant_depot[$i]) ;
-                $depot->setCeatedAt($dateCreation) ;
-                $depot->setUpdatedAt($dateCreation) ;
+                    $depot->setIdFacture($facture->getId())  ;
+                    $depot->setDate($dateDepotCal) ;
+                    $depot->setMontant($montant_depot[$i]) ;
+                    $depot->setCeatedAt($dateCreation) ;
+                    $depot->setUpdatedAt($dateCreation) ;
 
-                $em->persist($depot);
-                $em->flush();
-
+                    $em->persist($depot);
+                    $em->flush();
+                }
             }
         }
 
