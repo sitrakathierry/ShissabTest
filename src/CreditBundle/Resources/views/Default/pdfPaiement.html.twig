@@ -22,7 +22,7 @@
 	}
 
 	table {
-		font-size: 11pt;
+		font-size: 12pt;
 		font-family: times;
 	}
 
@@ -84,7 +84,7 @@
 	}
 
 	h3 {
-		font-size: 12pt;
+		font-size: 14pt;
 	}
 
 	.th,
@@ -95,11 +95,7 @@
 
 	.th {
 		text-align: center;
-	}
-
-	td {
-		;
-		/*padding: 0 5px;*/
+		background-color: #c0c0c0;
 	}
 </style>
 
@@ -109,18 +105,12 @@
 	<table style="width:100%">
 		<tr>
 			<td class="text-center" style="width:100%">
-				{# {% set type = '' %}
-
-				{% if facture.type == 1 %}
-					{% set type = 'DEVIS' %}
-				{% elseif facture.type == 3 %}
-					{% set type = 'PROFORMA' %}
-				{% endif %} #}
 
 				<h3>
-					<u>FICHE DEPOT D'ACOMPTE 
-						- N°
-						{{facture.formattedNum}}</u>
+					<u>
+						FICHE DE CREDIT N°
+						{{ credit.recu }}
+					</u>
 				</h3>
 			</td>
 		</tr>
@@ -133,25 +123,16 @@
 				<b></b>
 			</td>
 			<td style="width:10%">
-				<b>DOIT</b>
-			</td>
-			<td style="width:40%; text-transform: uppercase;" class="dashed typo"></td>
-		</tr>
-		<tr>
-			<td style="width:50%">
-				<b></b>
-			</td>
-			<td style="width:10%">
 				<b>Client</b>
 			</td>
 			<td style="width:40%; text-transform: uppercase;" class="dashed typo">
 
-				{% if facture.client.statut == 1 %}
+				{% if credit.client.statut == 1 %}
 					:
-					{{facture.client.idClientMorale.nomSociete}}
+					{{credit.client.idClientMorale.nomSociete}}
 				{% else %}
 					:
-					{{facture.client.idClientPhysique.nom}}
+					{{credit.client.idClientPhysique.nom}}
 				{% endif %}
 			</td>
 		</tr>
@@ -164,81 +145,62 @@
 			</td>
 			<td style="width:40%; text-transform: uppercase;" class="dashed typo">
 
-				{% if facture.client.statut == 1 %}
+				{% if credit.client.statut == 1 %}
 					:
-					{{facture.client.idClientMorale.adresse}}
+					{{credit.client.idClientMorale.adresse}}
 				{% else %}
 					:
-					{{facture.client.idClientPhysique.adresse}}
-				{% endif %}
-			</td>
-		</tr>
-		<tr>
-			<td style="width:50%">
-				<b></b>
-			</td>
-			<td style="width:10%">
-				<b>Tel</b>
-			</td>
-			<td style="width:40%; text-transform: uppercase;" class="dashed typo">
-
-				{% if facture.client.statut == 1 %}
-					:
-					{{facture.client.idClientMorale.telFixe}}
-				{% else %}
-					:
-					{{facture.client.idClientPhysique.tel}}
+					{{credit.client.idClientPhysique.adresse}}
 				{% endif %}
 			</td>
 		</tr>
 
-	</table>
-
-	<table style="width: 100%">
-		<tr>
-			<td style="width: 100%">
-				{{ facture.descr | raw }}
-			</td>
-		</tr>
 	</table>
 
 	<table style="width: 100%; border: solid 1px #000;margin-top:25px">
 		<tr>
-			<td class="th" style="width: 50%; border: solid 1px #000000;">DATE DEPOT</td>
-			<td class="th" style="width: 50%; border: solid 1px #000000;">MONTANT</td>
+			<td class="th" style="width: 50%; border: solid 1px #000000;">DATE PAIEMENT</td>
+			<td class="th" style="width: 50%; border: solid 1px #000000;">MONTANT PAYEE</td>
 		</tr>
         {% set total_payee = 0 %}
 		{% for detail in details %}
-				<tr>
-					<td class="text-center" style="width: 50%; border: solid 1px #000000;">
-						{{detail.Date}}
-					</td>
-					<td class="text-right" style="width: 50%; border: solid 1px #000000;">
-						{{detail.Montant}}
-					</td>
-				</tr>
-            {% set total_payee = total_payee + detail.Montant %}
+			<tr>
+				<td class="text-right" style="width: 50%; border: solid 1px #000000;">
+					{{detail.date | date('Y-m-d')}}
+				</td>
+				<td class="text-right" style="width: 50%; border: solid 1px #000000;">
+					{{detail.montant | round }}
+				</td>
+			</tr>
+            {% set total_payee = total_payee + detail.montant%}
 		{% endfor %}
+
 		<tr>
 			<td class="tf" style="width: 50%; border: solid 1px #000000;">TOTAL PAYEE</td>
-            <td class="tf text-right" style="width: 50%; border: solid 1px #000000;">{{ total_payee }}</td>
-
+			<td class="tf text-right" style="width: 50%; border: solid 1px #000000;">{{total_payee}}</td>
 		</tr>
 		<tr>
 			<td class="tf" style="width: 50%; border: solid 1px #000000;text-align: left;">TOTAL RESTANT</td>
-			<td class="tf text-right" style="width: 50%; border: solid 1px #000000;">{{facture.total - total_payee}}</td>
+			<td class="tf text-right" style="width: 50%; border: solid 1px #000000;">{{credit.total - total_payee}}</td>
 		</tr>
+
 	</table>
 
-	<table style="width:100%; margin-top: 20px">
+	<table style="width:100%; margin-top: 50px">
+		{# <tr>
+			<td style="width:100%">
+				Arrêté la présente facture à la somme de
+				<span id="somme" class="typo b" style="text-transform: uppercase;">{{credit.lettre}}</span>
+			</td>
+		</tr> #}
 		<tr>
-			<td style="width: 100%" class="text-right dashed typo">
+			<td style="width: 100%" class="text-center dashed typo text-right">
 				<br>
 				<br>
 				<br>
-				{{ facture.lieu }}
+				{{ credit.lieu }}
 				Le
-				{{facture.date| date('d/m/Y')}}
+				{{credit.date| date('d/m/Y')}}
 			</td>
 		</tr>
 	</table>
@@ -254,4 +216,6 @@
 			</td>
 		</tr>
 	</table>
+
+
 </page>

@@ -207,8 +207,14 @@ class Facture
 
     public function getFormattedNum()
     {
+        $statusFacture = "" ;
 
-        $this->formattedNum = (($this->type == 1 || $this->type == 3 ) ? "PR-" : "DF-") . str_pad($this->num, 3, '0', STR_PAD_LEFT) . "/" . $this->dateCreation->format('y');
+        if($this->is_credit == 1)
+        $statusFacture = "-CREDIT" ;
+         else if ($this->is_credit == 3)
+        $statusFacture = "-SOUS ACOMPTE" ;
+
+        $this->formattedNum = (($this->type == 1 || $this->type == 3 ) ? "PR-" : "DF-") . str_pad($this->num, 3, '0', STR_PAD_LEFT) . "/" . $this->dateCreation->format('y') . $statusFacture;
 
         return $this->formattedNum;
     }

@@ -103,17 +103,16 @@ class ProduitRepository extends \Doctrine\ORM\EntityRepository
 	)
 	{
 		$em = $this->getEntityManager();
-		
-		$query = "	select *
-					from produit p 
-					inner join produit_entrepot pe on (pe.produit = p.id)
-					where pe.stock <= pe.stock_alerte";
 
+		$query = "SELECT * FROM `variation_produit` v 
+JOIN produit_entrepot pe ON pe.id = v.produit_entrepot 
+LEFT JOIN produit p ON p.id = pe.produit 
+WHERE v.stock <= pe.stock_alerte AND p.is_delete IS NULL AND v.is_delete IS NULL ";
 		if ($agence) {
 			$query .= "	and p.agence = " . $agence ;
 		}
 
-		$query .= "	order by p.nom asc";
+		$query .= " GROUP BY v.id order by p.nom asc";
 
         $statement = $em->getConnection()->prepare($query);
 

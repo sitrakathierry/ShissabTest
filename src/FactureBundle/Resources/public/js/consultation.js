@@ -5,8 +5,8 @@ $(document).ready(function(){
 	load_list();
 
     function instance_list_grid() {
-        var colNames = ['N° Facture','Modele','Type','Type Payement','Date de création','Date facture','Client','Total',''];
-        var colModel = [
+        var colNames = ['N° Facture','Modele','Type','Date de création','Date facture','Client','Total',''];
+        var colModel = [ 
             // {
             //     name    : 'agence',
             //     index   : 'agence',
@@ -51,13 +51,6 @@ $(document).ready(function(){
                 editable: false,
                 sortable: false,
                 classes : 'js-type'
-            },{
-                name    : 'type_paiement',
-                index   : 'type_paiement',
-                align   : 'left',
-                editable: false,
-                sortable: false,
-                classes : 'js-modele'
             },{
                 name    : 'date_creation',
                 index   : 'date_creation',

@@ -478,7 +478,7 @@ class DefaultController extends Controller
 
         return $this->render('CreditBundle:Default:paiement.html.twig',array(
             'credit' => $credit,
-            'details' => $details,
+            'details' => $details,  
             'clients' => $clients,
             'variations' => $variations,
             'services' => $services,
@@ -970,6 +970,50 @@ class DefaultController extends Controller
 
     }
 
+    public function pdfPaiementAction($id)
+    {
+        $credit  = $this->getDoctrine()
+            ->getRepository('AppBundle:Credit')
+            ->find($id);
+
+        $details = $this->getDoctrine()
+            ->getRepository('AppBundle:PaiementCredit')
+            ->findBy(array(
+                'credit' => $credit
+            ));
+
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:UserAgence')
+            ->findOneBy(array(
+                'user' => $user
+            ));
+        $agence = $userAgence->getAgence();
+
+
+        $pdfAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:PdfAgence')
+            ->findOneBy(array(
+                'agence' => $agence
+            ));
+
+        $modelePdf = $credit->getModelePdf();
+
+
+        $template = $this->renderView('CreditBundle:Default:pdfPaiement.html.twig', array(
+            'credit' => $credit,
+            'details' => $details,
+            'modelePdf' => $modelePdf,
+        ));
+
+        $html2pdf = $this->get('app.html2pdf');
+
+        $html2pdf->create();
+
+        return $html2pdf->generatePdf($template, "fiche_de_credit" . $credit->getId());
+
+    }
+
     public function getDevise()
     {
         $user = $this->getUser();
@@ -1225,6 +1269,6 @@ class DefaultController extends Controller
 
         $html2pdf->create();
 
-        return $html2pdf->generatePdf($template, "depot" . $facture->getId());
+        return $html2pdf->generatePdf($template, "fiche_depot_acompte" . $facture->getId());
     }
 }

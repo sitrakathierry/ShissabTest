@@ -98,7 +98,7 @@ class FactureProduitController extends BaseController
 
         $facture->setDate($date);
 
-        if ($f_is_credit == 3)
+        if ($f_is_credit == 3 || $f_is_credit == 4 || $f_is_credit == 5)
             $facture->setDateLivrCom($dateLivreCom);
         else
             $facture->setDateLivrCom(NULL);

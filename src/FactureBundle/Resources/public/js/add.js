@@ -181,7 +181,7 @@ var parent = null
       if($(this).val() == 1 || $(this).val() == 3)
       {
         $('#f_is_credit').empty().append(`
-              <option></option>
+              <option value="0"></option>
               <option value="3">SOUS ACOMPTE</option>
             `)
 
@@ -229,6 +229,8 @@ var parent = null
                 <option value="0">ESPECE</option>
                 <option value="1">SOUS CREDIT</option>
                 <option value="2">CARTE BANCAIRE</option>
+                <option value="4">CHEQUE</option>
+                <option value="5">VIREMENT</option>
             `)
 
           $('.date_depot_final').remove()
@@ -370,6 +372,24 @@ var parent = null
             enleverLigneDepot()
             supprimeToutDepot()
         }
+        else if($(this).val() == 4 || $(this).val() == 5)
+        {
+          var labelP = ''
+          if($(this).val() == 4 )
+            labelP = 'CHEQUE'
+          else
+            labelP = 'VIREMENT'
+            var datePaiement = `
+            <div class="form-group date_depot_final">
+              <label class="col-sm-2 control-label">DATE `+labelP+` </label>
+              <div class="col-sm-4">
+                <input type="date" class="form-control ma_date input_date_depot_final m-b" name="date_livraison_commande">
+              </div>
+            </div>
+            ` 
+            $('.date_depot_final').remove()
+            $(datePaiement).insertAfter($('.client_mac'))
+        }
         else
         {
           $('.date_depot_final').remove()
@@ -476,6 +496,7 @@ $(document).on("click", "#btn-save", function (event) {
     } else if (f_model == 2) {
       $(".f_service_libre").each(function () {
         var self = $(this) ;
+        console.log('index'+$(this).val())
         if ($(this).val() == 0) {
           var f_service = self.closest('tr').find(".f_service ").val()
             if (f_service == "") {
@@ -485,7 +506,7 @@ $(document).on("click", "#btn-save", function (event) {
         }
 
         if (vide) {
-          swal({
+          swal({  
             type: "warning",
             title: "Désignation vide",
             text: "Sélectionnez un Désignation !",

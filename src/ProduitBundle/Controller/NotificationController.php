@@ -25,7 +25,7 @@ class NotificationController extends Controller
                     ->getRepository('AppBundle:Produit')
                     ->notifications($agence->getId());
 
-        if ($type_reponse == 'html') {
+        if ($type_reponse == 'html') { 
 	        return $this->render('ProduitBundle:Notification:notification.html.twig',array(
 	        	'produits' => $produits
 	        ));

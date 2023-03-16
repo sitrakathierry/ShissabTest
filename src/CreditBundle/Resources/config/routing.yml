@@ -94,6 +94,13 @@ credit_pdf:
         expose: true
     methods: [GET]
 
+credit_pdf_paiement:
+    path:     /credit/pdf/paiement/{id}
+    defaults: { _controller: CreditBundle:Default:pdfPaiement }
+    options:
+        expose: true
+    methods: [GET]
+    
 credit_dashboard:
     path:     /credit/dashboard
     defaults: { _controller: CreditBundle:Dashboard:index }

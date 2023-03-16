@@ -56,16 +56,17 @@ $(document).ready(function(){
     })
     
     $(document).on('change','.f_service_libre',function(event) {
-        var libre = $(this).children("option:selected").val();
+        var libre = $(this).find("option:selected").val();
 
         if (libre == 1) {
-            $(this).closest('tr').find('.f_service').addClass('hidden');
+            $(this).closest('tr').find('.f_service').remove();
             $(this).closest('tr').find('.f_service_designation_container').removeClass('hidden');
             
             // $('.f_service_designation').Editor() ;
         } else {
-            $(this).closest('tr').find('.f_service').removeClass('hidden');
-            $(this).closest('tr').find('.f_service_designation_container').addClass('hidden');
+            $('.btn-add-row-service').click()
+            $(this).closest('tr').remove()
+            // $(this).closest('tr').find('.f_service_designation_container').addClass('hidden');
         }
     })
 

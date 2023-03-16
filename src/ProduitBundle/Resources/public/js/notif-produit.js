@@ -8,6 +8,6 @@ $.ajax({
 	type: 'POST',
 	data: data,
 	success: function(res) {
-		$('#notif-produit').html(res)
+		$('#notif-produit').html(res)  
 	}
 })

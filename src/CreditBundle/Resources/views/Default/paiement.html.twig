@@ -167,86 +167,87 @@
             <p>
             <div class="hr-line-dashed"></div>
           </div>
-
           <div class="row">
           	<div class="col-lg-12">
-          		<table class="table table-bordered">
-          			<thead>
-    					<tr>
-    						<th>Date de paiement</th>
-    						<th>Montant Payé</th>
-    						<th></th>
-    					</tr>
-    				</thead>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Date de paiement</th>
+                    <th>Montant Payé</th>
+                    <th></th>
+                  </tr>
+                </thead>
 
-    				<tbody>
-              {% set total_paye = 0 %}
-              {% for paiement in paiements %}
-                <tr>
-                  <td>
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <input type="text" class="form-control" value="{{ paiement.date | date('d/m/Y') }}" disabled="">
+                <tbody>
+                  {% set total_paye = 0 %}
+                  {% for paiement in paiements %}
+                    <tr>
+                      <td>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" value="{{ paiement.date | date('d/m/Y') }}" disabled="">
+                            </div>
                         </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                          <input type="number" class="form-control" value="{{ paiement.montant }}" disabled="">
+                      </td>
+                      <td>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                              <input type="number" class="form-control" value="{{ paiement.montant }}" disabled="">
+                            </div>
                         </div>
-                    </div>
-                  </td>
-                  <td>
-                    {# <button class="btn btn-primary btn-full-width" id="btn-valider">
-                      <i class="fa fa-check"></i>
-                      VALIDER
-                    </button> #}
-                  </td>
-                </tr>
-                {% set total_paye = total_paye + paiement.montant %}
+                      </td>
+                      <td>
+                        {# <button class="btn btn-primary btn-full-width" id="btn-valider">
+                          <i class="fa fa-check"></i>
+                          VALIDER
+                        </button> #}
+                      </td>
+                    </tr>
+                    {% set total_paye = total_paye + paiement.montant %}
 
-              {% endfor %}
+                  {% endfor %}
 
-              {% if credit.statutPaiement != 1 %}
-      					<tr>
-      						<td>
-      							<div class="form-group">
-                        <div class="col-sm-12">
-                            <input type="text" class="form-control input-datepicker" id="date_paiement" value="{{ "now" | date('d/m/Y') }}">
+                  {% if credit.statutPaiement != 1 %}
+                    <tr>
+                      <td>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control input-datepicker" id="date_paiement" value="{{ "now" | date('d/m/Y') }}">
+                            </div>
                         </div>
-                    </div>
-      						</td>
-      						<td>
-      							<div class="form-group">
-                      	<div class="col-sm-12">
-                      		<input type="number" class="form-control" id="montant">
-                      	</div>
-                  	</div>
-      						</td>
-      						<td>
-      							<button class="btn btn-primary btn-full-width" id="btn-valider">
-      								<i class="fa fa-check"></i>
-      								VALIDER
-      							</button>
-      						</td>
-      					</tr>
-              {% endif %}
+                      </td>
+                      <td>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                              <input type="number" class="form-control" id="montant">
+                            </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button class="btn btn-primary btn-full-width" id="btn-valider">
+                          <i class="fa fa-check"></i>
+                          VALIDER
+                        </button>
+                      </td>
+                    </tr>
+                  {% endif %}
 
-    				</tbody>
+                </tbody>
 
-            <tfoot>
-              <tr>
-                <th>TOTAL PAYÉ</th>
-                <th>{{ total_paye }}</th>
-              </tr>
-              <tr>
-                <th>TOTAL RESTANT</th>
-                <th>{{ credit.total - total_paye }}</th>
-              </tr>
-            </tfoot>
-
+                <tfoot>
+                  <tr>
+                    <th>TOTAL PAYÉ</th>
+                    <th>{{ total_paye }}</th>
+                  </tr>
+                  <tr>
+                    <th>TOTAL RESTANT</th>
+                    <th>{{ credit.total - total_paye }}</th>
+                  </tr>
+                </tfoot>
           		</table>
+              <div class="text-right" style="width: 100% ;">
+                <button class="btn btn-success print_credit" value="{{credit.id}}"><i class="fa fa-print"></i>&nbsp;Imprimer</button>
+              </div>
           	</div>
           </div>
 
