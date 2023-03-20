@@ -174,17 +174,31 @@ var parent = null
 
   $('#f_type').change(function(){
     var f_model = $('#f_model').val()
-    
+    if($(this).val() == 1 || $(this).val() == 3)
+      {
+          $('#f_is_credit').empty().append(`
+            <option value="0"></option>
+            <option value="3">SOUS ACOMPTE</option>
+          `)
+      }
+      else
+      {
+          $('#f_is_credit').empty().append(`
+              <option value="0">ESPECE</option>
+              <option value="1">SOUS CREDIT</option>
+              <option value="2">CARTE BANCAIRE</option>
+              <option value="4">CHEQUE</option>
+              <option value="5">VIREMENT</option>
+          `)
+
+          $('.date_depot_final').remove()
+          $('.table_calendrier_depot').remove()
+      }
     if(f_model == 1)
     {
       var url = Routing.generate('facture_produit_variation_list')
       if($(this).val() == 1 || $(this).val() == 3)
       {
-        $('#f_is_credit').empty().append(`
-              <option value="0"></option>
-              <option value="3">SOUS ACOMPTE</option>
-            `)
-
         $.ajax({
           url: url,
           type:'POST',
@@ -225,17 +239,6 @@ var parent = null
       }
       else
       {
-        $('#f_is_credit').empty().append(`
-                <option value="0">ESPECE</option>
-                <option value="1">SOUS CREDIT</option>
-                <option value="2">CARTE BANCAIRE</option>
-                <option value="4">CHEQUE</option>
-                <option value="5">VIREMENT</option>
-            `)
-
-          $('.date_depot_final').remove()
-          $('.table_calendrier_depot').remove()
-
         $.ajax({
           url: url,
           type:'POST',

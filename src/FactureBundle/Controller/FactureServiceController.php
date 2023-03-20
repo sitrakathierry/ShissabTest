@@ -11,6 +11,7 @@ use AppBundle\Entity\BonCommande;
 use AppBundle\Entity\PannierBon;
 use AppBundle\Entity\Credit;
 use AppBundle\Entity\CreditDetails;
+use AppBundle\Entity\Depot;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use FactureBundle\Controller\BaseController;
 use TCPDF;
@@ -26,6 +27,7 @@ class FactureServiceController extends BaseController
         $f_date = $request->request->get('f_date');
         $f_lieu = $request->request->get('f_lieu');
         $descr = $request->request->get('descr');
+        $date_livraison_commande = $request->request->get('date_livraison_commande');
 
         $montant = $request->request->get('service_montant');
         $f_remise = $request->request->get('f_service_remise');
@@ -96,11 +98,41 @@ class FactureServiceController extends BaseController
         $facture->setDate($date);
         $facture->setLieu($f_lieu);
 
+        if (isset($date_livraison_commande) && $date_livraison_commande != '')
+            $dateLivreCom = new \DateTime($date_livraison_commande, new \DateTimeZone("+3"));
+
+        if ($f_is_credit == 3 || $f_is_credit == 4 || $f_is_credit == 5)
+            $facture->setDateLivrCom($dateLivreCom);
+        else
+            $facture->setDateLivrCom(NULL);
+
         $facture->setAgence($agence);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($facture);
         $em->flush();
+
+        $date_depot = $request->request->get('date_depot');
+        $montant_depot = $request->request->get('montant_depot');
+
+        if ($f_type != 2 && $f_is_credit == 3 && isset($date_depot) && isset($montant_depot)) {
+            for ($i = 0; $i < count($date_depot); $i++) {
+                if (!empty($date_depot[$i]) && !empty($montant_depot[$i]) && intval($montant_depot[$i]) > 0) {
+                    $depot = new Depot();
+                    // $dateDebut =  new \DateTime($t_date_debut, new \DateTimeZone("+3"));
+                    $dateDepotCal = new \DateTime($date_depot[$i], new \DateTimeZone("+3"));
+
+                    $depot->setIdFacture($facture->getId());
+                    $depot->setDate($dateDepotCal);
+                    $depot->setMontant($montant_depot[$i]);
+                    $depot->setCeatedAt($dateCreation);
+                    $depot->setUpdatedAt($dateCreation);
+
+                    $em->persist($depot);
+                    $em->flush();
+                }
+            }
+        }
 
         $factureService->setFacture($facture);
 

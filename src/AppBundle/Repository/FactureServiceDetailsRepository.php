@@ -95,16 +95,17 @@ class FactureServiceDetailsRepository extends \Doctrine\ORM\EntityRepository
         return $result;
     }
 
-    // public function getAllDetailsSerivce($idFacture)
-    // {
-    //     $query = "SELECT fsd.designation FROM `facture_service_details` fsd 
-	// 	    JOIN facture_service fs ON fs.id = fsd.facture_service
-    //     LEFT JOIN facture f ON f.id = fs.facture
-    //     WHERE f.id = ? ";
-    //     $em = $this->getEntityManager();
-    //     $statement = $em->getConnection()->prepare($query);
-    //     $statement->execute(array($idFacture));
-    //     $result = $statement->fetchAll();
-    //     return $result;
-    // }
+    public function getAllDetailsSerivce($idFacture)
+    {
+        $query = "SELECT s.nom, fsd.periode as qte, fsd.prix, fsd.montant_remise, fsd.type_remise  FROM `facture_service_details` fsd 
+		        JOIN facture_service fs ON fs.id = fsd.facture_service
+                JOIN `service` s ON s.id = fsd.service
+                LEFT JOIN facture f ON f.id = fs.facture
+                WHERE fsd.facture_service = ? ";
+                $em = $this->getEntityManager();
+                $statement = $em->getConnection()->prepare($query);
+                $statement->execute(array($idFacture));
+                $result = $statement->fetchAll();
+                return $result;
+    }
 }

@@ -10,4 +10,5 @@ namespace AppBundle\Repository;
  */
 class FactureServiceRepository extends \Doctrine\ORM\EntityRepository
 {
+    
 }

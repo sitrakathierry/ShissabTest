@@ -44,6 +44,70 @@ class DepotRepository extends \Doctrine\ORM\EntityRepository
         return $result;
     }
 
+    public function getBSousAcopmteInFacture($agence, $idFacture = null)
+    {
+        $specifique = '';
+        if ($idFacture != null)
+            $specifique = " AND f.id = ? ";
+        $em = $this->getEntityManager();
+        $sql = " SELECT 
+        f.id, 
+        CONCAT( IF(f.type = 1, 'PR-', IF(f.type = 3, 'PR-','DF-')) ,LPAD(f.num, 3, '0'),'/',date_format(f.date_creation,'%y')) as num_fact, 
+        IF(c.statut = 1,cm.nom_societe,cp.nom) as client, 
+        f.date_livr_c, 
+        f.modele,
+        f.total,
+        fs.id as idFService
+        FROM `facture` f 
+        RIGHT JOIN facture_service fs ON fs.facture = f.id 
+        left join client c on (f.client = c.num_police) 
+        left join client_morale cm on (c.id_client_morale = cm.id) 
+        left join client_physique cp on (c.id_client_physique = cp.id) 
+        WHERE f.agence = ? $specifique AND f.is_credit = 3 ";
+        $statement = $em->getConnection()->prepare($sql);
+        if ($idFacture != null) {
+            $statement->execute(array($agence, $idFacture));
+            $result = $statement->fetch();
+        } else {
+            $statement->execute(array($agence));
+            $result = $statement->fetchAll();
+        }
+        return $result;
+    }
+
+
+
+    public function getCalendrierSousAcopmteInFacture($agence, $idFacture = null)
+    {
+        $specifique = '';
+        if ($idFacture != null)
+            $specifique = " AND f.id = ? ";
+        $em = $this->getEntityManager();
+        $sql = " SELECT 
+        f.id, 
+        CONCAT( IF(f.type = 1, 'PR-', IF(f.type = 3, 'PR-','DF-')) ,LPAD(f.num, 3, '0'),'/',date_format(f.date_creation,'%y')) as num_fact, 
+        IF(c.statut = 1,cm.nom_societe,cp.nom) as client, 
+        f.date_livr_c, 
+        f.modele,
+        f.total,
+        fp.id as idFProd
+        FROM `facture` f 
+        RIGHT JOIN facture_produit fp ON fp.facture = f.id 
+        left join client c on (f.client = c.num_police) 
+        left join client_morale cm on (c.id_client_morale = cm.id) 
+        left join client_physique cp on (c.id_client_physique = cp.id) 
+        WHERE f.agence = ? $specifique AND f.is_credit = 3 ORDER BY f.date_livr_c ASC";
+        $statement = $em->getConnection()->prepare($sql);
+        if ($idFacture != null) {
+            $statement->execute(array($agence, $idFacture));
+            $result = $statement->fetch();
+        } else {
+            $statement->execute(array($agence));
+            $result = $statement->fetchAll();
+        }
+        return $result;
+    }
+
     public function getSommeDepotFacture($facture)
     {
         $em = $this->getEntityManager();

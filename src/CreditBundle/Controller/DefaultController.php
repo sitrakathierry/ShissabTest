@@ -11,6 +11,7 @@ use AppBundle\Entity\PaiementCredit;
 use AppBundle\Entity\Commande;
 use AppBundle\Entity\Depot;
 use AppBundle\Entity\Pannier;
+use AppBundle\Entity\Facture;
 use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
@@ -1067,59 +1068,80 @@ class DefaultController extends Controller
             ));
         $agence = $userAgence->getAgence();
 
+        $facture  = $this->getDoctrine()
+            ->getRepository('AppBundle:Facture')
+            ->findBy(array(
+                "is_credit" => 3
+            ));
+
+        $uneacompte = [];
+        $sousAcompte = [] ;
+        $factures = [] ;
+
+        // foreach ($facture as $facture) {
+        //    if($facture->getModele() == 1)
+        //    {
+        //         $uneacompte = $this->getDoctrine()
+        //             ->getRepository('AppBundle:Depot')
+        //             ->getASousAcopmteInFacture($agence->getId(), $facture->getId());
+        //         array_push($sousAcompte, $uneacompte) ;
+        //    }
+        //    else if($facture->getModele() == 2)
+        //    {
+        //         $uneacompte = $this->getDoctrine()
+        //             ->getRepository('AppBundle:Depot')
+        //             ->getBSousAcopmteInFacture($agence->getId(), $facture->getId());
+
+        //         array_push($sousAcompte, $uneacompte);
+        //    }
+        // //    else
+        // //    {
+        // //         $uneacompte = $this->getDoctrine()
+        // //             ->getRepository('AppBundle:Depot')
+        // //             ->getASousAcopmteInFacture($agence->getId(),);
+        // //         array_push($sousAcompte, $uneacompte);
+        // //    }
+            
+        // }
+        
+            
         $sousAcompte = $this->getDoctrine()
-            ->getRepository('AppBundle:Depot')
-            ->getASousAcopmteInFacture($agence->getId()) ;
+                    ->getRepository('AppBundle:Depot')
+                    ->getASousAcopmteInFacture($agence->getId());
+
 
         $factures = $sousAcompte;
         $produitsDetails = [];
         $sommeDepot = [] ;
 
-        foreach ($sousAcompte as $sousAcompte) {
-            # f.modele = 1
-
-            // $factureProduit  = $this->getDoctrine()
-            //     ->getRepository('AppBundle:FactureProduit')
-            //     ->findOneBy(array(
-            //         'facture' => $sousAcompte['id']
-            //     ));
-
-            // var_dump($sousAcompte['idFProd']);
-            
-            $details = $this->getDoctrine()
-            ->getRepository('AppBundle:FactureProduit')
-            ->getFactureProduit($sousAcompte['idFProd']);
-
-            if (empty($details))
-                    array_push($produitsDetails, '');
-                else
-                    array_push($produitsDetails, $details);
-
-            // foreach ($details as $detail) {
-            //     $detailsProduit = $this->getDoctrine()
-            //     ->getRepository('AppBundle:FactureProduitDetails')
-            //     ->getFactureProduitDetails($detail->getId());
-
-            //     if (empty($detailsProduit))
-            //         array_push($produitsDetails, '');
-            //     else
-            //         array_push($produitsDetails, $detailsProduit);
-
-            //     var_dump($detail->getId());
+        foreach($sousAcompte as $acompte) {   
+            // if($acompte['modele'] == 1 )
+            // {
+                $details = $this->getDoctrine()
+                    ->getRepository('AppBundle:FactureProduit')
+                    ->getFactureProduit($acompte['idFProd']);
             // }
-
+            // else if ($acompte['modele'] == 2)
+            // {
+            //     $details = $this->getDoctrine()
+            //         ->getRepository('AppBundle:FactureServiceDetails')
+            //         ->getAllDetailsSerivce($acompte['idFService']) ;
+            // }
+            
+            if (empty($details))
+                    array_push($produitsDetails,'') ;
+                else
+                    array_push($produitsDetails,$details) ;
 
             $totalDepot = $this->getDoctrine()
                 ->getRepository('AppBundle:Depot')
-                ->getSommeDepotFacture($sousAcompte['id']);
+                ->getSommeDepotFacture($acompte['id']);
 
             if (empty($totalDepot))
                 array_push($sommeDepot, 0);
             else
                 array_push($sommeDepot, $totalDepot['totalD']);
         }
-
-
 
         $clients = $this->getDoctrine()
             ->getRepository('AppBundle:Client')
@@ -1138,7 +1160,6 @@ class DefaultController extends Controller
 
     public function detailsAcompteAction($idFacture)
     {
-
         $user = $this->getUser();
         $userAgence = $this->getDoctrine()
             ->getRepository('AppBundle:UserAgence')
@@ -1270,5 +1291,61 @@ class DefaultController extends Controller
         $html2pdf->create();
 
         return $html2pdf->generatePdf($template, "fiche_depot_acompte" . $facture->getId());
+    }
+
+    public function calendrierDepotAction()
+    {
+        $user = $this->getUser();
+        $userAgence = $this->getDoctrine()
+            ->getRepository('AppBundle:UserAgence')
+            ->findOneBy(array(
+                'user' => $user
+            ));
+        $agence = $userAgence->getAgence();
+
+        $sousAcompte = $this->getDoctrine()
+            ->getRepository('AppBundle:Depot')
+            ->getCalendrierSousAcopmteInFacture($agence->getId());
+
+        $sommeDepot = [];
+        
+        $allAcompte = $sousAcompte ;
+
+        foreach ($sousAcompte as $sousAcompte) {
+            $totalDepot = $this->getDoctrine()
+                ->getRepository('AppBundle:Depot')
+                ->getSommeDepotFacture($sousAcompte['id']);
+
+            if (empty($totalDepot))
+                array_push($sommeDepot, 0);
+            else
+                array_push($sommeDepot, $totalDepot['totalD']);
+        }
+
+        return $this->render('CreditBundle:Acompte:calendrier.html.twig', array(
+            'userAgence' => $userAgence,
+            'sousAcompte' => $allAcompte,
+            'sommeDepot' => $sommeDepot
+        ));
+    }
+
+    public function updateDateAction(Request $request)
+    {
+        $factures = $request->request->get('factures') ;
+        $date_livraisons = $request->request->get('date_livraisons') ;
+        $em = $this->getDoctrine()->getManager();
+
+        for ($i=0; $i < count($factures); $i++) { 
+            $facture  = $this->getDoctrine()
+                ->getRepository('AppBundle:Facture')
+                ->find($factures[$i]);
+
+            $dateLivreCom = \DateTime::createFromFormat('Y-m-d', $date_livraisons[$i]);
+
+            $facture->setDateLivrCom($dateLivreCom) ;
+            $em->flush() ;
+        }
+
+        return new JsonResponse(array('msg'=>'success')) ;
     }
 }

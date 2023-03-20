@@ -128,3 +128,13 @@ acompte_depot_pdf:
         expose: true
     methods: [GET]
 
+acompte_calendrier:
+    path:     /acompte/calendrier
+    defaults: { _controller: CreditBundle:Default:calendrierDepot}
+
+update_livraison_acompte:
+    path:     /acompte/update/date
+    defaults: { _controller: CreditBundle:Default:updateDate}
+    options:
+        expose: true
+    methods: [POST]

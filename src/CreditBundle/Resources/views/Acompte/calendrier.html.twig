@@ -1,0 +1,275 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/plugins/jqGrid/ui.jqgrid.css') }}">
+	<style type="text/css">
+		td {
+			vertical-align: middle;
+		}
+		.w-100 {
+			width: 100% !important;
+		}
+		.mt-2 {
+			margin-top: 10px;
+		}
+		.tabl-sm {
+			font-size: 0.95em !important;
+		}
+	</style>
+{% endblock  %}
+
+{% block scripts %}
+	{{ parent() }}
+	<script src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script>
+	<script src="{{ asset('js/plugins/jqGrid/jquery.jqGrid.min.js') }}"></script>
+	<script src="{{ asset('bundles/credit/js/calendrier_acompte.js') }}"></script> 
+{% endblock %}
+
+{% block contenu %}
+
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						Liste des acomptes
+					</h5>
+				</div>
+				<div class="ibox-content">
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="row">
+								{# <div class="col-sm-3">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">SOCIETE</label>
+										<select class="form-control m-b agence" id="agence"> #}
+											{# {% if is_granted('ROLE_ADMIN') %}
+												<option value="0">TOUS</option>
+												{% for agence in agences %}
+													{% if agence.id != 1 %}
+														<option value="{{agence.id}}">{{agence.nom}}</option>
+													{% endif %}
+												{% endfor %}
+											{% else %}
+												<option value="{{userAgence.agence.id}}" selected="">{{userAgence.agence.nom}}</option>
+											{% endif %} #}
+										{# </select>
+									</div>
+								</div> #}
+								{# <div class="col-lg-3">
+								                                    <div class="form-group">
+								                                        <label class="col-sm-4 control-label">RECHERCHE PAR</label>
+								                                        <div class="col-sm-8">
+								                                            <select class="form-control m-b statut" id="recherche_par">
+								                                                <option value="1">NOM MODELE</option>
+								                                            </select>
+								                                        </div>
+								                                    </div>
+								                                </div>
+								                                <div class="col-lg-3">
+								                                    <div class="form-group">
+								                                        <div class="col-sm-12">
+								                                            <input type="text" class="form-control" id="a_rechercher" placeholder="Texte à rechercher ..." style="margin-bottom:10px;">
+								                                        </div>
+								                                    </div>
+								                                </div> #}
+
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="col-sm-3 control-label" for="type_date">DATE</label>
+										<select class="form-control m-b" id="type_date">
+											<option value="0">Tous</option>
+											<option value="1">Aujourd'hui</option>
+											<option value="2">Mois</option>
+											<option value="3">Année</option>
+											<option value="4">Date spécifique</option>
+											<option value="5">Fourchette</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-sm-3 selector_mois hidden">
+									<div class="form-group">
+										<label class="control-label" for="mois">MOIS</label>
+										<select class="form-control m-b" id="mois">
+											<option value=""></option>
+											<option {% if "now" | date('m') == "01" %} selected="" {% endif %} value="01">Janvier</option>
+											<option {% if "now" | date('m') == "02" %} selected="" {% endif %} value="02">Fevrier</option>
+											<option {% if "now" | date('m') == "03" %} selected="" {% endif %} value="03">Mars</option>
+											<option {% if "now" | date('m') == "04" %} selected="" {% endif %} value="04">Avril</option>
+											<option {% if "now" | date('m') == "05" %} selected="" {% endif %} value="05">Mai</option>
+											<option {% if "now" | date('m') == "06" %} selected="" {% endif %} value="06">Juin</option>
+											<option {% if "now" | date('m') == "07" %} selected="" {% endif %} value="07">Juillet</option>
+											<option {% if "now" | date('m') == "08" %} selected="" {% endif %} value="08">Août</option>
+											<option {% if "now" | date('m') == "09" %} selected="" {% endif %} value="09">Septembre</option>
+											<option {% if "now" | date('m') == "10" %} selected="" {% endif %} value="10">Octobre</option>
+											<option {% if "now" | date('m') == "11" %} selected="" {% endif %} value="11">Novembre</option>
+											<option {% if "now" | date('m') == "12" %} selected="" {% endif %} value="12">Decembre</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-sm-3 selector_annee hidden">
+									<div class="form-group">
+										<label class="control-label" for="annee">ANNÉE</label>
+										<input type="number" class="form-control" id="annee" value="{{ "now" | date('Y') }}">
+									</div>
+								</div>
+
+
+								<div class="col-sm-3 selector_specifique hidden">
+									<div class="form-group">
+										<label class="control-label" for="date_specifique">DATE</label>
+										<div class="input-group date">
+											<span class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</span><input id="date_specifique" type="text" class="form-control input-datepicker" value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-3 selector_fourchette hidden">
+									<div class="form-group">
+										<label class="control-label" for="debut_date">DATE DÉBUT</label>
+										<div class="input-group date">
+											<span class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</span><input id="debut_date" type="text" class="form-control input-datepicker" value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-3 selector_fourchette hidden">
+									<div class="form-group">
+										<label class="control-label" for="fin_date">DATE FIN</label>
+										<div class="input-group date">
+											<span class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</span><input id="fin_date" type="text" class="form-control input-datepicker" value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">RECHERCHE PAR</label>
+										<select class="form-control m-b statut" id="recherche_par">
+											<option></option>
+											{# <option value="1">N° VENTE</option> #}
+											{# <option value="2">NOM CLIENT</option> #}
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">TEXTE À RECHERCHER</label>
+										<input type="text" class="form-control" id="a_rechercher" placeholder="Texte à rechercher ..." style="margin-bottom:10px;">
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="col-sm-3 control-label" for="status_credit">STATUS</label>
+										<select class="form-control m-b" id="status_credit">
+											{# <option value="100|100" selected>Tous</option>
+											<option value="1|0">EN COURS DE VALIDATION</option>
+											<option value="2|0">EN COURS DE PAYEMENT</option>
+											<option value="2|1">PAYEE</option> #}
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<div class="w-100">
+											<label class="control-label" for="nom_client">CLIENT</label>
+										</div>
+										<div class="w-100">
+											<select class="form-control select2 m-b" id="nom_client">
+												{# <option value=""></option>
+												{% for client in clients %}
+													{% if client.statut == 1 %}
+														<option value="{{client.numPolice}}" data-police="{{client.formattedNum}}">
+															{{client.idClientMorale.nomSociete}}
+														</option>
+													{% else %}
+														<option value="{{client.numPolice}}" data-police="{{client.formattedNum}}">
+															{{client.idClientPhysique.nom}}
+														</option>
+													{% endif %}
+												{% endfor %} #}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<button class="btn btn-primary btn-full-width mt-custom" id="btn_search">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="t-content">
+									<div id="list_commande" style="width: 100%;overflow: scroll;height: 400px;">
+										<table class="table table-sm table-bordered">
+											<thead>
+												<tr>
+                                                    <th>N° FICHE</th>
+													<th>CLIENT</th>
+                                                    <th>DATE PREVU LIVRAISON COMMANDE</th>
+													<th>MONTANT</th>
+													<th class="text-center">STATUT</th>
+												</tr>
+											</thead>
+											<tbody>
+                                            {% set totalAcompte = 0 %}
+                                            {% set i = 0 %}
+                                            {% set dateActuel = "now"|date('d/m/Y') %}
+                                            {% set fond = "" %}
+                                            {% set status = "" %}
+                                            {% for sousACT in sousAcompte %}
+                                                {% set dateLivraison = sousACT.date_livr_c | date('d/m/Y') %}
+                                                {% if  dateLivraison < dateActuel %}
+                                                    {% set fond = "#d5300a" %}
+                                                    {% set status = "DEPASSEE" %}
+                                                {% elseif dateLivraison == dateActuel %}
+                                                    {% set fond = "orange" %}
+                                                    {% set status = "PROCHE" %}
+                                                {% else %}                                                    
+                                                    {% set fond = "#8ccc19" %}
+                                                    {% set status = "EN COURS" %}
+                                                {% endif %}
+                                                <tr>    
+                                                    <td>{{ sousACT.num_fact }}</td>
+                                                    <td>{{ sousACT.client }}</td>
+                                                    <td>{{ ('<input type="date"  value="' ~ ((sousACT.date_livr_c is null ) ? '' :  sousACT.date_livr_c) ~ '" class="form-control date_livre_acompte" idFacture="' ~ sousACT.id ~ '">')|raw }}</td>
+                                                    <td>{{ sommeDepot[i] }}</td>
+                                                    <th class="text-center"><span class="text-white" style="background-color:{{fond}}">{{status}}</span></th>
+                                                </tr>
+                                                {% set totalAcompte = totalAcompte + sommeDepot[i] %}
+                                                {% set i = i + 1 %}
+                                            {% endfor %}
+                                                <tr>
+                                                    <th colspan="3" class="text-right" >TOTAL</th>
+                                                    <th bgcolor="#eff">{{ totalAcompte }}</th>
+                                                    <td bgcolor="#eff"></td>
+                                                </tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="text-right">
+						<button class="btn btn-primary mt-2 mise_a_jour_acompte"><i class="fa fa-save"></i>&nbsp;Mettre à jour</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+

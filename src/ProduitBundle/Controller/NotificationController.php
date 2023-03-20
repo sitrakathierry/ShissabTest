@@ -27,7 +27,7 @@ class NotificationController extends Controller
 
         if ($type_reponse == 'html') { 
 	        return $this->render('ProduitBundle:Notification:notification.html.twig',array(
-	        	'produits' => $produits
+	        	'produits' => $produits  
 	        ));
         } else {
         	return new JsonResponse($produits);
