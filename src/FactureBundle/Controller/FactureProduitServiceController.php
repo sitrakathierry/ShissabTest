@@ -18,7 +18,6 @@ class FactureProduitServiceController extends BaseController
 {
 	public function tplAction($type)
 	{
-
 		$user = $this->getUser();
         $userAgence = $this->getDoctrine()
                     ->getRepository('AppBundle:UserAgence')
@@ -55,7 +54,6 @@ class FactureProduitServiceController extends BaseController
 
     public function saveAction(Request $request)
     {
-
         $f_type = $request->request->get('f_type');
         $f_model = $request->request->get('f_model');
         $f_client = $request->request->get('f_client');
@@ -126,8 +124,14 @@ class FactureProduitServiceController extends BaseController
         $dateCreation = new \DateTime('now');
         $facture->setDateCreation($dateCreation);
         
-        $date = \DateTime::createFromFormat('j/m/Y', $f_date);
+        // $date = new \DateTime($f_date);
+        
+        $date = \DateTime::createFromFormat('j/m/Y',$f_date);
 
+        // $date = new \DateTime(strtotime($f_date), new \DateTimeZone("+3"));
+        // var_dump($date->format('Y-m-d')) ;
+        // die() ;
+        $facture->setDateLivrCom(null) ;
         $facture->setDate($date);
         $facture->setLieu($f_lieu);
 

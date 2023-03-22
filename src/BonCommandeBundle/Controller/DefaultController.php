@@ -80,7 +80,6 @@ class DefaultController extends BaseController
 
     public function addAction()
     {
-
         $user = $this->getUser();
         $userAgence = $this->getDoctrine()
                     ->getRepository('AppBundle:UserAgence')

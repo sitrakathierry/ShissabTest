@@ -98,6 +98,7 @@ class FactureHebergementController extends Controller
         $date = \DateTime::createFromFormat('j/m/Y', $f_date);
 
         $facture->setDate($date);
+        $facture->setDateLivrCom(null) ;
         $facture->setLieu($f_lieu);
 
         $facture->setAgence($agence);

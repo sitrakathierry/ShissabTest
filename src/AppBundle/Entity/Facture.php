@@ -300,7 +300,7 @@ class Facture
      *
      * @return Facture
      */
-    public function setDateLivrCom($dateLivrCom)
+    public function setDateLivrCom($dateLivrCom = null)
     {
         $this->dateLivrCom = $dateLivrCom;
 
