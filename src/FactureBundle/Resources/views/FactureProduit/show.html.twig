@@ -68,10 +68,11 @@
 								<div class="col-sm-10">
 									<select class="form-control m-b" name="f_type" required="">
 										{% if facture.type == 1 %}
-											<option value="1" {% if facture.type == 1 %} selected="" {% endif %}>DEVIS</option>
-										{% endif %}
-										{% if facture.type == 2 %}
-											<option value="2" {% if facture.type == 2 %} selected="" {% endif %}>DEFINITIVE</option>
+											<option value="1" selected="" >DEVIS</option>
+										{% elseif facture.type == 2 %}
+											<option value="2" selected="" >DEFINITIVE</option>
+										{% elseif facture.type == 3 %}
+											<option value="3" selected="" >PROFORMA</option>
 										{% endif %}
 									</select>
 								</div>
@@ -150,13 +151,10 @@
 										</tr>
 									</thead>
 									<tbody id="principal">
-
 										{% set i = 0 %}
 										{% set total = 0 %}
 										{% set list_id = "" %}
-
 										{% for detail in details %}
-
 											{% if list_id == "" %}
 												{% set list_id = detail.id %}
 											{% else %}

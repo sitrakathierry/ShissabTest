@@ -1,0 +1,171 @@
+.t-block {
+    width: 100%;
+    height: auto;
+    background-color: white !important;
+    /* border: 2px solid black ;  */
+    overflow: hidden;
+
+}
+
+.mb-2 {
+    margin-bottom: 15px;
+}
+
+.mr-3 {
+    margin-right: 7px;
+}
+
+.tachecst.btn-success {
+    background-color: #1cc664;
+    border-color: #1cc664;
+    color: #FFFFFF;
+}
+
+.liste-tache {
+    width: 100%;
+    height: auto;
+    /* padding: 10px; */
+}
+
+.liste-tache .row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.t-title {
+    width: 100%;
+    border-bottom: 1px solid lightgray;
+    border-top: 3px solid gray;
+    padding-left: 20px;
+}
+
+.t-title h2 {
+    font-size: 1.5em !important;
+    margin: 10px 0 10px 10px !important;
+}
+
+.t-content {
+    padding: 30px;
+}
+
+.mt-3 {
+    margin-top: 15px;
+}
+
+.mb-3 {
+    margin-bottom: 20px;
+}
+
+.tache-content {
+    border: 1px solid grey;
+    height: auto;
+    margin: 10px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    /* background-color: #2196F3;
+    padding: 10px; */
+}
+
+.grid-item {
+    /* background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center; */
+}
+
+.button-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.button-content button {
+    margin: 10px 10px;
+    width: 100px !important;
+}
+
+.tache_depassee {
+    background-color: #eb2222;
+    /* background: repeating-linear-gradient(
+45deg,
+#f05142,
+#f05142 10px,
+#eb2222 10px,
+#eb2222 20px
+); */
+}
+
+.tache_terminee {
+    background-color: #48eb22;
+    /* background: repeating-linear-gradient(
+45deg,
+#baf8b8,
+#baf8b8 10px,
+#48eb22 10px,
+#48eb22 20px
+); */
+}
+
+.tache_encours {
+    background-color: #FFA500;
+    /* background: repeating-linear-gradient(
+45deg,
+#fff5cf,
+#fff5cf 10px,
+#FFA500 10px,
+#FFA500 20px
+); */
+}
+
+.tache_noncommencee {
+    background-color: #a8a7a6;
+    /* background: repeating-linear-gradient(
+45deg,
+#f5efdc,
+#f5efdc 10px,
+#a8a7a6 10px,
+#a8a7a6 20px
+); */
+}
+
+.statut-tache {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+}
+
+.bg-dark {
+    background-color: #303234 !important;
+    color: white;
+    font-weight: bold;
+}
+
+table td {
+    white-space: normal;
+}
+
+table {
+    font-size: 0.8em !important;
+}
+
+.bouton_afficher {
+    font-size: 0.85em !important;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+
+.content-center {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -1,0 +1,107 @@
+.dt_title
+{
+     color: white;
+     text-transform: uppercase;
+     font-weight: 900;
+     padding : 2px 5px ;
+}
+.dt-box
+{
+     width: 100% ;
+     height: auto;
+     padding: 10px ;
+     background-color: ; 
+     box-shadow: 0px 2px 2px rgb(194, 194, 194); 
+ } 
+
+ .dt_size
+ {
+     font-size: 1.4em ;
+ }
+ .dt_descri
+ {
+     width: 100% ;
+     padding: 10px ;
+ }
+ .dt_list
+ {
+     line-height: 30px;
+ }
+ .dt_commentaire
+ {
+     width: 100% ;
+     padding-left:10px ;
+ }
+ .dt_cm_profil
+ {
+     width: 60px;
+     height: 60px;
+     object-fit: cover;
+     border-radius: 50%;
+     margin-right: 10px;
+ }
+ .dt_item_profil
+ {
+     width: 40px;
+     height: 40px;
+     object-fit: cover;
+     border-radius: 50%;
+     margin-right: 10px;
+ }
+ .new_comment
+ {
+     display: flex ;
+     flex-direction: row;
+     margin-top: 15px;
+ }
+ .comment_content
+ {
+     width: 100%;
+     height: 90px !important;
+ }
+ .comment_content_item
+ {
+     width: 100%;
+ }
+ .comment_content_item span
+ {
+     font-size: 0.6em;
+ }
+ .comment_content_item p
+ {
+     font-size: 0.8em;
+     font-style: italic;
+ }
+ .dt_ajout_comment
+ {
+     padding: 5px 30px;
+     float: right;
+     margin-top: 15px;
+ }
+ .dt_comment_add
+ {
+     overflow: hidden;
+ }
+ .dt_comment_recs
+ {
+     width: 100%;
+     margin-top: 20px;
+ }
+ .show_comment:hover
+ {
+     color: darkcyan;
+     cursor: pointer;
+     transition: .5s;
+     /* transform: scale(1.05); */
+     /* font-size: 1.1em; */
+ }
+ .dt_action button
+ {
+     margin-top: 10px;
+ }
+ .comment_item
+ {
+     margin-top: 10px;
+     min-height: 60px !important;
+     /* border: 1px solid black; */
+ }
